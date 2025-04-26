@@ -1,12 +1,12 @@
-# DollLiaToyBox
+# Doll.Lia's Toy Box
 
-Doll.Lia's Toy Box add new weapons and spells to Kinky Dungeon.
+Doll.Lia's Toy Box is a content expansion mod that adds new weapons, spells and perks to Kinky Dungeon, meant to fit nicely alongside existing content.
+- See the Discord post for the full list of included content.
 
-Ideally, the new additions are balanced, and fit nicely alongside
- the existing toys & tricks available in Kinky Dungeon.
-
-See the Discord post for the full list of included content.
-
+#### Running the Mod:
+Download the repository, compress it into a .zip archive, then follow the instructions according to your version of Kinky Dungeon (Offline or Browser):
+- Offline KD Users - Place the archive into the /Mods folder of your Kinky Dungeon installation.
+- Browser KD Users - In game, click the Mods button in the main menu, then click "Load Mod .zip" and select the archive.
 
 ### New Weapon Types:
 - Whips - Pain damage weapons with a high damage and stamina cost. Use their special attack to pull enemies in.
