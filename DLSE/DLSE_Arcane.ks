@@ -29,7 +29,6 @@ let DLSE_Hyperfocus_Passive = {
     name: "DLSE_Hyperfocus2", manacost: 0, components: [], level:1, passive: true, type:"", onhit:"", time: 0, delay: 0, range: 0, lifetime: 0, power: 0, damage: "inert",
     hideLearned: true, hideWithout: "DLSE_Hyperfocus",
     events: [
-        {type: "DLSE_Hyperfocus2", trigger: "beforeCast"},
         {type: "DLSE_Hyperfocus2", trigger: "beforeCrit"},
         {type: "DLSE_Hyperfocus2", trigger: "duringCrit", mult: 1.5},
     ]
@@ -77,22 +76,14 @@ KDEventMapSpell.toggleSpell["DLSE_Hyperfocus"] = (e, spell, data) => {
     }
 }
 
-// New attempt
-KDEventMapSpell.beforeCast["DLSE_Hyperfocus2"] = (_e, _spell, data) => {
-    data.flags["DLSE_Meow"] = true
-    console.log("Data - Before Cast:")
-    console.log(data)
-    // if (data.spell && data.spell.tags?.includes("trapReducible") && data.channel) {
-    //     data.channel = 0;
-    // }
-}
-
+// Event to force any spell to crit IF you have the buff.
 KDEventMapSpell.beforeCrit["DLSE_Hyperfocus2"] = (_e, _spell, data) => {
-    console.log("Data - Before Crit:")
-    console.log(data);
     if (data.faction == "Player" && data.spell && KDEntityHasBuff(KinkyDungeonPlayerEntity, "DLSE_Hyperfocus")) {
         data.forceCrit = true;
-        //KinkyDungeonExpireBuff(KinkyDungeonPlayerEntity, "DLSE_Hyperfocus");
+        // Set the buff's duration to 0, so that it expires after the turn ends.
+        if(KinkyDungeonPlayerBuffs.DLSE_Hyperfocus.duration > 0){
+            KinkyDungeonPlayerBuffs.DLSE_Hyperfocus.duration = 0;
+        }
     }
 }
 
@@ -102,7 +93,7 @@ KDEventMapSpell.duringCrit["DLSE_Hyperfocus2"] = (e, _spell, data) => {
     if (data.dmg > 0 && data.critical && data.enemy
         //&& data.attacker?.player          // Prevents spells from super-critting
         && !data.attacker
-        && !data.customCrit && KDHostile(data.enemy) 
+        && !data.customCrit //&& KDHostile(data.enemy) 
         //&& !KDEnemyHasFlag(data.enemy, "RogueTarget")
         && KDEntityHasBuff(KinkyDungeonPlayerEntity, "DLSE_Hyperfocus")
     ) {
@@ -111,21 +102,9 @@ KDEventMapSpell.duringCrit["DLSE_Hyperfocus2"] = (e, _spell, data) => {
         //KinkyDungeonSetEnemyFlag(data.enemy, "RogueTarget", -1);
         KDDamageQueue.push({ floater: TextGet("KDRogueCritical"), Entity: data.enemy, Color: "#ff5555", Delay: data.Delay });
         data.customCrit = true;
-        console.log(KinkyDungeonPlayerBuffs)
-        //KinkyDungeonExpireBuff(KinkyDungeonPlayerEntity, "DLSE_Hyperfocus");
-        // shitty solution
-        // TODO - Check if dur is 1, then don't do this or the expire buff.
-        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, {
-            id: "DLSE_Hyperfocus", 
-            type: "DLSE_Hyperfocus",
-            power: 1,
-            duration: 1, 
-            aura: "#ff0000", 
-            //sfx: "FireSpell",
-        });
     }
 }
 
-// KinkyDungeonSpellList["Illusion"].push(DLSE_Hyperfocus);
-// KinkyDungeonSpellList["Illusion"].push(DLSE_Hyperfocus_Passive);
-// KinkyDungeonLearnableSpells[6][1].push("DLSE_Hyperfocus");
+KinkyDungeonSpellList["Illusion"].push(DLSE_Hyperfocus);
+KinkyDungeonSpellList["Illusion"].push(DLSE_Hyperfocus_Passive);
+KinkyDungeonLearnableSpells[6][1].push("DLSE_Hyperfocus");
