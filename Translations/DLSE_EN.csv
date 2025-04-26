@@ -1,0 +1,150 @@
+KDModButtonDLSEMCM,"Doll.Lia's Toy Box"
+KDModButtonDLSEMCM_Header_Weapons,"Options to configure weapons:"
+KDModButtonDLSEMCM_Whips,"Enable Whips"
+KDModButtonDLSEMCM_Halberds,"Enable Halberds"
+KDModButtonDLSEMCM_Shops,"Add new items to The Shoppe"
+KDModButtonDLSEMCM_Classes,"Enable new Class Spells"
+KDModButtonDLSEMCM_Light,"Enable new Light Spells"
+KDModButtonDLSEMCM_Shadow,"Enable new Shadow Spells"
+KDModButtonDLSEMCM_ShroudChanges,"Shroud/Smoke Bombs are Shadow"
+KDModButtonDLSEMCM_ClassicDarkblade,"Revert Darkblade (Default: OFF)"
+KDModButtonDLSEMCM_Perks_BigArms,"Enable Big Arms perk"
+
+KDModButtonDLSEMCM_ShadowSlashLegs,"Shadow Slash w/Legs (Default: OFF)"
+
+KDModButtonDLSEMCM_Cute,"You're cute."
+
+KDModButtonDLSEMCM_Spacer,""
+KDModButtonDLSEMCM_Header_Spells,"Options to configure spells:"
+
+KinkyDungeonStatDLSE_BigArms,"Big Arms"
+KinkyDungeonStatDescDLSE_BigArms,"You can wield 2-handed weapons in one hand."
+
+
+
+KinkyDungeonSpellDLSE_SilentAssassin,"Silent Assassin"
+KinkyDungeonSpellDescriptionDLSE_SilentAssassin,"You are 15% harder to detect while gagged, increased to 30% while fully gagged."
+
+
+
+
+KinkyDungeonSpellDLSE_Hyperfocus,"Hyperfocus"
+KinkyDungeonSpellDescriptionDLSE_Hyperfocus,"Strike a pose as you focus energy into your body. Your next spell always super-critically strikes for 1.5x damage."
+KinkyDungeonSpellCastDLSE_Hyperfocus,"You strike an edgy pose to focus your mind!"
+KinkyDungeonBuffDLSE_Hyperfocus,"Hyperfocus: Your next spell is super-critcal!"
+KinkyDungeonSpellCastDLSE_HyperfocusTest,
+
+
+
+KinkyDungeonSpellDLSE_DaggerFan,"Dark Scattershot"
+KinkyDungeonSpellDescriptionDLSE_DaggerFan,"Throw a fan of Shadow Daggers towards the target location, dealing 25 shadow damage in a cone."
+KinkyDungeonSpellCastDLSE_DaggerFan,"You flick your wrist and unleash a fan of shadowy blades!"
+KinkyDungeonSpellTargetDLSE_DaggerFan,"You summon several shadow daggers between your fingers..."
+
+KinkyDungeonSpellDLSE_ShadowSlashLv2,"Whirling Scythe"
+KinkyDungeonSpellDLSE_ShadowSlashLv2_Burst,"Whirling Scythe"
+KinkyDungeonSpellDescriptionDLSE_ShadowSlashLv2,"Throw a shadowy scythe into the distance, dealing a delayed DamageDealt damage in an area. Cannot strike targets within its minimum range. Deals 50% more damage while you are in shadow."
+KinkyDungeonSpellCastDLSE_ShadowSlashLv2,"Your shadow scythe cleaves into the distance!"
+KinkyDungeonSpellTargetDLSE_ShadowSlashLv2,"Choose AoE location"
+
+KinkyDungeonSpellDLSE_Darkblade,"Blade of Darkness"
+KinkyDungeonSpellDescriptionDLSE_Darkblade,"When enabled: Melee weapons deal +15 shadow damage, and your tools become magical, gaining cut power. Damage and cut power bonuses are doubled while you are in shadow."
+KinkyDungeonSpellDLSE_DarkbladeStruggle,Your tool glows with shadow energy!
+
+KinkyDungeonSpellDLSE_WickedEdges,"Wicked Edges"
+KinkyDungeonSpellDescriptionDLSE_WickedEdges,"Shadow damage curses the target, dealing 3 shadow damage per turn for 10 turns. Damage is doubled while the target remains in shadow."
+
+KinkyDungeonSpellDLSE_Shroud,"Hex of Darkness"
+KinkyDungeonSpellDescriptionDLSE_Shroud,"Hexes the target area for Duration turns, shrouding it in darkness. All creatures within gain a massive evasion buff."
+KinkyDungeonSpellTargetDLSE_Shroud,Select where to center the shroud (SpellArea radius)
+KinkyDungeonSpellCastDLSE_Shroud,You curse the very ground into darkness!
+KDEffectTileTooltipDLSE_Void,"Shadow Fissure"
+KDEffectTileTooltipDLSE_VoidDesc,"Blocks light"
+
+
+
+KinkyDungeonSpellDLSE_PurgingCross,"Purging Cross"
+KinkyDungeonSpellDLSE_PurgingCrossBeam,"Purging Cross"
+KinkyDungeonSpellDLSE_PurgingCrossDamageComp,"Purging Cross"
+KinkyDungeonSpellDescriptionDLSE_PurgingCross,"Holy light erupts in the four cardinal directions, dealing 50 holy damage to targets up to 3 spaces away."
+KinkyDungeonSpellCastDLSE_PurgingCross,"You stomp your heel, causing an explosion of light!"
+KinkyDungeonSpellTargetDLSE_PurgingCross,"This is a bug. Please report to DollLia."
+KinkyDungeonSpellCastDLSE_PurgingCrossTest,
+
+KinkyDungeonSpellDLSE_LeapOfFaith,"Leap of Faith"
+KinkyDungeonSpellDescriptionDLSE_LeapOfFaith,"Instantly teleport up to 3 tiles away.  You are blinded for 15 turns upon arrival."
+KinkyDungeonSpellCastDLSE_LeapOfFaith,"You leap blindly into the distance!"
+KinkyDungeonSpellTargetDLSE_LeapOfFaith,"Choose target location (3 tile range)"
+
+
+KinkyDungeonSpellDLSE_Guidance,"Divine Guidance"
+KinkyDungeonSpellDescriptionDLSE_Guidance,"Entrust your blade to the angels, gaining up to 60% accuracy while blinded, increasing with the strength of your blind."
+
+
+KinkyDungeonSpellDLSE_Wrath,"Wrathful Smite"
+KinkyDungeonSpellDLSE_WrathStrike,"Wrathful Smite"
+KinkyDungeonSpellDescriptionDLSE_Wrath,"When enabled: Melee attacks call down wrath from on high, dealing an additional DamageDealt holy damage after a delay."
+
+
+KinkyDungeonInventoryItemDLSE_Whip,"Leather Whip"
+KinkyDungeonInventoryItemDLSE_WhipDesc,"For both adventurers and the aspiring dominatrix."
+KinkyDungeonInventoryItemDLSE_WhipDesc2,"Deals heavy pain damage. Highly distracting. Can perform a ranged pulling attack for attack + sprint cost. Offhand: +10 pain damage on attack for 8 stamina."
+ItemPickupDLSE_Whip,"You pick up a rugged leather whip."
+KinkyDungeonSpecialDLSE_Whip,"Make a ranged attack with the whip, pulling your target close to you."
+KinkyDungeonSpellDLSE_WhipPull,"Whip Lash"
+KinkyDungeonSpellCastDLSE_WhipPull,
+KinkyDungeonSpellCastFailDLSE_WhipPull,"There's an obstacle in the way!"
+rAntiqueShopDLSE_Whip,"(The SPEAKER giggles)|Look at you!|You're a proper adventurer now."
+
+
+KinkyDungeonInventoryItemDLSE_WhipThorn,"Thorn Whip"
+KinkyDungeonInventoryItemDLSE_WhipThornDesc,"You cannot escape the thorns' embrace."
+KinkyDungeonInventoryItemDLSE_WhipThornDesc2,"Deals pain damage and applies vine restraints. Highly distracting. Can perform a ranged pulling attack for attack + sprint cost."
+ItemPickupDLSE_WhipThorn,"You cautiously pick up a thorn-covered whip."
+KinkyDungeonSpecialDLSE_WhipThorn,"Make a ranged attack with the whip, pulling your target close to you."
+
+KinkyDungeonInventoryItemDLSE_WhipRose,"Blooming Agony"
+KinkyDungeonInventoryItemDLSE_WhipRoseDesc,"A beautiful rose, but she's all thorns."
+KinkyDungeonInventoryItemDLSE_WhipRoseDesc2,"Deals distracting pierce damage and applies vine restraints. Can perform a ranged pulling attack for attack + sprint cost."
+ItemPickupDLSE_WhipRose,"You retrieve Blooming Agony."
+KinkyDungeonSpecialDLSE_WhipRose,"Make a ranged attack with the whip, pulling your target close to you."
+
+
+KinkyDungeonInventoryItemDLSE_WhipTentacle,"Tentacle Lash"
+KinkyDungeonInventoryItemDLSE_WhipTentacleDesc,"This wiggly whip almost seems to have a mind of its own..."
+KinkyDungeonInventoryItemDLSE_WhipTentacleDesc2,"Deals grope damage and applies 25 slime binding. This stretchy whip can perform a longer-ranged pulling attack for attack + sprint cost."
+ItemPickupDLSE_WhipTentacle,"You pick up a slimy tentacle on a handle."
+KinkyDungeonSpecialDLSE_WhipTentacle,"Make a ranged attack with the whip, pulling your target close to you."
+
+
+KinkyDungeonInventoryItemDLSE_WhipIceQueen,"Ice Queen's Kiss"
+KinkyDungeonInventoryItemDLSE_WhipIceQueenDesc,"The cold will numb their pain."
+KinkyDungeonInventoryItemDLSE_WhipIceQueenDesc2,"Deals an additional 20 ice damage, with a 25% chance to freeze. Highly distracting. Can perform a ranged pulling attack for attack + sprint cost."
+ItemPickupDLSE_WhipIceQueen,"You shiver as you pick up an enchanted white latex whip."
+KinkyDungeonSpecialDLSE_WhipIceQueen,"Make a ranged attack with the whip, pulling your target close to you."
+
+
+KinkyDungeonInventoryItemDLSE_Halberd,"Halberd"
+KinkyDungeonInventoryItemDLSE_HalberdDesc,"Hit them with the sweet spot!"
+KinkyDungeonInventoryItemDLSE_HalberdDesc2,"Ranged attacks deal heavy slash damage. Close-range attacks cost 30 SP and deal 30 crush damage instead, knocking the target back."
+ItemPickupDLSE_Halberd,"You pick up a halberd."
+KinkyDungeonSpecialDLSE_Halberd,"Hew: Bring the blade down upon an enemy at 2 range."
+
+KinkyDungeonInventoryItemDLSE_HalberdLabrys,"Silver Labrys"
+KinkyDungeonInventoryItemDLSE_HalberdLabrysDesc,"Imposing and regal, fit for a princess."
+KinkyDungeonInventoryItemDLSE_HalberdLabrysDesc2,"Ranged attacks deal heavy slash damage in an arc. Close-range attacks cost 35 SP and deal 35 crush damage instead, knocking the target back."
+ItemPickupDLSE_HalberdLabrys,"You pick up a gleaming silver labrys."
+KinkyDungeonSpecialDLSE_HalberdLabrys,"Giant Swing: Strike all targets in an arc at 2 range."
+
+KinkyDungeonInventoryItemDLSE_HalberdRoyal,"Royal Halberd"
+KinkyDungeonInventoryItemDLSE_HalberdRoyalDesc,"A giant, garish, but supremely effective weapon."
+KinkyDungeonInventoryItemDLSE_HalberdRoyalDesc2,"Ranged attacks deal severe slash damage. Close-range attacks cost 35 SP and deal 35 crush damage instead, knocking the target back."
+ItemPickupDLSE_HalberdRoyal,"You find a regal looking halberd, replete with golden trim."
+KinkyDungeonSpecialDLSE_HalberdRoyal,"Hew: Bring the blade down upon an enemy at 2 range."
+
+KinkyDungeonSpellDLSE_HalberdHew,"Hew"
+KinkyDungeonSpellCastDLSE_HalberdHew,
+KinkyDungeonSpellCastFailDLSE_HalberdHew,"There's an obstacle in the way!"
+KinkyDungeonSpellDLSE_GiantSwing,"Giant Swing"
+KinkyDungeonSpellCastDLSE_GiantSwing,
+KinkyDungeonSpellCastFailDLSE_GiantSwing,"There's an obstacle in the way!"

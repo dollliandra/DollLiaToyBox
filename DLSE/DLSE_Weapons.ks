@@ -1,0 +1,690 @@
+'use strict';
+
+///////////////////////////////////////////////////////
+//                                                   //
+//      ///////////////////////////////////////      //
+//      //         DLSE - Weapons            //      //
+//      ///////////////////////////////////////      //
+//                                                   //
+///////////////////////////////////////////////////////
+
+//region Whips
+/**************************************************
+ * Leather Whip
+ * 
+ * Hier-tier toy that deals severe pain damage.
+ * Special Ability - Whip Pull
+ *  > A ranged attack that pulls your target in!
+ *  > Costs Attack + Stamina cost, as you have to pull your victim in.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_Whip"] = {
+    name: "DLSE_Whip", damage: 3.5, chance: 1.0, staminacost: 3.5,
+    tags: ["toy"],
+    crit: 1.5, distract: 4, type: "pain", tease: true, unarmed: false, rarity: 2, shop: false, sfx: "Whip",
+    angle: 0,                                   // Angle when rendered on player appearance (Telekinesis)
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_WhipPull", range: 3.99},
+    //special: {type: "spell", spell: "Charge", range: 2.99},           // You can give a weapon Charge with this line of code, super neat!
+
+    // Off-Hand effect. Might remove.
+    events: [
+        {type: "ElementalEffectStamCost", trigger: "playerAttack", power: 1, damage: "pain", offhand: true, offhandonly: true, cost: 0.8, sfx: "Whip"},
+        // Whip VFX
+        {type: "CastSpell", spell: "DLSE_WhipStrike", trigger: "playerAttack", requireEnergy: false},
+    ],
+}
+
+// Whip Code
+/////////////////
+let DLSE_WhipStrike = {
+    name: "DLSE_WhipStrike", tags: ["earth", "offense", "utility"], school: "Elements", components: [], level:1,
+    type:"hit", onhit:"instant", power: 0, range: 3.99, size: 1, aoe: 0, damage: "inert",
+}
+KinkyDungeonSpellListEnemies.push(DLSE_WhipStrike);
+
+// Spell cast by DLSE_Whip's Special
+let DLSE_WhipPull = {
+    name: "DLSE_WhipPull", tags: ["leather", "utility"], 
+    //sfx: "Leather2", 
+    school: "Conjure", manacost: 0, components: ["Arms"], level:1, noMiscast: true,
+    type:"special", special: "DLSE_WhipPull",
+    onhit:"", time:0, power: 1.0, range: 3.99, size: 1, damage: "chain",
+    minRange: 1.99,
+}
+KinkyDungeonSpellListEnemies.push(DLSE_WhipPull);
+
+// Clone of Elastic Grip, but costs SP similar to Charge.
+KinkyDungeonSpellSpecials["DLSE_WhipPull"] = (spell, _data, targetX, targetY, tX, tY, entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) => {
+
+    // Get the correct particle for the whip in use..
+    let DLSE_Particle = "DLSE_Whip_PullHit";
+    if(_data.targetingSpellWeapon.name === "DLSE_WhipIceQueen"){DLSE_Particle = "DLSE_WhipIceQueen_PullHit";}
+    if(_data.targetingSpellWeapon.name === "DLSE_WhipTentacle"){DLSE_Particle = "ElasticGripHit";}
+    if(_data.targetingSpellWeapon.name === "DLSE_WhipRose"){DLSE_Particle = "DLSE_WhipRose_PullHit";}
+
+    // Need a proper cost, let's copy Charge!
+    // TODO - Tell the player how much that they need?
+    let cost = KDAttackCost().attackCost + KDSprintCost();
+    if(!KinkyDungeonHasStamina(-cost)){
+        KinkyDungeonSendTextMessage(8, TextGet("KDChargeFail_NoStamina"), "#ff5555", 1, true);
+        return "Fail";
+    }
+
+    // Need a clear line to pull the enemy.
+    if (!KinkyDungeonCheckPath(entity.x, entity.y, tX, tY, true, false)) {
+        KinkyDungeonSendActionMessage(8, TextGet("KinkyDungeonSpellCastFail"+spell.name), "#ff5555", 1);
+        return "Fail";
+    }
+    let en = KinkyDungeonEntityAt(targetX, targetY);
+    if (en && !en.player) {
+        if (!KDIsImmobile(en)) {
+            if (_miscast) return "Miscast";
+
+
+            // Attack?
+            let result = KinkyDungeonLaunchAttack(en, 1);
+            // If we interact with something instead, do nothing.
+            if (result == "confirm" || result == "dialogue") {return "Fail";}
+            // We strike the enemy!  Do cool stuff.
+            if (result == "hit" || result == "capture") {
+
+
+                // Do a bunch of complicated stuff that I copy/pasted.
+                //  > Pulls your victim in.
+
+                if (!en.player)
+                    KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
+                let dist = Math.min(KDistEuclidean(en.x - entity.x, en.y - entity.y),
+                    Math.max(1, KDPushModifier(4, en))) + 0.01;
+                let pullToX = entity.x;
+                let pullToY = entity.y;
+
+                KDCreateParticle(en.x, en.y, DLSE_Particle);//"DLSE_Whip_PullHit");
+                
+                let lastx = en.x;
+                let lasty = en.y;
+
+                for (let i = dist; i > 0; i -= 0.2499) {
+                    if (KDistChebyshev(pullToX - en.x, pullToY - en.y) > 1.5) {
+                        let newX = pullToX + Math.round((en.x - pullToX) * i / dist);
+                        let newY = pullToY + Math.round((en.y - pullToY) * i / dist);
+                        if (KinkyDungeonMovableTilesEnemy.includes(KinkyDungeonMapGet(newX, newY)) && KinkyDungeonNoEnemy(newX, newY, true)
+                        && (KinkyDungeonCheckProjectileClearance(en.x, en.y, newX, newY))) {
+                            KDMoveEntity(en, newX, newY, false, true, KDHostile(en));
+                            if (en.x != lastx || en.y != lasty) {
+                                lastx = en.x;
+                                lasty = en.y;
+                                KDCreateParticle(en.x, en.y, DLSE_Particle);//"DLSE_Whip_PullHit");
+                            }
+                            KinkyDungeonSetEnemyFlag(en, "takeFF", 2);
+                        }
+                    } else break;
+                }
+
+
+                if(_data.targetingSpellWeapon.name === "DLSE_Whip"){KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/Leather2.ogg", undefined, 1);}
+                if(_data.targetingSpellWeapon.name === "DLSE_WhipThorn"){KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/Rope4.ogg", undefined, 1);}
+                if(_data.targetingSpellWeapon.name === "DLSE_WhipIceQueen"){KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/Rubber2.ogg", undefined, 1);}
+                if(_data.targetingSpellWeapon.name === "DLSE_WhipTentacle"){KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/Rubber2.ogg", undefined, 1);}
+
+                KDChangeMana(spell.name, "spell", "cast", -KinkyDungeonGetManaCost(spell));
+                KDCreateParticle(en.x, en.y, DLSE_Particle);//"DLSE_Whip_PullHit");
+
+                // Pay the SP cost:
+                // NOTE - If we make this spell into an ATTACK, we need to remove the attack cost.
+                //KDChangeStamina(spell.name, "spell", "cast", cost);
+                KDChangeStamina(spell.name, "spell", "cast", KDSprintCost());
+
+                // Bonus damage
+                // if (!en.player)
+                //     KinkyDungeonDamageEnemy(en, {
+                //         type: spell.damage,//"glue",
+                //         damage: spell.power,
+                //         time: spell.time,
+                //         bind: spell.bind,
+                //     }, false, true, undefined, undefined, entity);
+
+                return "Cast";
+
+            }
+            // We whiffed.  Do nothing.
+            else if (result == "miss") {
+                KinkyDungeonSendTextMessage(8, TextGet("KDChargeFail_AttackMiss"), "#ff5555", 1, true);
+            }
+        } else return "Fail";
+    } else return "Fail";
+}
+
+
+/**************************************************
+ * Thorn Whip
+ * 
+ * Mid-tier bondage toy that deals pain/pierce damage.
+ * Special Ability - Whip Pull
+ *  > A ranged attack that pulls your target in!
+ *  > Costs Attack + Stamina cost, as you have to pull your victim in.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_WhipThorn"] = {
+    name: "DLSE_WhipThorn", damage: 2.5, chance: 1.0, staminacost: 3,
+    tags: ["toy", "bondage"],
+    crit: 1.4, distract: 4, type: "pain", tease: true, unarmed: false, rarity: 2, shop: false, sfx: "Whip",
+    angle: 0,                                   // Angle when rendered on player appearance (Telekinesis)
+
+    // Applies vine bondage 
+    // TODO - Consider making this exclusive to the special ability. You might need to pay charge/mana/SP for it.
+
+    // TODO - Replace with Vine once it's fixed.
+    bind: 2.5, 
+    //bindEff: 1,                     // Should let it scale with damage bonuses?
+    addBind: true, bindType: "Rope",//bindType: "Vine",
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_WhipPull", range: 3.99},
+
+    events: [
+        //{type: "ElementalEffect", trigger: "playerAttack", power: 1.0, damage: "pierce"},                       // Pierce Damage
+        {type: "CastSpell", spell: "DLSE_WhipStrike", trigger: "playerAttack", requireEnergy: false},           // Whip crack VFX
+    ],
+}
+
+
+/**************************************************
+ * Tentacle Lash
+ * 
+ * Mid-tier bondage toy that deals grope damage and applies slime.
+ * Special Ability - Whip Pull
+ *  > A ranged attack that pulls your target in!
+ *  > Costs Attack + Stamina cost, as you have to pull your victim in.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_WhipTentacle"] = {
+    name: "DLSE_WhipTentacle", damage: 2, chance: 1.25, staminacost: 3, noDamagePenalty: true,
+    tags: ["toy", "bondage"],
+    crit: 2, type: "grope", unarmed: false, rarity: 3, shop: false, sfx: "DLSE_WhipTentacle",
+    angle: 0,                                   // Angle when rendered on player appearance (Telekinesis)
+    //distract: 3,                              // Grope damage already does distraction?
+
+    bind: 2.5, 
+    //bindEff: 1,//1.2,                         // Really bad idea when the weapon has 200% crit modifier
+    addBind: true, bindType: "Slime",
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_WhipPull", range: 4.99},
+
+    events: [
+        {type: "CastSpell", spell: "DLSE_WhipStrike", trigger: "playerAttack", requireEnergy: false},           // Whip crack VFX
+    ],
+}
+
+
+
+/**************************************************
+ * Ice Queen
+ * 
+ * Hier-tier toy that deals pain/ice damage.
+ * Special Ability - Whip Pull
+ *  > A ranged attack that pulls your target in!
+ *  > Costs Attack + Stamina cost, as you have to pull your victim in.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_WhipIceQueen"] = {
+    name: "DLSE_WhipIceQueen", damage: 2, chance: 1.25, staminacost: 3.5,
+    tags: ["illum","toy"],
+    crit: 1.4, distract: 4, type: "pain", tease: true, unarmed: false, rarity: 4, shop: false, sfx: "DLSE_WhipIceQueen",
+    magic: true,
+    angle: 0,                                   // Angle when rendered on player appearance (Telekinesis)
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_WhipPull", range: 3.99},
+    //special: {type: "spell", spell: "Charge", range: 2.99},           // You can give a weapon Charge with this line of code, super neat!
+
+    // Off-Hand effect. Might remove.
+    events: [
+        {type: "ElementalEffect", trigger: "playerAttack", power: 2.0, damage: "frost"},                        // Ice Damage
+        {type: "ElementalEffect", trigger: "playerAttack", power: 0, damage: "ice", time: 4, chance: 0.25},     // Chance to freeze
+        {type: "CastSpell", spell: "DLSE_WhipStrike", trigger: "playerAttack", requireEnergy: false},           // Whip crack VFX
+        {type: "WeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},                                // Glows blue
+    ],
+}
+
+
+
+/**************************************************
+ * Blooming Agony
+ * 
+ * High-tier bondage whip that deals pierce damage.
+ * Special Ability - Whip Pull
+ *  > A ranged attack that pulls your target in!
+ *  > Costs Attack + Stamina cost, as you have to pull your victim in.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_WhipRose"] = {
+    name: "DLSE_WhipRose", damage: 4, chance: 1.0, staminacost: 4,
+    tags: ["toy", "bondage"],
+    crit: 1.5, distract: 4, type: "pierce", tease: true, unarmed: false, rarity: 5, shop: false, sfx: "Whip",
+    angle: 0,                                   // Angle when rendered on player appearance (Telekinesis)
+
+    // Applies vine bondage 
+    // TODO - Consider making this exclusive to the special ability. You might need to pay charge/mana/SP for it.
+
+    // TODO - Replace with Vine once it's fixed.
+    bind: 4, 
+    //bindEff: 1,                     // Should let it scale with damage bonuses?
+    addBind: true, bindType: "Rope",//bindType: "Vine",
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_WhipPull", range: 4.99},
+
+    events: [
+        //{type: "ElementalEffect", trigger: "playerAttack", power: 1.0, damage: "pierce"},                       // Pierce Damage
+        {type: "CastSpell", spell: "DLSE_WhipStrike", trigger: "playerAttack", requireEnergy: false},           // Whip crack VFX
+    ],
+}
+
+
+
+//region Halberds
+////////////////////////////////////////////////////////
+//                                                    //
+//      ////////////////////////////////////////      //
+//      //         DLSE - Halberds            //      //
+//      ////////////////////////////////////////      //
+//                                                    //
+////////////////////////////////////////////////////////
+//
+//  Polearms with a "sweet spot" of 2 range.
+//  Low crit modifiers.
+//  > You cannot usually crit with a sweet spot attack due to how critical attacks work.
+
+/**************************************************
+ * Halberd
+ * 
+ * Polearm that deals heavy slash damage at 2-range.
+ * Special Ability - Hew
+ *  > A ranged attack that deals full damage.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_Halberd"] = {name: "DLSE_Halberd", damage: 5.5, chance: 1.0, staminacost: 4.5, type: "slash", unarmed: false, rarity: 2, shop: false,
+    sfx: "DLSE_HeavySlash",                         // Strike with the blade
+    tags: ["axe"],                                  // TBD - Not sure what tags suit best.
+    crit: 1.2,                                      // Base crit rate.
+    clumsy: true, 
+    //heavy: true, 
+    massive: true,       // It's so big...?
+    angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
+    cutBonus: 0.01,
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_HalberdHew"},
+
+    // At short range, deal 1/3rd as crush damage, but knockback 1.
+    events: [
+        {type: "DLSE_KnockbackShortRange", trigger: "playerAttack", dist: 1, dlse_dist: 2,},
+        {type: "DLSE_DamageMultShortRange", trigger: "beforePlayerAttack", dlse_dist: 2, power: 0.546, damage: "crush", dlse_replacesfx: "HeavySwing",},
+        {type: "DLSE_ReduceCostShortRange", trigger: "beforePlayerLaunchAttack", dlse_dist: 2, dlse_mult: 0.66,},
+    ],
+};
+
+/**************************************************
+ * Silver Labrys
+ * 
+ * Polearm that deals massive slash damage.
+ * Special Ability - Giant Swing
+ **************************************************/
+// Labrynth cosplay weapon
+KinkyDungeonWeapons["DLSE_HalberdLabrys"] = {name: "DLSE_HalberdLabrys", damage: 6.5, chance: 1.2, staminacost: 5, type: "slash", unarmed: false, rarity: 4, shop: false,
+    sfx: "HeavySwing",                         // Strike with the blade
+    tags: ["axe"],                                  // TBD - Not sure what tags suit best.
+    crit: 1.2,                                      // Base crit rate.
+    clumsy: true, 
+    //heavy: true,                                  // Princessy weapon should be less heavy.
+    massive: true,                                  // Still massive, though.
+    angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
+    cutBonus: 0.05,
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_GiantSwing"},
+
+    events: [
+        {type: "DLSE_KnockbackShortRange", trigger: "playerAttack", dist: 1, dlse_dist: 2,},
+        {type: "DLSE_DamageMultShortRange", trigger: "beforePlayerAttack", dlse_dist: 2, power: 0.538, damage: "crush", dlse_replacesfx: "HeavySwing",},
+        {type: "DLSE_ReduceCostShortRange", trigger: "beforePlayerLaunchAttack", dlse_dist: 2, dlse_mult: 0.7,},
+    ],
+};
+
+/**************************************************
+ * Royal Halberd
+ * 
+ * Polearm that deals massive slash damage.
+ * Special Ability - Heavy Swing
+ *  > A ranged attack that deals full damage.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_HalberdRoyal"] = {name: "DLSE_HalberdRoyal", damage: 8.0, chance: 1.0, staminacost: 7, type: "slash", unarmed: false, rarity: 5, shop: false,
+    sfx: "DLSE_HeavySlash",                         // Strike with the blade
+    tags: ["axe"],                                  // TBD - Not sure what tags suit best.
+    crit: 1.2,                                      // Base crit rate.
+    clumsy: true, heavy: true, massive: true,       // It's so big...?
+    angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
+    cutBonus: 0.05,
+
+    // Make Ranged attacks! Whips are long.
+    special: {type: "spell", spell: "DLSE_HalberdHew"},
+
+    // At short range, deal 1/3rd as crush damage, but knockback 1.
+    events: [
+        {type: "DLSE_KnockbackShortRange", trigger: "playerAttack", dist: 1, dlse_dist: 2,},
+        {type: "DLSE_DamageMultShortRange", trigger: "beforePlayerAttack", dlse_dist: 2, power: 0.4375, damage: "crush", dlse_replacesfx: "HeavySwing",},
+        {type: "DLSE_ReduceCostShortRange", trigger: "beforePlayerLaunchAttack", dlse_dist: 2, dlse_mult: 0.5,},
+    ],
+};
+
+
+//region Weapon Events
+///////////////////////////////////////////////////////
+//                                                   //
+//      ///////////////////////////////////////      //
+//      //     DLSE - Weapons Events         //      //
+//      ///////////////////////////////////////      //
+//                                                   //
+///////////////////////////////////////////////////////
+
+/******************************************************
+ * Weapon Events
+ * 
+ * Had to write a few in order to implement the Halberd 
+ *  and Whip.
+ ******************************************************/
+
+// Do something special IF your target is at e.dlse_dist range or farther. (Chebyshev Distance)
+KDEventMapWeapon.beforePlayerAttack["DLSE_DamageMultLongRange"] = (e, _weapon, data) => {
+    if (data.enemy && !data.miss && !data.disarm && data.Damage && data.Damage.damage) {
+        if (data.enemy && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
+            if ((!e.chance || KDRandom() < e.chance)        // Allow for chance on event to be applied
+                // Compute Chebyshev distance, MUST be >= the threshold or it doesn't count.
+                && KDistChebyshev(data.enemy.x - KinkyDungeonPlayerEntity.x, data.enemy.y - KinkyDungeonPlayerEntity.y) >= e.dlse_dist)
+            {
+                let dmgMult = e.power;
+                data.Damage.damage = data.Damage.damage * dmgMult;
+                if(e.damage) data.Damage.type = e.damage;                                                                   // Switch damage type if specified
+                if (e.energyCost) KDChangeCharge(_weapon.name, "weapon", "attack", - e.energyCost);                         // Consume power if specified
+                if (e.sfx) KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/" + e.sfx + ".ogg", undefined, e.vol);  // Play SFX if specified
+                if (e.dlse_replacesfx) data.Damage.sfx = e.dlse_replacesfx;                                                 // Replace SFX if specified
+            }
+        }
+    }
+}
+
+// Do something special IF your target is under e.dlse_dist range. (Chebyshev Distance)
+KDEventMapWeapon.beforePlayerAttack["DLSE_DamageMultShortRange"] = (e, _weapon, data) => {
+    if (data.enemy && !data.miss && !data.disarm && data.Damage && data.Damage.damage) {
+        if (data.enemy && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
+            if ((!e.chance || KDRandom() < e.chance)
+                // Compute Chebyshev distance, MUST be < the threshold or it doesn't count.
+                && KDistChebyshev(data.enemy.x - KinkyDungeonPlayerEntity.x, data.enemy.y - KinkyDungeonPlayerEntity.y) < e.dlse_dist)
+            {
+                let dmgMult = e.power;                                                                                      
+                data.Damage.damage = data.Damage.damage * dmgMult;                                                          // Modify power
+                if (e.damage) data.Damage.type = e.damage;                                                                  // Switch damage type if specified
+                if (e.energyCost) KDChangeCharge(_weapon.name, "weapon", "attack", - e.energyCost);                         // Consume power if specified
+                if (e.sfx) KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/" + e.sfx + ".ogg", undefined, e.vol);  // Play SFX if specified
+                if (e.dlse_replacesfx) data.Damage.sfx = e.dlse_replacesfx;                                                 // Replace SFX if specified
+            }
+        }
+    }
+}
+
+// Knockback ONLY if your target is under e.dlse_dist range. (Chebyshev Distance)
+KDEventMapWeapon.playerAttack["DLSE_KnockbackShortRange"] =(e, _weapon, data) => {
+
+    if (e.dist && data.enemy && data.targetX && data.targetY && !data.miss && !data.disarm && !KDHelpless(data.enemy)) {
+        if (data.enemy.Enemy && !data.enemy.Enemy.tags.unflinching && !data.enemy.Enemy.tags.stunresist && !data.enemy.Enemy.tags.unstoppable && !data.enemy.Enemy.tags.noknockback && !KDIsImmobile(data.enemy)
+            // AND if the target is within the specified range.
+            && KDistChebyshev(data.enemy.x - KinkyDungeonPlayerEntity.x, data.enemy.y - KinkyDungeonPlayerEntity.y) < e.dlse_dist) {
+            let newX = data.targetX + Math.round(e.dist * (data.targetX - KinkyDungeonPlayerEntity.x));
+            let newY = data.targetY + Math.round(e.dist * (data.targetY - KinkyDungeonPlayerEntity.y));
+            if (KinkyDungeonMovableTilesEnemy.includes(KinkyDungeonMapGet(newX, newY)) && KinkyDungeonNoEnemy(newX, newY, true)
+                && (e.dist == 1 || KinkyDungeonCheckProjectileClearance(data.enemy.x, data.enemy.y, newX, newY, false))) {
+                KDMoveEntity(data.enemy, newX, newY, false);
+
+                KinkyDungeonSetEnemyFlag(data.enemy, "takeFF", 1);
+            }
+        }
+    }
+}
+
+// Kinky Dungeon does not currently have "beforePlayerLaunchAttack" mapped to KDEventMapWeapon.
+// Add the mapping, if it does not exist.
+if(!KDEventMapWeapon.beforePlayerLaunchAttack){KDEventMapWeapon["beforePlayerLaunchAttack"] = {};}
+
+// Reduce stamina cost if your target is within a certain range.
+KDEventMapWeapon["beforePlayerLaunchAttack"]["DLSE_ReduceCostShortRange"] = (e, _spell, data) => {
+    if ((!e.prereq || KDCheckPrereq(null, e.prereq, e, data))
+    && KDistChebyshev(data.target.x - KinkyDungeonPlayerEntity.x, data.target.y - KinkyDungeonPlayerEntity.y) < e.dlse_dist
+    && !KinkyDungeonFlags.get("DLSE_ReduceCostShortRange")) {
+        data.attackCost *= e.dlse_mult;
+        KinkyDungeonSetFlag("DLSE_ReduceCostShortRange", 1);       // Set the flag for 1 turn.
+    }
+}
+
+/******************************************************
+ * Royal Cleave
+ * 
+ * Strike a target at range with the full force of the polearm.
+ ******************************************************/
+// Spell cast a Royal Halberd's special:
+let DLSE_HalberdHew = {
+    name: "DLSE_HalberdHew", tags: ["leather", "utility"], 
+    school: "Conjure", manacost: 0, components: ["Arms"], level:1, noMiscast: true,
+    type:"special", special: "DLSE_HalberdHew",
+    onhit:"", time:0, power: 1.0, range: 2.99, size: 1, damage: "chain",
+    minRange: 1.99,
+}
+KinkyDungeonSpellListEnemies.push(DLSE_HalberdHew);
+
+// Clone of Elastic Grip, but costs SP similar to Charge.
+KinkyDungeonSpellSpecials["DLSE_HalberdHew"] = (spell, _data, targetX, targetY, tX, tY, entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) => {
+
+    // Need a proper cost, let's copy Charge!
+    let cost = KDAttackCost().attackCost + KDSprintCost();
+    if(!KinkyDungeonHasStamina(-cost)){
+        KinkyDungeonSendTextMessage(8, TextGet("KDChargeFail_NoStamina"), "#ff5555", 1, true);
+        return "Fail";
+    }
+
+    // Need a clear line to strike the enemy.
+    // > Current Spear implementation is cheating, it goes THROUGH walls???
+    // > Apply this to Spears?
+    if (!KinkyDungeonCheckPath(entity.x, entity.y, tX, tY, true, false)) {
+        KinkyDungeonSendActionMessage(8, TextGet("KinkyDungeonSpellCastFail"+spell.name), "#ff5555", 1);
+        return "Fail";
+    }
+
+    let en = KinkyDungeonEntityAt(targetX, targetY);
+    if (en && !en.player) {
+        if (_miscast) return "Miscast";
+
+        let result = KinkyDungeonLaunchAttack(en, 1);                       // Launch an attack
+        if (result == "confirm" || result == "dialogue") {return "Fail";}   // If we interact with something instead, do nothing.
+        if (result == "hit" || result == "capture") {                       // We strike the enemy!  Do cool stuff.
+
+            if (!en.player)
+                KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
+
+            // Pay an extra SP Cost?
+            //KDChangeStamina(spell.name, "spell", "cast", KDSprintCost());
+
+            return "Cast";
+        }
+        // We whiffed.  Do nothing.
+        else if (result == "miss") {
+            KinkyDungeonSendTextMessage(8, TextGet("KDChargeFail_AttackMiss"), "#ff5555", 1, true);
+        }
+    } else return "Fail";
+}
+
+/******************************************************
+ * Giant Swing
+ * 
+ * Strike targets in an arc.  Clone of Telekinetic Slash with important changes.
+ * > Conveniently, this applies the short range bonuses from the weapon.
+ * 
+ * Issues:
+ * > Cannot trigger dialogue. Just accept the friendly fire, really.
+ ******************************************************/
+
+// Need a special AoE type for Giant Swing. NOTE - Not rigorously tested, but works for current purposes.
+// bx, by - Target location (Static)
+// xx, yy - Tested location
+// ox, oy - Player location
+KDAOETypes["DLSE_SlashChebyshev"] = (bx, by, xx, yy, rad, modifier = "", ox, oy) => {
+    let dist = KDistChebyshev(ox-xx , oy-yy);       // Distance between player and tested location
+    let dist2 = KDistChebyshev(ox-bx , oy-by);      // Distance between player and target location
+    let dist3 = KDistEuclidean(xx-bx, yy-by);       // Distance between tested and target location
+    // Special case to reduce aoe in melee
+    if (ox == bx && yy == oy) return false;
+    if (oy == by && xx == ox) return false;
+    //Main case
+    return (Math.abs(dist2-dist) < 0.49) 
+            && (dist3 <= rad);                      // Limit the size of the AoE
+}
+
+// Spell attached to weapon
+let DLSE_GiantSwing = {
+    name: "DLSE_GiantSwing", //sfx: "FireSpell", // Let weapon SFX play instead
+    manacost: 0, components: [], level:1, 
+    noMiscast: true,                // Weapon swing - it rolls accuracy, not miscast.
+    type:"special", special: "DLSE_GiantSwing_Mundane", aoetype: "DLSE_SlashChebyshev",//"slash", 
+    aoe: 1,
+    onhit:"", time:0, power: 1.0, size: 1, damage: "crush",
+    minRange: 1.99, 
+    range: 2.99,
+}
+KinkyDungeonSpellListEnemies.push(DLSE_GiantSwing);
+
+// Spell special attached to above spell.
+// > Meant for non-magical weapons.
+KinkyDungeonSpellSpecials["DLSE_GiantSwing_Mundane"] = (spell, data, targetX, targetY, _tX, _tY, entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) => {
+
+    // Need a proper cost, let's copy Charge!
+    let halberdCost = KDAttackCost().attackCost;
+    if(!KinkyDungeonHasStamina(-halberdCost)){
+        KinkyDungeonSendTextMessage(8, TextGet("KDChargeFail_NoStamina"), "#ff5555", 1, true);
+        return "Fail";
+    }
+
+    let tilesHit = [];
+    for (let xx = -spell.aoe; xx <= spell.aoe; xx++) {
+        for (let yy = -spell.aoe; yy <= spell.aoe; yy++) {
+            if (AOECondition(targetX, targetY, targetX+xx, targetY+yy, spell.aoe, "DLSE_SlashChebyshev", entity.x, entity.y)) {
+                tilesHit.push({x:targetX + xx, y:targetY+yy});
+            }
+        }
+    }
+    let hit = false;
+    for (let tile of tilesHit) {
+        let en = KinkyDungeonEnemyAt(tile.x, tile.y);
+        if (en && !KDAllied(en) && !KDHelpless(en) && en.hp > 0) {
+            if (_miscast) return "Miscast";
+            if (!hit) {         // Change stamina ONCE and only once.
+                //KDChangeMana(spell.name, "spell", "cast", -KinkyDungeonGetManaCost(spell));
+                KDChangeStamina(spell.name, "spell", "cast", halberdCost);
+            }
+            KDTriggerSpell(spell, data, false, false);
+            hit = true;
+            let mod = (KinkyDungeonFlags.get("KineticMastery") ? 1.5 : 0) + KinkyDungeonGetBuffedStat(KinkyDungeonPlayerBuffs, "KinesisBase");
+            let scaling = 0.9 * (KinkyDungeonMultiplicativeStat(-KinkyDungeonGetBuffedStat(KinkyDungeonPlayerBuffs, "KinesisScale")));
+            let ad = {
+                name: KinkyDungeonPlayerDamage.name,
+                nodisarm: false,
+                damage: spell.power + mod + KinkyDungeonPlayerDamage.damage * scaling,
+                type: KinkyDungeonPlayerDamage.type,
+                distract: KinkyDungeonPlayerDamage.distract,
+                distractEff: KinkyDungeonPlayerDamage.distractEff,
+                desireMult: KinkyDungeonPlayerDamage.desireMult,
+                bind: KinkyDungeonPlayerDamage.bind,
+                bindType: KinkyDungeonPlayerDamage.bindType,
+                bindEff: KinkyDungeonPlayerDamage.bindEff,
+                ignoreshield: KinkyDungeonPlayerDamage.ignoreshield,
+                shield_crit: KinkyDungeonPlayerDamage.shield_crit, // Crit thru shield
+                shield_stun: KinkyDungeonPlayerDamage.shield_stun, // stun thru shield
+                shield_freeze: KinkyDungeonPlayerDamage.shield_freeze, // freeze thru shield
+                shield_bind: KinkyDungeonPlayerDamage.shield_bind, // bind thru shield
+                shield_snare: KinkyDungeonPlayerDamage.shield_snare, // snare thru shield
+                shield_slow: KinkyDungeonPlayerDamage.shield_slow, // slow thru shield
+                shield_distract: KinkyDungeonPlayerDamage.shield_distract, // Distract thru shield
+                shield_vuln: KinkyDungeonPlayerDamage.shield_vuln, // Vuln thru shield
+                boundBonus: KinkyDungeonPlayerDamage.boundBonus,
+                novulnerable: KinkyDungeonPlayerDamage.novulnerable,
+                tease: KinkyDungeonPlayerDamage.tease};
+            data = {
+                target: en,
+                attackCost: 0.0, // Important
+                attackCostOrig: 0.0,
+                skipTurn: false,
+                spellAttack: true,
+                attackData: ad
+            };
+            if (KinkyDungeonPlayerDamage.stam50mult && KinkyDungeonStatMana/KinkyDungeonStatManaMax >= 0.50) {
+                data.attackData.damage *= KinkyDungeonPlayerDamage.stam50mult;
+            }
+            KinkyDungeonSendEvent("beforePlayerLaunchAttack", data);
+
+            // Attack the enemy, rolling your accuracy against their evasion.
+            // > Significant change from Telekinetic Slash, which floors your hit chance at 100%.
+            // NOTE: If you make a magical Halberd, need to set the fourth argument to True.  (IsMagic)
+            KinkyDungeonAttackEnemy(en, data.attackData, KinkyDungeonGetEvasion(undefined, false, false, false));//Math.max(1, KinkyDungeonGetEvasion(undefined, false, false, false)));
+        }
+    }
+    if (hit) {
+        if (KinkyDungeonStatsChoice.has("BerserkerRage")) {
+            KDChangeDistraction(spell.name, "spell", "cast", 0.7 + 0.5 * KinkyDungeonGetManaCost(spell), false, 0.33);
+        }
+        if (!KDEventData.shockwaves) KDEventData.shockwaves = [];
+        KDEventData.shockwaves.push({
+            x: targetX,
+            y: targetY,
+            radius: 1.5,
+            sprite: "Particles/Slash.png",
+        });
+        KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
+        return "Cast";
+    }
+
+    return "Fail";
+}
+
+//region stamPenType
+///////////////////////////////////////////////////////
+//                                                   //
+//      ///////////////////////////////////////      //
+//      //       DLSE - stamPenType          //      //
+//      ///////////////////////////////////////      //
+//                                                   //
+///////////////////////////////////////////////////////
+
+// This controls stamina penalties on swing.
+// ISSUE - Could not figure out how to determine closeness to the enemy.
+
+// Create our own.
+// KDSTAMPENTYPE.DLSE_HeavyWeapon = {
+//     onAttack: (data) => {
+//         console.log(data);
+//         // Reduce the stamina cost of the swing.
+//         // NOTE: This will still show the "not enough stamina" warning, but you can still melee.
+//         data.attackCost *= 0.5;
+//     },
+
+//     // TODO - Make this just copy from KDSTAMPENTYPE.Weapon
+//     onEvasion: (data) => {
+//         let perk = "Focused";
+//         let focusStat = "WepDPAccPenalty";
+//         let accPenMult = KinkyDungeonMultiplicativeStat(-KDEntityBuffedStat(KDPlayer(), focusStat)
+//             + (KinkyDungeonStatsChoice.get(perk) ? 9 : 0))
+//         let amount = 1;
+//         let dist = KinkyDungeonStatDistraction / KinkyDungeonStatDistractionMax;
+//         if (dist >= KDUnfocusedParams.ThreshMin) {
+//             amount = (1 - accPenMult*KDUnfocusedParams.AmountMin)
+//             + ((1 - accPenMult*KDUnfocusedParams.AmountMax) - (1 - accPenMult*KDUnfocusedParams.AmountMin))
+//                 * (dist - KDUnfocusedParams.ThreshMin)
+//             / (KDUnfocusedParams.ThreshMax - KDUnfocusedParams.ThreshMin);
+//         }
+//         if (amount != 1) data.hitmult *= amount;
+//     },
+// }
