@@ -18,16 +18,11 @@
 let DLSE_Hyperfocus = {
     name: "DLSE_Hyperfocus", prerequisite: "ApprenticeKnowledge", tags: ["buff", "utility", "knowledge"], school: "Illusion", 
     autoLearn: ["DLSE_Hyperfocus_Passive"],
-    manacost: 4, defaultOff: true, time: 10, components: ["Arms"], level:1, type:"passive",
+    manacost: 4, defaultOff: true, time: 10, components: ["Verbal"], level:1, type:"passive",
     events: [
         {type: "DLSE_Hyperfocus", trigger: "toggleSpell", power: 12, time: 10},
     ]
 }
-
-
-
-// TODO - Make this work if this exists later on
-KDEventMapSpell.spellCast = {}
 
 
 // Invisible passive that handles tracking beforeCrit event
@@ -126,4 +121,3 @@ KDEventMapSpell.duringCrit["DLSE_Hyperfocus_Passive"] = (e, _spell, data) => {
 
 KinkyDungeonSpellList["Illusion"].push(DLSE_Hyperfocus);
 KinkyDungeonSpellList["Illusion"].push(DLSE_Hyperfocus_Passive);
-KinkyDungeonLearnableSpells[6][1].push("DLSE_Hyperfocus");

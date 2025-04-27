@@ -6,6 +6,7 @@ KDModButtonDLSEMCM_Shops,"Add new items to The Shoppe"
 KDModButtonDLSEMCM_Classes,"Enable new Class Spells"
 KDModButtonDLSEMCM_Light,"Enable new Light Spells"
 KDModButtonDLSEMCM_Shadow,"Enable new Shadow Spells"
+KDModButtonDLSEMCM_Arcane,"Enable new Arcane Spells"
 KDModButtonDLSEMCM_ShroudChanges,"Shroud/Smoke Bombs are Shadow"
 KDModButtonDLSEMCM_ClassicDarkblade,"Revert Darkblade (Default: OFF)"
 KDModButtonDLSEMCM_Perks_BigArms,"Enable Big Arms perk"
@@ -29,8 +30,8 @@ KinkyDungeonSpellDescriptionDLSE_SilentAssassin,"You are 15% harder to detect wh
 
 
 KinkyDungeonSpellDLSE_Hyperfocus,"Hyperfocus"
-KinkyDungeonSpellDescriptionDLSE_Hyperfocus,"Strike a pose as you focus energy into your body. Your next spell always super-critically strikes for 1.5x damage."
-KinkyDungeonSpellCastDLSE_Hyperfocus,"You strike an edgy pose to focus your mind!"
+KinkyDungeonSpellDescriptionDLSE_Hyperfocus,"Metamagic that empowers your spells. Your next spell always super-critically strikes for 1.5x damage."
+KinkyDungeonSpellCastDLSE_Hyperfocus,"You recite an empowering mantra!"
 KinkyDungeonBuffDLSE_Hyperfocus,"Hyperfocus: Your next spell is super-critcal!"
 KinkyDungeonSpellCastDLSE_HyperfocusTest,
 

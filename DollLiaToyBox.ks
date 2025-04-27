@@ -71,7 +71,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Arcane",      type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 // Page 2
@@ -140,6 +140,7 @@ function DLSE_MCM_Config(){
     DLSE_Classes()              // Configure Class changes
     DLSE_Light();               // Spell Trees
     DLSE_Shadow();
+    DLSE_Arcane();
 
     KDLoadPerks();              // Refresh the perks list so that things show up.
 
@@ -473,6 +474,15 @@ function DLSE_ShadowV2(){
 
 }
 
+// Following alternate strat.
+function DLSE_Arcane(){
+
+    // Hyperfocus after Sonar.
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && !KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus")){
+        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("Sonar")+1),0,"DLSE_Hyperfocus");}  // Add the spell if not already added
+    else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus")){
+        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("DLSE_Hyperfocus")),1);}             // Remove the spell if already added
+}
 
 //////////////////////////////////////////////////////////////////
 // Overwriting Events so Shadow Spells work with Shroud         //
