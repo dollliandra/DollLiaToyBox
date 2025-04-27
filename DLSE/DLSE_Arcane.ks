@@ -17,20 +17,27 @@
 // Actual Spell on the Hotbar.  Uses the Toggle trick to cast without targeting
 let DLSE_Hyperfocus = {
     name: "DLSE_Hyperfocus", prerequisite: "ApprenticeKnowledge", tags: ["buff", "utility", "knowledge"], school: "Illusion", 
-    autoLearn: ["DLSE_Hyperfocus2"],
+    autoLearn: ["DLSE_Hyperfocus_Passive"],
     manacost: 4, defaultOff: true, time: 10, components: ["Arms"], level:1, type:"passive",
     events: [
         {type: "DLSE_Hyperfocus", trigger: "toggleSpell", power: 12, time: 10},
     ]
 }
 
+
+
+// TODO - Make this work if this exists later on
+KDEventMapSpell.spellCast = {}
+
+
 // Invisible passive that handles tracking beforeCrit event
 let DLSE_Hyperfocus_Passive = {
-    name: "DLSE_Hyperfocus2", manacost: 0, components: [], level:1, passive: true, type:"", onhit:"", time: 0, delay: 0, range: 0, lifetime: 0, power: 0, damage: "inert",
+    name: "DLSE_Hyperfocus_Passive", manacost: 0, components: [], level:1, passive: true, type:"", onhit:"", time: 0, delay: 0, range: 0, lifetime: 0, power: 0, damage: "inert",
     hideLearned: true, hideWithout: "DLSE_Hyperfocus",
     events: [
-        {type: "DLSE_Hyperfocus2", trigger: "beforeCrit"},
-        {type: "DLSE_Hyperfocus2", trigger: "duringCrit", mult: 1.5},
+        //{type: "DLSE_Hyperfocus_Passive", trigger: "beforeCast"},
+        {type: "DLSE_Hyperfocus_Passive", trigger: "beforeCrit"},
+        {type: "DLSE_Hyperfocus_Passive", trigger: "duringCrit", mult: 1.5},
     ]
 }
 
@@ -76,10 +83,22 @@ KDEventMapSpell.toggleSpell["DLSE_Hyperfocus"] = (e, spell, data) => {
     }
 }
 
+// NOTE - Detached from Hyperfocus_Passive, as it does nothing.
+// _spell here is DLSE_Hyperfocus_Passive
+KDEventMapSpell.beforeCast["DLSE_Hyperfocus_Passive"] = (_e, _spell, data) => {
+//     console.log("Data - Before Cast")
+//     console.log(data)
+}
+
 // Event to force any spell to crit IF you have the buff.
-KDEventMapSpell.beforeCrit["DLSE_Hyperfocus2"] = (_e, _spell, data) => {
-    if (data.faction == "Player" && data.spell && KDEntityHasBuff(KinkyDungeonPlayerEntity, "DLSE_Hyperfocus")) {
+KDEventMapSpell.beforeCrit["DLSE_Hyperfocus_Passive"] = (_e, _spell, data) => {
+    // console.log("Data - Before Crit:")
+    // console.log(data)
+    if (data.faction == "Player" && data.spell
+        && (!data.spell.tags?.includes("dot"))
+        && KDEntityHasBuff(KinkyDungeonPlayerEntity, "DLSE_Hyperfocus")) {
         data.forceCrit = true;
+        data.meow = true;
         // Set the buff's duration to 0, so that it expires after the turn ends.
         if(KinkyDungeonPlayerBuffs.DLSE_Hyperfocus.duration > 0){
             KinkyDungeonPlayerBuffs.DLSE_Hyperfocus.duration = 0;
@@ -87,9 +106,9 @@ KDEventMapSpell.beforeCrit["DLSE_Hyperfocus2"] = (_e, _spell, data) => {
     }
 }
 
-KDEventMapSpell.duringCrit["DLSE_Hyperfocus2"] = (e, _spell, data) => {
-    console.log("Data - During Crit:")
-    console.log(data);
+KDEventMapSpell.duringCrit["DLSE_Hyperfocus_Passive"] = (e, _spell, data) => {
+    // console.log("Data - During Crit:")
+    // console.log(data);
     if (data.dmg > 0 && data.critical && data.enemy
         //&& data.attacker?.player          // Prevents spells from super-critting
         && !data.attacker
