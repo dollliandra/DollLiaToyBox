@@ -66,9 +66,10 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Light",       type: "boolean", default: true, block: undefined},                
                 {refvar: "DLSEMCM_Shadow",      type: "boolean", default: true, block: undefined},
 
+                // Page 1, Column 2
                 {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Colossals",    type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Relics",       type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 {refvar: "DLSEMCM_Arcane",      type: "boolean", default: true, block: undefined},
@@ -164,6 +165,16 @@ let DLSE_HalberdsList = [           // Items to inject into the loot pools.
     "DLSE_Halberd",
     "DLSE_HalberdLabrys",
     "DLSE_HalberdRoyal",
+]
+
+let DLSE_Colossals_Init = false;    // Have we injected colosals into the loot pools yet?
+let DLSE_ColossalsList = [          // Items to inject into the loot pools.
+    "DLSE_ColossalSword",
+]
+
+let DLSE_Relics_Init = false;       // Have we injected relics into the loot pools yet?
+let DLSE_RelicsList = [             // Items to inject into the loot pools.
+    "DLSE_InfiniteBaths",
 ]
 
 // Inject new items into the loot pools. The code is a bit sloppy.
@@ -279,6 +290,100 @@ function DLSE_Loot() {
             }
         })
         DLSE_Halberds_Init = false;
+    }
+    // Colossal Weapons
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Colossals"] && !DLSE_Colossals_Init){            // Add Colossals to Loot IF they haven't been added yet.
+        DLSE_Colossals_Init = true;
+
+        // Allow halberds to appear in shops
+        DLSE_ColossalsList.forEach((item) => {KinkyDungeonWeapons[item].shop = true;})
+
+        // Add Colossals to common pool?  Unlikely.
+        //KDWeaponLootList.CommonWeapon["DLSE_Halberd"] = 1;
+
+        // Place Halberd in chests.
+        // KinkyDungeonLootTable.chest.push(
+        //     {name: "DLSE_Halberd", minLevel: 0, weight:0.8, weapon: "DLSE_Halberd", noweapon: ["DLSE_Halberd"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
+        // );
+
+        // Place the Silver Labrys in caches.
+        // KinkyDungeonLootTable.cache.push(
+        //     {name: "DLSE_HalberdLabrys", minLevel: 3, weight:0.8, weapon: "DLSE_HalberdLabrys", noweapon: ["DLSE_HalberdLabrys"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
+        // );
+
+        // Place Colossal Sword in lesser gold chests.
+        KinkyDungeonLootTable.lessergold.push(
+            {name: "DLSE_ColossalSword", minLevel: 5, weight:0.66, weapon: "DLSE_ColossalSword", noweapon: ["DLSE_ColossalSword"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
+        );
+    // Else, remove them from the pool
+    // > This comes up if you mess with saves, then edit the MCM
+    }else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Colossals"] && DLSE_Colossals_Init){      // Remove Halberds from Loot IF they have been added.
+        // Disallow halberds to appear in shops
+        DLSE_ColossalsList.forEach((item) => {KinkyDungeonWeapons[item].shop = false;})
+
+        for(const item in KDWeaponLootList["CommonWeapon"]){
+            if(DLSE_ColossalsList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
+        }
+        KinkyDungeonLootTable.chest.forEach((item,index) => {
+            if(DLSE_ColossalsList.includes(item.name)){
+                KinkyDungeonLootTable.chest.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.cache.forEach((item,index) => {
+            if(DLSE_ColossalsList.includes(item.name)){
+                KinkyDungeonLootTable.cache.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
+            if(DLSE_ColossalsList.includes(item.name)){
+                KinkyDungeonLootTable.lessergold.splice(index,1);
+            }
+        })
+        DLSE_Colossals_Init = false;
+    }
+
+    // Relic Weapons
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Relics"] && !DLSE_Relics_Init){            // Add Colossals to Loot IF they haven't been added yet.
+        DLSE_Relics_Init = true;
+
+        // Allow relics to appear in shops?
+        DLSE_RelicsList.forEach((item) => {KinkyDungeonWeapons[item].shop = true;})
+
+        // Place Relics in (lesser?) gold chests with a very low weight and minlevel 5.
+        // Let the player amass Ancient Restraints before these start showing up.
+        KinkyDungeonLootTable.gold.push(
+            {name: "DLSE_InfiniteBaths", minLevel: 5, weight:0.33, weapon: "DLSE_InfiniteBaths", noweapon: ["DLSE_InfiniteBaths"], message:"LootChestWeapon", messageColor:"yellow", messageTime: 3, allFloors: true},
+        );
+    // Else, remove them from the pool
+    // > This comes up if you mess with saves, then edit the MCM
+    }else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Relics"] && DLSE_Relics_Init){      // Remove Halberds from Loot IF they have been added.
+        // Disallow halberds to appear in shops
+        DLSE_RelicsList.forEach((item) => {KinkyDungeonWeapons[item].shop = false;})
+
+        for(const item in KDWeaponLootList["CommonWeapon"]){
+            if(DLSE_RelicsList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
+        }
+        KinkyDungeonLootTable.chest.forEach((item,index) => {
+            if(DLSE_RelicsList.includes(item.name)){
+                KinkyDungeonLootTable.chest.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.cache.forEach((item,index) => {
+            if(DLSE_RelicsList.includes(item.name)){
+                KinkyDungeonLootTable.cache.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
+            if(DLSE_RelicsList.includes(item.name)){
+                KinkyDungeonLootTable.lessergold.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.gold.forEach((item,index) => {
+            if(DLSE_RelicsList.includes(item.name)){
+                KinkyDungeonLootTable.gold.splice(index,1);
+            }
+        })
+        DLSE_Relics_Init = false;
     }
 }
 
