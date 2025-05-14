@@ -154,7 +154,7 @@ KinkyDungeonInventoryItemDLSE_ColossalSword,"Colossal Sword"
 KinkyDungeonInventoryItemDLSE_ColossalSwordDesc,"No mortal was ever intended to wield a sword like this..."
 KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Deals terrifying slash damage and stuns the target."
 ItemPickupDLSE_ColossalSword,"You struggle to pick up a sword as big as yourself!"
-KinkyDungeonSpecialDLSE_ColossalSword,"Giant Swing: Strike all targets in an arc."
+KinkyDungeonSpecialDLSE_ColossalSword,"Giant Swing: Strike all targets in an arc for 2x SP cost, knocking them back."
 
 KinkyDungeonInventoryItemDLSE_InfiniteBaths,"Fractured Vessel"
 KinkyDungeonInventoryItemDLSE_InfiniteBathsDesc,"Try as you might, it can never be filled."
@@ -168,3 +168,6 @@ KinkyDungeonSpellCastFailDLSE_HalberdHew,"There's an obstacle in the way!"
 KinkyDungeonSpellDLSE_GiantSwing,"Giant Swing"
 KinkyDungeonSpellCastDLSE_GiantSwing,
 KinkyDungeonSpellCastFailDLSE_GiantSwing,"There's an obstacle in the way!"
+KinkyDungeonSpellDLSE_GiantSwingShort,"Giant Swing"
+KinkyDungeonSpellCastDLSE_GiantSwingShort,
+KinkyDungeonSpellCastFailDLSE_GiantSwingShort,"There's an obstacle in the way!"

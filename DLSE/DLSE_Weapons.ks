@@ -339,7 +339,7 @@ KinkyDungeonWeapons["DLSE_HalberdLabrys"] = {name: "DLSE_HalberdLabrys", damage:
     angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
     cutBonus: 0.05,
 
-    // Make Ranged attacks! Whips are long.
+    // Strike in an arc.
     special: {type: "spell", spell: "DLSE_GiantSwing"},
 
     events: [
@@ -398,12 +398,16 @@ KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
     clumsy: true, heavy: true, massive: true,       // As big as it gets.
 	tags: ["sword"],
 	sfx: "DLSE_HeavySlash",                         // Thwomp
-    angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
+    //angle: -0.48,                                 // Angle when rendered on player appearance (Telekinesis)
+
+    // Strike in an arc.
+    special: {type: "spell", spell: "DLSE_GiantSwingShort"},
 
     events: [
         // Casting a spell on hit is a potential solution to have VFX
         //{type: "CastSpell", spell: "Tremor", trigger: "playerAttack", requireEnergy: false},
         {type: "ElementalEffect", trigger: "playerAttack", power: 0, damage: "stun", time: 2},
+        {type: "DLSE_KnockbackGiantSwing", trigger: "playerAttack", dist: 2},
     ]
 }
 
@@ -664,13 +668,62 @@ let DLSE_GiantSwing = {
     range: 2.99,
 }
 KinkyDungeonSpellListEnemies.push(DLSE_GiantSwing);
+// Spell attached to weapon
+let DLSE_GiantSwingShort = {
+    name: "DLSE_GiantSwingShort", //sfx: "FireSpell", // Let weapon SFX play instead
+    manacost: 0, components: [], level:1, 
+    noMiscast: true,                // Weapon swing - it rolls accuracy, not miscast.
+    type:"special", special: "DLSE_GiantSwing_Mundane", aoetype: "DLSE_SlashChebyshev",//"slash", 
+    aoe: 1,
+    onhit:"", time:0, power: 1.0, size: 1, damage: "crush",
+    //minRange: 1.99, 
+    range: 1.99,
+}
+KinkyDungeonSpellListEnemies.push(DLSE_GiantSwingShort);
+
+
+KDAddEvent(KDEventMapWeapon, "playerAttack", "DLSE_KnockbackGiantSwing", (e, _weapon, data) => {
+    // Only work on Giant Swing
+    if(KinkyDungeonFlags.get("DLSE_GiantSwinging")){
+        if (e.dist && data.enemy && data.targetX && data.targetY && !data.miss && !data.disarm && !KDHelpless(data.enemy)) {
+            if (data.enemy.Enemy
+                && !data.enemy.Enemy.tags.noknockback
+                && !KDIsImmobile(data.enemy)) {
+
+                let dist = e.dist;
+                if (data.enemy.Enemy.tags.unflinching || data.enemy.Enemy.tags.stunresist) {
+                    dist -= 1;
+                }
+                if (data.enemy.Enemy.tags.unstoppable) {
+                    dist -= 1;
+                }
+
+                for (let i = 0; i < dist; i++) {
+                    let newX = Math.round(data.enemy.x + (data.enemy.x - KinkyDungeonPlayerEntity.x)
+                        / KDistEuclidean(data.enemy.y - KinkyDungeonPlayerEntity.y, data.enemy.x - KinkyDungeonPlayerEntity.x)
+                    );
+                    let newY = Math.round(data.enemy.y + (data.enemy.y - KinkyDungeonPlayerEntity.y)
+                        / KDistEuclidean(data.enemy.y - KinkyDungeonPlayerEntity.y, data.enemy.x - KinkyDungeonPlayerEntity.x)
+                        );
+                    if (KinkyDungeonMovableTilesEnemy.includes(KinkyDungeonMapGet(newX, newY))
+                        && KinkyDungeonNoEnemy(newX, newY, true)) {
+                        KDMoveEntity(data.enemy, newX, newY, false);
+                        KinkyDungeonSetEnemyFlag(data.enemy, "takeFF", 1);
+                        KinkyDungeonRemoveBuffsWithTag(data.enemy, ["displaceend"]);
+                    }
+                }
+            }
+        }
+    }
+});
+
 
 // Spell special attached to above spell.
 // > Meant for non-magical weapons.
 KinkyDungeonSpellSpecials["DLSE_GiantSwing_Mundane"] = (spell, data, targetX, targetY, _tX, _tY, entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) => {
 
     // Need a proper cost, let's copy Charge!
-    let halberdCost = KDAttackCost().attackCost;
+    let halberdCost = KinkyDungeonPlayerDamage.name == "DLSE_ColossalSword" ? 2 * KDAttackCost().attackCost : KDAttackCost().attackCost;
     if(!KinkyDungeonHasStamina(-halberdCost)){
         KinkyDungeonSendTextMessage(8, TextGet("KDChargeFail_NoStamina"), "#ff5555", 1, true);
         return "Fail";
@@ -695,6 +748,7 @@ KinkyDungeonSpellSpecials["DLSE_GiantSwing_Mundane"] = (spell, data, targetX, ta
             }
             KDTriggerSpell(spell, data, false, false);
             hit = true;
+            KinkyDungeonSetFlag("DLSE_GiantSwinging", 1);
             let mod = (KinkyDungeonFlags.get("KineticMastery") ? 1.5 : 0) + KinkyDungeonGetBuffedStat(KinkyDungeonPlayerBuffs, "KinesisBase");
             let scaling = 0.9 * (KinkyDungeonMultiplicativeStat(-KinkyDungeonGetBuffedStat(KinkyDungeonPlayerBuffs, "KinesisScale")));
             let ad = {
