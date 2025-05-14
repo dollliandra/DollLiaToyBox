@@ -376,6 +376,113 @@ KinkyDungeonWeapons["DLSE_HalberdRoyal"] = {name: "DLSE_HalberdRoyal", damage: 8
 };
 
 
+
+
+//region Colossal Weapons
+////////////////////////////////////////////////////////
+//                                                    //
+//      ////////////////////////////////////////      //
+//      //         DLSE - Colossals           //      //
+//      ////////////////////////////////////////      //
+//                                                    //
+////////////////////////////////////////////////////////
+//
+//  BIG weapons. You basically NEED Iron Blood and something else to manage these.
+
+// Colossal Sword
+// 100 Damage, 100 SP, 
+KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
+    damage: 10, chance: 1.2, staminacost: 10, type: "slash", unarmed: false, rarity: 5, shop: false,
+    cutBonus: 0.05,                                 // Should it be too awkward to cut with? Or even just dull?
+    crit: 1.2,                                      // Base crit rate.
+    clumsy: true, heavy: true, massive: true,       // As big as it gets.
+	tags: ["sword"],
+	sfx: "DLSE_HeavySlash",                         // Thwomp
+    angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
+
+    events: [
+        // Casting a spell on hit is a potential solution to have VFX
+        //{type: "CastSpell", spell: "Tremor", trigger: "playerAttack", requireEnergy: false},
+        {type: "ElementalEffect", trigger: "playerAttack", power: 0, damage: "stun", time: 2},
+    ]
+}
+
+
+//region Thrusting Swords
+////////////////////////////////////////////////////////
+//                                                    //
+//      ////////////////////////////////////////      //
+//      //     DLSE - Thrusting Swords        //      //
+//      ////////////////////////////////////////      //
+//                                                    //
+////////////////////////////////////////////////////////
+// Poke!
+
+/**************************************************
+ * Fractured Vessel
+ * 
+ * Legendary-tier thrusting sword that deals water damage on vulnerable targets.
+ * Applies the Drenched status to self and targets hit.
+ * Special Ability - ???
+ **************************************************/
+KinkyDungeonWeapons["DLSE_InfiniteBaths"] = {
+    name: "DLSE_InfiniteBaths", damage: 2.5, chance: 1.3, staminacost: 3.5, type: "pierce", unarmed: false, rarity: 9, shop: false, sfx: "LightSwing",
+    magic: true,
+    tags: ["sword"],
+    crit: 1.5,
+    events: [
+        {type: "ChangeDamageVulnerable", trigger: "beforePlayerAttack", power: 5.0, damage: "soap"},
+        {type: "DLSE_InfiniteBaths", trigger: "playerAttack", duration: 10},
+        {type: "DLSE_InfiniteBaths", trigger: "tick",},//offhand: true},
+    ],
+    angle: 0,       // Sprite is not meant to be rotated.
+}
+
+// Apply KDDrenched to target on hit.
+KDAddEvent(KDEventMapWeapon, "playerAttack", "DLSE_InfiniteBaths", (e, _weapon, data) => {
+    if (data.enemy && !data.miss && !data.disarm) {
+        if (data.enemy && (!e.chance || KDRandom() < e.chance) && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
+            let changes = {};
+            if (e.duration) changes.duration = e.duration;
+            if (e.power) changes.power = e.power;
+            KinkyDungeonApplyBuffToEntity(data.enemy, KDDrenched, changes);
+            KinkyDungeonApplyBuffToEntity(data.enemy, KDDrenched2, changes);
+            KinkyDungeonApplyBuffToEntity(data.enemy, KDDrenched3, changes);
+        }
+    }
+});
+
+// Apply KDDrenched infinitely to self while equipped
+KDAddEvent(KDEventMapWeapon, "tick", "DLSE_InfiniteBaths", (e, _weapon, data) => {
+    if(!KDEntityHasBuff(KinkyDungeonPlayerEntity,"Drenched")
+        || (KDEntityHasBuff(KinkyDungeonPlayerEntity,"Drenched") && !KinkyDungeonPlayerBuffs.Drenched?.DLSE_InfiniteBaths)
+    ){
+        let changes = {
+            infinite:               true,           // Buff is infinite while you have the weapon equipped.
+            duration:               9999,           // Duration is 9999 for infinite buffs.
+            DLSE_InfiniteBaths:     true,           // Label that this buff was modified by this weapon
+        };
+        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, KDDrenched, changes);
+        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, KDDrenched2, changes);
+        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, KDDrenched3, changes);
+    }
+});
+
+// Reduce KDDrenched from infinite to 5 turns when not equipped.
+KDAddEvent(KDEventMapGeneric, "tick", "DLSE_InfiniteBaths", (e, data) => {
+    if(KDEntityHasBuff(KinkyDungeonPlayerEntity,"Drenched")         // If the player is drenched, and...
+        && KinkyDungeonPlayerBuffs.Drenched?.DLSE_InfiniteBaths     // ...the drenched buff was modified by the weapon
+        && KinkyDungeonPlayerDamage.name != "DLSE_InfiniteBaths"    // ...and the weapon is no longer equipped.
+    ){
+        for(const drenchedBuff of ["Drenched","Drenched2","Drenched3"]){
+            KinkyDungeonPlayerBuffs[drenchedBuff].duration = 6;                     // Let buff expire in 5 turns
+            KinkyDungeonPlayerBuffs[drenchedBuff].infinite = false;                 // Remove the infinite property
+            delete KinkyDungeonPlayerBuffs[drenchedBuff].DLSE_InfiniteBaths;        // Clean up the property
+        }
+    }
+});
+
+
 //region Weapon Events
 ///////////////////////////////////////////////////////
 //                                                   //

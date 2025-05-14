@@ -30,10 +30,15 @@ KinkyDungeonSpellDescriptionDLSE_SilentAssassin,"You are 15% harder to detect wh
 
 
 KinkyDungeonSpellDLSE_Hyperfocus,"Hyperfocus"
-KinkyDungeonSpellDescriptionDLSE_Hyperfocus,"Metamagic that empowers your spells. Your next spell always super-critically strikes for 1.5x damage."
+KinkyDungeonSpellDescriptionDLSE_Hyperfocus,"Metamagic that empowers your spells. Your next spell always critically strikes.|(You can only apply one metamagic at a time.)"
 KinkyDungeonSpellCastDLSE_Hyperfocus,"You recite an empowering mantra!"
-KinkyDungeonBuffDLSE_Hyperfocus,"Hyperfocus: Your next spell is super-critcal!"
+KinkyDungeonBuffDLSE_Hyperfocus,"Hyperfocus: Your next spell always crits!"
 KinkyDungeonSpellCastDLSE_HyperfocusTest,
+
+KinkyDungeonSpellDLSE_Hyperfocus_Lv2,"Supercritical"
+KinkyDungeonSpellDescriptionDLSE_Hyperfocus_Lv2,"Metamagic that empowers your spells. Your next spell always super-critically strikes for 1.5x damage.|(You can only apply one metamagic at a time.)"
+KinkyDungeonSpellCastDLSE_Hyperfocus_Lv2,"You recite an intensifying mantra!"
+KinkyDungeonBuffDLSE_Hyperfocus_Lv2,"Supercritical: Your next spell is super-critical!"
 
 
 
@@ -142,6 +147,18 @@ KinkyDungeonInventoryItemDLSE_HalberdRoyalDesc,"A giant, garish, but supremely e
 KinkyDungeonInventoryItemDLSE_HalberdRoyalDesc2,"Ranged attacks deal severe slash damage. Close-range attacks cost 35 SP and deal 35 crush damage instead, knocking the target back."
 ItemPickupDLSE_HalberdRoyal,"You find a regal looking halberd, replete with golden trim."
 KinkyDungeonSpecialDLSE_HalberdRoyal,"Hew: Bring the blade down upon an enemy at 2 range."
+
+KinkyDungeonInventoryItemDLSE_ColossalSword,"Colossal Sword"
+KinkyDungeonInventoryItemDLSE_ColossalSwordDesc,"No mortal was ever intended to wield a sword like this..."
+KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Deals terrifying slash damage and stuns the target."
+ItemPickupDLSE_ColossalSword,"You struggle to pick up a sword as big as yourself!"
+KinkyDungeonSpecialDLSE_ColossalSword,"Giant Swing: Strike all targets in an arc."
+
+KinkyDungeonInventoryItemDLSE_InfiniteBaths,"Fractured Vessel"
+KinkyDungeonInventoryItemDLSE_InfiniteBathsDesc,"Try as you might, it can never be filled."
+KinkyDungeonInventoryItemDLSE_InfiniteBathsDesc2,"Deals pierce damage. Deals 50 soap damage instead on vulnerable targets. The waters drench yourself and targets hit, granting fire resist, ice/electric weakness, and conductivity."
+ItemPickupDLSE_InfiniteBaths,"You pick up an ivory blade that flows with water!"
+KinkyDungeonSpecialDLSE_InfiniteBaths,"???: Not Implemented, uh-oh."
 
 KinkyDungeonSpellDLSE_HalberdHew,"Hew"
 KinkyDungeonSpellCastDLSE_HalberdHew,

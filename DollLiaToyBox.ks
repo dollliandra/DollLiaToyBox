@@ -482,6 +482,12 @@ function DLSE_Arcane(){
         KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("Sonar")+1),0,"DLSE_Hyperfocus");}  // Add the spell if not already added
     else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus")){
         KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("DLSE_Hyperfocus")),1);}             // Remove the spell if already added
+    
+    // Hyperfocus after Sonar.
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && !KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus_Lv2")){
+        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("Sonar")+2),0,"DLSE_Hyperfocus_Lv2");}  // Add the spell if not already added
+    else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus_Lv2")){
+        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("DLSE_Hyperfocus_Lv2")),1);}             // Remove the spell if already added
 }
 
 //////////////////////////////////////////////////////////////////
