@@ -171,3 +171,13 @@ KinkyDungeonSpellCastFailDLSE_GiantSwing,"There's an obstacle in the way!"
 KinkyDungeonSpellDLSE_GiantSwingShort,"Giant Swing"
 KinkyDungeonSpellCastDLSE_GiantSwingShort,
 KinkyDungeonSpellCastFailDLSE_GiantSwingShort,"There's an obstacle in the way!"
+
+
+KinkyDungeonInventoryItemDLSE_MaceInquisitor,"Inquisitor's Mace"
+KinkyDungeonInventoryItemDLSE_MaceInquisitorDesc,"We have ways of making you talk...~"
+KinkyDungeonInventoryItemDLSE_MaceInquisitorDesc2,"Deals grope damage. Flick the switch to deal 20 charm damage instead."
+ItemPickupDLSE_MaceInquisitor,"You pick up a mace with a suspiciously soft head."
+KinkyDungeonSpecialDLSE_MaceInquisitor,"Toggle ON/OFF: Why does this weapon have a switch?"
+KinkyDungeonPlaySelfDLSE_MaceInquisitor,"You play with yourself using the soft tip..."
+KDDLSE_MaceInquisitor_ON,"You flick the switch ON, and the weapon buzzes to life!"
+KDDLSE_MaceInquisitor_OFF,"You flick the switch OFF, and the weapon is silent."
