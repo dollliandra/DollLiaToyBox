@@ -134,7 +134,7 @@ let DLSE_CheeseBeamCenter = {name: "DLSE_PC_Center", tags: [], school: "Illusion
 // > Does NOT pierce walls.  Only enemies.
 let DLSE_PurgingCrossDamageComp = {name: "DLSE_PurgingCrossDamageComp", tags: ["bolt", "shadow", "offense"], school: "Illusion", manacost: 0, components: [], level:1,
     type:"bolt", projectileTargeting:true, noDoubleHit: true, onhit:"", pierceEnemies: true,
-    power: 5, time: 0, delay: 0, range: 3, damage: "holy", speed: 4
+    power: 4, time: 0, delay: 0, range: 3, damage: "holy", speed: 4
 }
 
 // Use an event on spell toggle to fire the actual spell

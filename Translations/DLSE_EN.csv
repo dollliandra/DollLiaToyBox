@@ -74,7 +74,7 @@ KDEffectTileTooltipDLSE_VoidDesc,"Blocks light"
 KinkyDungeonSpellDLSE_PurgingCross,"Purging Cross"
 KinkyDungeonSpellDLSE_PurgingCrossBeam,"Purging Cross"
 KinkyDungeonSpellDLSE_PurgingCrossDamageComp,"Purging Cross"
-KinkyDungeonSpellDescriptionDLSE_PurgingCross,"Holy light erupts in the four cardinal directions, dealing 50 holy damage to targets up to 3 spaces away."
+KinkyDungeonSpellDescriptionDLSE_PurgingCross,"Holy light erupts in the four cardinal directions, dealing 40 holy damage to targets up to 3 spaces away."
 KinkyDungeonSpellCastDLSE_PurgingCross,"You stomp your heel, causing an explosion of light!"
 KinkyDungeonSpellTargetDLSE_PurgingCross,"This is a bug. Please report to DollLia."
 KinkyDungeonSpellCastDLSE_PurgingCrossTest,
