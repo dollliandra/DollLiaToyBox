@@ -18,7 +18,7 @@
  *  > Change the damage that the weapon deals.
  **************************************************/
 KinkyDungeonWeapons["DLSE_MaceInquisitor"] = {
-    name: "DLSE_MaceInquisitor", damage: 2.5, chance: 1.0, staminacost: 3, type: "grope", unarmed: false, rarity: 4, shop: true, sfx: "RubberBolt",
+    name: "DLSE_MaceInquisitor", damage: 2.5, chance: 1.0, staminacost: 3, type: "grope", unarmed: false, rarity: 4, shop: false, sfx: "RubberBolt",
     tags: ["toy"], noDamagePenalty: true,
     crit: 2,
     //angle: 0,

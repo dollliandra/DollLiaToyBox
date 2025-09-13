@@ -52,29 +52,29 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 //     block: () => {return true}
                 // },
                 // Header for Weapons
-                {refvar: "DLSEMCM_Header_Weapons", type: "text"},
+                {refvar: "DLSEMCM_Header_Weapons",  type: "text"},
                 // Enable/Disable New Weapons
-                {refvar: "DLSEMCM_Whips",       type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_Halberds",    type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_Shops",       type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Shops",           type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Whips",           type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Halberds",        type: "boolean", default: true, block: undefined},
 
-                {refvar: "DLSEMCM_Header_Spells", type: "text"},
+                {refvar: "DLSEMCM_Header_Spells",   type: "text"},
                 // Enable/Disable Class Changes
-                {refvar: "DLSEMCM_Classes",     type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Classes",         type: "boolean", default: true, block: undefined},
 
                 // Enable/Disable Spell School Changes
-                {refvar: "DLSEMCM_Light",       type: "boolean", default: true, block: undefined},                
-                {refvar: "DLSEMCM_Shadow",      type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Light",           type: "boolean", default: true, block: undefined},                
+                {refvar: "DLSEMCM_Shadow",          type: "boolean", default: true, block: undefined},
 
                 // Page 1, Column 2
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Colossals",    type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_ThrustingSwords",       type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Arcane",      type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Colossals",       type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_ThrustingSwords", type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Toys",            type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
                 // Page 2
                 // Header for Compatibility
                 {refvar: "DLSEMCM_Header_Compatibility", type: "text"},
@@ -99,6 +99,13 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Spacer", type: "text"},
                 {refvar: "DLSEMCM_Exp_BigArms", type: "text"},
                 {refvar: "DLSEMCM_Exp_ShroudChanges", type: "text"},
+                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer", type: "text"},
+
+                // Page 3
 
                 // Example Range setting, kept here for future reference
                 // {
@@ -172,15 +179,21 @@ let DLSE_ColossalsList = [          // Items to inject into the loot pools.
     "DLSE_ColossalSword",
 ]
 
-let DLSE_ThrustingSwords_Init = false;       // Have we injected relics into the loot pools yet?
+let DLSE_ThrustingSwords_Init = false;       // Have we injected thrusting swords into the loot pools yet?
 let DLSE_ThrustingSwordsList = [             // Items to inject into the loot pools.
     "DLSE_MagicEpee",
     "DLSE_FracturedVessel",
 ]
 
+let DLSE_Toys_Init = false;       // Have we injected toys into the loot pools yet?
+let DLSE_ToysList = [             // Items to inject into the loot pools.
+    "DLSE_MaceInquisitor",
+]
+
 // Inject new items into the loot pools. The code is a bit sloppy.
 function DLSE_Loot() {
     // Add weapon categories to the game in suitable places.
+    // Whips
     if(KDModSettings["DLSEMCM"]["DLSEMCM_Whips"] && !DLSE_Whips_Init){            // Add Whips to Loot IF they haven't been added yet.
         DLSE_Whips_Init = true;
 
@@ -243,6 +256,7 @@ function DLSE_Loot() {
         })
         DLSE_Whips_Init = false;
     }
+    // Halberds
     if(KDModSettings["DLSEMCM"]["DLSEMCM_Halberds"] && !DLSE_Halberds_Init){            // Add Halberds to Loot IF they haven't been added yet.
         DLSE_Halberds_Init = true;
 
@@ -342,8 +356,7 @@ function DLSE_Loot() {
         })
         DLSE_Colossals_Init = false;
     }
-
-    // Thrusting Weapons
+    // Thrusting Swords
     if(KDModSettings["DLSEMCM"]["DLSEMCM_ThrustingSwords"] && !DLSE_ThrustingSwords_Init){            // Add Thrusting Weapons to Loot IF they haven't been added yet.
         DLSE_ThrustingSwords_Init = true;
 
@@ -385,6 +398,50 @@ function DLSE_Loot() {
             }
         })
         DLSE_ThrustingSwords_Init = false;
+    }
+
+    // Toys
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Toys"] && !DLSE_Toys_Init){            // Add Thrusting Weapons to Loot IF they haven't been added yet.
+        DLSE_Toys_Init = true;
+
+        // Allow toys to appear in shops?
+        DLSE_ToysList.forEach((item) => {KinkyDungeonWeapons[item].shop = true;})
+
+        // Place Toys
+        KinkyDungeonLootTable.chest.push(
+		    {name: "DLSE_MaceInquisitor", arousalMode: true, minLevel: 0, weight:0.5, weapon: "DLSE_MaceInquisitor", noweapon: ["DLSE_MaceInquisitor"], message:"LootChestWeapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true},
+        );
+
+    // Else, remove them from the pool
+    // > This comes up if you mess with saves, then edit the MCM
+    }else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Toys"] && DLSE_Toys_Init){      // Remove Halberds from Loot IF they have been added.
+        // Disallow toys to appear in shops
+        DLSE_ToysList.forEach((item) => {KinkyDungeonWeapons[item].shop = false;})
+
+        for(const item in KDWeaponLootList["CommonWeapon"]){
+            if(DLSE_ToysList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
+        }
+        KinkyDungeonLootTable.chest.forEach((item,index) => {
+            if(DLSE_ToysList.includes(item.name)){
+                KinkyDungeonLootTable.chest.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.cache.forEach((item,index) => {
+            if(DLSE_ToysList.includes(item.name)){
+                KinkyDungeonLootTable.cache.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
+            if(DLSE_ToysList.includes(item.name)){
+                KinkyDungeonLootTable.lessergold.splice(index,1);
+            }
+        })
+        KinkyDungeonLootTable.gold.forEach((item,index) => {
+            if(DLSE_ToysList.includes(item.name)){
+                KinkyDungeonLootTable.gold.splice(index,1);
+            }
+        })
+        DLSE_Toys_Init = false;
     }
 }
 
