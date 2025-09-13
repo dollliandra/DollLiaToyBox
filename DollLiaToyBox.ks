@@ -264,7 +264,7 @@ function DLSE_Loot() {
 
         // Place Royal Halberd in lesser gold chests.
         KinkyDungeonLootTable.lessergold.push(
-            {name: "DLSE_HalberdRoyal", minLevel: 5, weight:0.66, weapon: "DLSE_HalberdRoyal", noweapon: ["DLSE_HalberdRoyal"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
+            {name: "DLSE_HalberdRoyal", minLevel: 5, weight:0.33, weapon: "DLSE_HalberdRoyal", noweapon: ["DLSE_HalberdRoyal"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
         );
     // Else, remove them from the pool
     // > This comes up if you mess with saves, then edit the MCM
@@ -352,7 +352,8 @@ function DLSE_Loot() {
 
         // Place Relics in (lesser?) gold chests with a very low weight and minlevel 5.
         KinkyDungeonLootTable.lessergold.push(
-            {name: "DLSE_InfiniteBaths", minLevel: 5, weight:0.66, weapon: "DLSE_InfiniteBaths", noweapon: ["DLSE_InfiniteBaths"], message:"LootChestWeapon", messageColor:"yellow", messageTime: 3, allFloors: true},
+            {name: "DLSE_MagicEpee", minLevel: 3, weight:0.33, weapon: "DLSE_MagicEpee", message:"LootChestWeapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true, noweapon: ["DLSE_MagicEpee"]},
+            {name: "DLSE_FracturedVessel", minLevel: 5, weight:0.33, weapon: "DLSE_FracturedVessel", noweapon: ["DLSE_FracturedVessel"], message:"LootChestWeapon", messageColor:"yellow", messageTime: 3, allFloors: true},
         );
     // Else, remove them from the pool
     // > This comes up if you mess with saves, then edit the MCM

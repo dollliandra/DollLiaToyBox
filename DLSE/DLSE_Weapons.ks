@@ -429,7 +429,7 @@ KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
  * Direct upgrade from the Foil.  (8/60 -> 20/70)
  **************************************************/
 KinkyDungeonWeapons["DLSE_MagicEpee"]	= {
-    name: "DLSE_MagicEpee", damage: 2, chance: 2, staminacost: 2, type: "pierce", unarmed: false, rarity: 6, shop: true, sfx: "Miss",
+    name: "DLSE_MagicEpee", damage: 2, chance: 2, staminacost: 2, type: "pierce", unarmed: false, rarity: 6, shop: false, sfx: "Miss",
     tags: ["sword"], magic: true,
     crit: 2.0,
     events: [
