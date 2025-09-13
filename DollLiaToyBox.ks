@@ -2,9 +2,14 @@
 
 //////////////////////////////////////////////////////
 // DLSE - Doll.Lia's Spell Expansion                //
-//  Version 0.1a                                    //
 // Use DLSE_ as the prefix for any new content.     //
 //////////////////////////////////////////////////////
+
+
+// NOTE TO SELF:
+// Please remember to increment this when you update your own mod!
+// -Doll.Lia
+let DLSE_VER = 0.3
 
 
 /**************************************************************
@@ -906,4 +911,55 @@ function DLSE_Perks_BigArms(){
         KinkyDungeonCanUseWeapon = DLSE_BigArms_Storage.KinkyDungeonCanUseWeapon;
     }
 
+}
+
+
+
+
+
+
+
+
+//#region Initialize Save Data
+/****************************************************************
+ * Need to keep track of certain things.
+ ****************************************************************/
+KDAddEvent(KDEventMapGeneric, "afterNewGame", "DLSE_SaveData", (e, data) => {
+    // Initialize data in the save file if necessary.
+    DLSE_Init_ToyBoxSave();
+});
+
+KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_SaveData", (e, data) => {
+    // Initialize data in the save file.
+    DLSE_Init_ToyBoxSave();
+});
+
+function DLSE_Init_ToyBoxSave(){
+
+    // Initialize the GameData portion for DollLia's mods.
+    if(!KDGameData?.DollLia){
+        console.log("Created DollLia base gamedata.")
+        KDGameData.DollLia = {}
+    }
+    // Initialize the GameData portion for DollLia's mods.
+    if(!KDGameData.DollLia?.ToyBox){
+        console.log("Created DollLia's Toy Box gamedata.")
+        KDGameData.DollLia.ToyBox = {
+            modVer:                 DLSE_VER,           // Important to track in case of potentially save-breaking changes. Can write code to fix.
+            freezingPointLoaded:    false,              // Is Freezing Point loaded?
+        }
+    }else{
+        // Verify Mod Version
+        if(KDGameData.DollLia.ToyBox.modVer < DLSE_VER){
+            console.log("Updating Mod Version from " + String(KDGameData.DollLia.ToyBox.modVer) + " to " + String(DLSE_VER))
+
+            // Update the number.
+            KinkyDungeonSendTextMessage(10, "Updated Toy Box from v" + String(KDGameData.DollLia.ToyBox.modVer) + " to v" + String(DLSE_VER) + "!", KDBaseCyan, 10);
+            KDGameData.DollLia.ToyBox.modVer = DLSE_VER;
+        // This should NEVER happen.
+        }else if(KDGameData.DollLia.ToyBox.modVer > DLSE_VER){
+            console.log("ERROR: Game save is from a later version of DollLia's Toy Box, please update!");
+            KinkyDungeonSendTextMessage(10, "ERROR: Game save is from a later version of DollLia's Toy Box, please update the mod!", KDBaseRed, 10);
+        }
+    }
 }

@@ -428,13 +428,108 @@ KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
  * Magic-tier Thrusting Sword
  * Direct upgrade from the Foil.  (8/60 -> 20/70)
  **************************************************/
-KinkyDungeonWeapons["DLSE_MagicEpee"]	= {
+KinkyDungeonWeapons["DLSE_MagicEpee"] = {
     name: "DLSE_MagicEpee", damage: 2, chance: 2, staminacost: 2, type: "pierce", unarmed: false, rarity: 6, shop: false, sfx: "Miss",
     tags: ["sword"], magic: true,
     crit: 2.0,
     events: [
         {type: "ChangeDamageVulnerable", trigger: "beforePlayerAttack", power: 3.5, damage: "pierce"},
     ],
+}
+
+/**************************************************
+ * Freezing Point
+ * 
+ * Elemental Thrusting Sword
+ * Forms a frigid blade over 4 turns, that deals Ice damage.
+ * Special - Launch the blade, dealing Ice damage.  However, the sword is nerfed until it can reform.
+ **************************************************/
+
+// Manually load the textures we need
+// To assign texture afterwards - kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex)
+let DLSE_FreezingPoint_UnformedTex = null;
+let DLSE_FreezingPoint_FormedTex = null;
+KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_FreezingPointLoadTex", (e, data) => {
+    let filepath = KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint_Alt.png"];
+    DLSE_FreezingPoint_FormedTex = KDTex(filepath, true);
+    DLSE_FreezingPoint_UnformedTex = KDTex(KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint.png"], true);
+});
+
+KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_FreezingPointLoadGame", (e, data) => {
+    if(KDGameData.DollLia?.ToyBox){
+        // If weapopn is loaded, load the alternate sprite
+        if(KDGameData.DollLia.ToyBox.freezingPointLoaded){
+            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
+        }
+    }
+});
+
+// Special Reload function for Freezing Point
+KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, data) => {
+    let player = data.player || KinkyDungeonPlayerEntity;
+    if (KDGameData.SlowMoveTurns < 1 && (!e.prereq || !KDPrereqs[e.prereq] || KDPrereqs[e.prereq](player, e, data))) {
+        let originalDuration = KinkyDungeonPlayerBuffs[weapon.name + "Load"]?.duration;
+        let currentLoad = KDEntityBuffedStat(player, weapon.name + "Load") || 0;
+        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, {
+            id: weapon.name + "Load",
+            type: weapon.name + "Load",
+            aura: e.color,
+            auraSprite: "Reload",
+            //buffSprite: true,
+            power: Math.min(e.power, currentLoad + data.delta),
+            duration: 7,
+        });
+        // Weapon is loaded
+        if (currentLoad >= e.power) {
+            if (originalDuration < 9000)
+                KinkyDungeonInterruptSleep(); // End wait if we were reloading
+            KinkyDungeonPlayerBuffs[weapon.name + "Load"].aura = undefined;
+            KinkyDungeonPlayerBuffs[weapon.name + "Load"].duration = 9999;
+            // Swap weapon sprite
+            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
+            KDGameData.DollLia.ToyBox.freezingPointLoaded = true;
+        // Weapon is still loading
+        } else {
+            KinkyDungeonPlayerBuffs[weapon.name + "Load"].aura = e.color;
+            KinkyDungeonPlayerBuffs[weapon.name + "Load"].duration = 7;
+            KinkyDungeonPlayerBuffs[weapon.name + "Load"].text = ">" + Math.round(e.power - currentLoad) + "<";
+        }
+    }
+});
+
+// Special Unload function for Freezing Point
+KDAddEvent(KDEventMapWeapon, "playerCastSpecial", "DLSE_FreezingPointUnload", (e, weapon, data) => {
+    let player = data.player || KinkyDungeonPlayerEntity;
+    if (!e.prereq || !KDPrereqs[e.prereq] || KDPrereqs[e.prereq](player, e, data)) {
+        let buff = KDEntityGetBuff(player, weapon.name + "Load");
+        if (buff) {
+            buff.power *= e.mult;
+            buff.power += e.power;
+            // Swap weapon sprite
+            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_UnformedTex);
+            KDGameData.DollLia.ToyBox.freezingPointLoaded = false;
+        }
+    }
+});
+
+KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
+    damage: 1, chance: 1.0, staminacost: 2.5, type: "pierce", unarmed: false, rarity: 6, shop: false, sfx: "LesserFreeze", magic: true,
+    tags: ["illum", "sword"],
+    // TODO - Cut Bonus only when loaded
+    //cutBonus: 0.1, 
+    events: [
+        // TODO - EleEffect only when loaded.
+        {type: "ElementalEffect", trigger: "playerAttack", power: 1.0, time: 5, damage: "frost"},
+        // TODO - WeaponLight only when blade is formed
+        {type: "WeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},
+
+        // TODO - Loading and unloading
+        {type: "DLSE_FreezingPointReload", trigger: "tick", requireEnergy: true, energyCost: 0.02, power: 4, color: KDBaseWhite, prereq: "LightLoad"},
+		{type: "DLSE_FreezingPointUnload", trigger: "playerCastSpecial", power: 0, mult: 0},
+    ],
+
+    // TODO - Special attack!
+    special: {type: "spell", spell: "ArrowRecurve", prereq: "Loaded", requiresEnergy: true, energyCost: 0.014, range: 6},
 }
 
 /**************************************************

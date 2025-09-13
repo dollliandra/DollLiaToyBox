@@ -62,6 +62,7 @@ KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_SpriteNearestFix", (
         "DLSE_ShadowSlashLv2Trail.png",
         "DLSE_ShadowSlashLv2TrailHit.png",
     ]
+    console.log("Loading Files With Nearest:");
     for (let dataFile of DLSE_ItemsList ) {
         KDTex(KDModFiles[KinkyDungeonRootDirectory + "Items/" + dataFile], true);
     }
@@ -71,4 +72,5 @@ KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_SpriteNearestFix", (
     for (let dataFile of DLSE_BulletsList ) {
         KDTex(KDModFiles[KinkyDungeonRootDirectory + "Bullets/" + dataFile], true);
     }
+    console.log("Loading Complete!");
 });
