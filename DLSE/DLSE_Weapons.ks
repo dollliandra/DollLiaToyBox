@@ -454,7 +454,6 @@ KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_FreezingPointLoadTex
     DLSE_FreezingPoint_FormedTex = KDTex(filepath, true);
     DLSE_FreezingPoint_UnformedTex = KDTex(KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint.png"], true);
 });
-
 KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_FreezingPointLoadGame", (e, data) => {
     if(KDGameData.DollLia?.ToyBox){
         // If weapopn is loaded, load the alternate sprite
@@ -463,7 +462,6 @@ KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_FreezingPointLoadGame", (e,
         }
     }
 });
-
 // Special Reload function for Freezing Point
 KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, data) => {
     let player = data.player || KinkyDungeonPlayerEntity;
@@ -484,17 +482,12 @@ KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, dat
             if (originalDuration < 9000)
                 KinkyDungeonInterruptSleep(); // End wait if we were reloading
             
-            // Pay the energy cost
+            // Pay the energy cost, swap weapon sprite and play SFX.
             if(!KDGameData.DollLia.ToyBox.freezingPointLoaded){
                 if (e.energyCost){KDChangeCharge(KinkyDungeonPlayerDamage?.name, "weapon", "tick", - e.energyCost);}
-
-                // Swap weapon sprite
                 kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
                 KDGameData.DollLia.ToyBox.freezingPointLoaded = true;
-
                 KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/DLSE_SoftFreeze.ogg", undefined, 0.5);
-
-
             }
             KinkyDungeonPlayerBuffs[weapon.name + "Load"].aura = undefined;
             KinkyDungeonPlayerBuffs[weapon.name + "Load"].duration = 9999;
@@ -507,7 +500,6 @@ KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, dat
         }
     }
 });
-
 // Special Unload function for Freezing Point
 KDAddEvent(KDEventMapWeapon, "playerCastSpecial", "DLSE_FreezingPointUnload", (e, weapon, data) => {
     let player = data.player || KinkyDungeonPlayerEntity;
@@ -522,7 +514,6 @@ KDAddEvent(KDEventMapWeapon, "playerCastSpecial", "DLSE_FreezingPointUnload", (e
         }
     }
 });
-
 // Special WeaponLight Function
 KDAddEvent(KDEventMapWeapon, "getLights", "DLSE_FPWeaponLight", (e, weapon, data) => {
     if(KDGameData.DollLia.ToyBox.freezingPointLoaded){
@@ -532,25 +523,68 @@ KDAddEvent(KDEventMapWeapon, "getLights", "DLSE_FPWeaponLight", (e, weapon, data
         });
     }
 });
+// Special Elemental Damage on Vuln w/Prereq
+KDAddEvent(KDEventMapWeapon, "playerAttack", "DLSE_ElementalEffectExtended", (e, weapon, data) => {
+    console.log(data)
+    console.log(e)
+    if (data.enemy && !data.miss && !data.disarm) {
+        if (!e.prereq || KDCheckPrereq(data.enemy, e.prereq)){
+            if (data.enemy && (!e.chance || KDRandom() < e.chance) && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
+                let damageDealt = e.power;
+                if (data.enemy.vulnerable > 0) {
+                    damageDealt = e.powerVuln;
+                };
+                KinkyDungeonDamageEnemy(data.enemy, {
+                    type: e.damage,
+                    crit: e.crit,
+                    damage: damageDealt,
+                    time: e.time,
+                    bind: e.bind,
+                    bindEff: e.bindEff,
+                    distract: e.distract,
+                    desireMult: e.desireMult,
+                    distractEff: e.distractEff,
+                    bindType: e.bindType,
+                    addBind: e.addBind,
+                }, false, e.power < 0.5, undefined, undefined, KinkyDungeonPlayerEntity, undefined, undefined, data.vulnConsumed);
+                if (e.sfx) {
+                    KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/" + e.sfx + ".ogg");
+                }
+            }
+        }
+    }
+});
+// Swap SFX on prereq
+KDEventMapWeapon.beforePlayerAttack["DLSE_SwapSFX"] = (e, _weapon, data) => {
+    if (data.enemy && !data.miss && !data.disarm && data.Damage && data.Damage.damage) {
+        if (data.enemy && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
+            if (!e.prereq || KDCheckPrereq(data.enemy, e.prereq)){
+                data.Damage.sfx = e.replacesfx;
+            }
+        }
+    }
+}
 
 KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
-    damage: 1, chance: 1.0, staminacost: 2.5, type: "pierce", unarmed: false, rarity: 6, shop: false, sfx: "LesserFreeze", magic: true,
+    damage: 1, chance: 1.0, staminacost: 2.5, type: "pierce", unarmed: false, rarity: 6, shop: false, sfx: "Miss", magic: true,
+    crit: 1.5,
     tags: ["illum", "sword"],
-    // TODO - Cut Bonus only when loaded
-    //cutBonus: 0.1, 
     events: [
         // TODO - EleEffect only when loaded.
-        {type: "ElementalEffect", trigger: "playerAttack", power: 1.0, time: 5, damage: "frost"},
-        // TODO - WeaponLight only when blade is formed
+        {type: "DLSE_ElementalEffectExtended", trigger: "playerAttack", power: 1.0, crit: 1.5, powerVuln: 4.0, time: 5, damage: "frost", prereq: "FPLoaded",},
+        {type: "DLSE_SwapSFX", trigger: "beforePlayerAttack", prereq: "FPLoaded", replacesfx: "LesserFreeze",},
         {type: "DLSE_FPWeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},
-
-        // TODO - Loading and unloading
-        {type: "DLSE_FreezingPointReload", trigger: "tick", requireEnergy: true, energyCost: 0.02, power: 4, color: KDBaseWhite, prereq: "LightLoad"},
+        {type: "DLSE_FreezingPointReload", trigger: "tick", requireEnergy: true, energyCost: 0.03, power: 5, color: KDBaseWhite, prereq: "LightLoad"},
 		{type: "DLSE_FreezingPointUnload", trigger: "playerCastSpecial", power: 0, mult: 0},
     ],
 
     // TODO - Special attack!
-    special: {type: "spell", spell: "ArrowRecurve", prereq: "Loaded", range: 6},
+    special: {type: "spell", spell: "ArrowRecurve", prereq: "FPLoaded", range: 6},
+}
+
+// Very simple prereq for the special attack
+KDPrereqs["FPLoaded"] = (_enemy, _e, _data) => {
+    return KDGameData.DollLia.ToyBox.freezingPointLoaded;
 }
 
 /**************************************************

@@ -164,9 +164,11 @@ ItemPickupDLSE_MagicEpee,"You pick up an enchanted fencing sword."
 
 KinkyDungeonInventoryItemDLSE_FreezingPoint,"Freezing Point"
 KinkyDungeonInventoryItemDLSE_FreezingPointDesc,"This broken blade mends itself with ice!"
-KinkyDungeonInventoryItemDLSE_FreezingPointDesc2,"Deals pierce damage. Forms a frigid blade over 4 turns that deals 10 bonus ice damage, increased to 40 against vulnerable targets. Special attack launches the blade."
+KinkyDungeonInventoryItemDLSE_FreezingPointDesc2,"Deals pierce damage. Draws 30 charge over 5 turns to form a frigid blade that deals 10 bonus ice damage, increased to 40 against vulnerable targets. Special attack launches the blade."
 ItemPickupDLSE_FreezingPoint,"You pick up the frigid hilt of a broken sword."
 KinkyDungeonSpecialDLSE_FreezingPoint,"Frozen Needle: Launch the ice blade as a projectile."
+KDPrereqFailFPLoaded,"The weapon needs to form its ice blade first."
+KinkyDungeonBuffDLSE_FreezingPointLoad,"Reforming: Your weapon is freezing a new blade."
 
 KinkyDungeonInventoryItemDLSE_FracturedVessel,"Fractured Vessel"
 KinkyDungeonInventoryItemDLSE_FracturedVesselDesc,"Try as you might, it can never be filled."
