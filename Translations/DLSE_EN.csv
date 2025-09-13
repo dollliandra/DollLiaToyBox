@@ -156,11 +156,16 @@ KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Deals terrifying slash damage 
 ItemPickupDLSE_ColossalSword,"You struggle to pick up a sword as big as yourself!"
 KinkyDungeonSpecialDLSE_ColossalSword,"Giant Swing: Strike all targets in an arc for 2x SP cost, knocking them back."
 
-KinkyDungeonInventoryItemDLSE_RapierWater,"Fractured Vessel"
-KinkyDungeonInventoryItemDLSE_RapierWaterDesc,"Try as you might, it can never be filled."
-KinkyDungeonInventoryItemDLSE_RapierWaterDesc2,"Deals pierce damage. Deals 50 soap damage instead on vulnerable targets. The waters drench yourself and targets hit, granting fire resist, ice/electric weakness, and conductivity."
-ItemPickupDLSE_RapierWater,"You pick up an ivory blade that flows with water!"
-KinkyDungeonSpecialDLSE_RapierWater,"???: Not Implemented, uh-oh."
+KinkyDungeonInventoryItemDLSE_MagicEpee,"Magic Épée"
+KinkyDungeonInventoryItemDLSE_MagicEpeeDesc,"The flexible blade thrums with power."
+KinkyDungeonInventoryItemDLSE_MagicEpeeDesc2,"Deals pierce damage, increased to 35 against vulnerable targets. The blade's enchantment guides itself towards your target, even ghosts."
+ItemPickupDLSE_MagicEpee,"You pick up an enchanted fencing sword."
+
+KinkyDungeonInventoryItemDLSE_FracturedVessel,"Fractured Vessel"
+KinkyDungeonInventoryItemDLSE_FracturedVesselDesc,"Try as you might, it can never be filled."
+KinkyDungeonInventoryItemDLSE_FracturedVesselDesc2,"Deals pierce damage. Deals 50 soap damage instead on vulnerable targets. The waters drench yourself and targets hit, granting fire resist, ice/electric weakness, and conductivity."
+ItemPickupDLSE_FracturedVessel,"You pick up an ivory blade that flows with water!"
+KinkyDungeonSpecialDLSE_FracturedVessel,"???: Not Implemented, uh-oh."
 
 KinkyDungeonSpellDLSE_HalberdHew,"Hew"
 KinkyDungeonSpellCastDLSE_HalberdHew,

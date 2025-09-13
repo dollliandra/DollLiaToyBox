@@ -174,7 +174,8 @@ let DLSE_ColossalsList = [          // Items to inject into the loot pools.
 
 let DLSE_ThrustingSwords_Init = false;       // Have we injected relics into the loot pools yet?
 let DLSE_ThrustingSwordsList = [             // Items to inject into the loot pools.
-    "DLSE_RapierWater",
+    "DLSE_MagicEpee",
+    "DLSE_FracturedVessel",
 ]
 
 // Inject new items into the loot pools. The code is a bit sloppy.

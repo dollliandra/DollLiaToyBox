@@ -423,14 +423,29 @@ KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
 // Poke!
 
 /**************************************************
+ * Magic Epee
+ * 
+ * Magic-tier Thrusting Sword
+ * Direct upgrade from the Foil.  (8/60 -> 20/70)
+ **************************************************/
+KinkyDungeonWeapons["DLSE_MagicEpee"]	= {
+    name: "DLSE_MagicEpee", damage: 2, chance: 2, staminacost: 2, type: "pierce", unarmed: false, rarity: 6, shop: true, sfx: "Miss",
+    tags: ["sword"], magic: true,
+    crit: 2.0,
+    events: [
+        {type: "ChangeDamageVulnerable", trigger: "beforePlayerAttack", power: 3.5, damage: "pierce"},
+    ],
+}
+
+/**************************************************
  * Fractured Vessel
  * 
  * Legendary-tier thrusting sword that deals water damage on vulnerable targets.
  * Applies the Drenched status to self and targets hit.
  * Special Ability - ???
  **************************************************/
-KinkyDungeonWeapons["DLSE_RapierWater"] = {
-    name: "DLSE_RapierWater", damage: 2.5, chance: 1.3, staminacost: 3.5, type: "pierce", unarmed: false, rarity: 9, shop: false, sfx: "LightSwing",
+KinkyDungeonWeapons["DLSE_FracturedVessel"] = {
+    name: "DLSE_FracturedVessel", damage: 2.5, chance: 1.3, staminacost: 3.5, type: "pierce", unarmed: false, rarity: 9, shop: false, sfx: "LightSwing",
     magic: true,
     tags: ["sword"],
     crit: 1.5,
@@ -476,7 +491,7 @@ KDAddEvent(KDEventMapWeapon, "tick", "DLSE_InfiniteBaths", (e, _weapon, data) =>
 KDAddEvent(KDEventMapGeneric, "tick", "DLSE_InfiniteBaths", (e, data) => {
     if(KDEntityHasBuff(KinkyDungeonPlayerEntity,"Drenched")         // If the player is drenched, and...
         && KinkyDungeonPlayerBuffs.Drenched?.DLSE_InfiniteBaths     // ...the drenched buff was modified by the weapon
-        && KinkyDungeonPlayerDamage.name != "DLSE_RapierWater"    // ...and the weapon is no longer equipped.
+        && KinkyDungeonPlayerDamage.name != "DLSE_FracturedVessel"    // ...and the weapon is no longer equipped.
     ){
         for(const drenchedBuff of ["Drenched","Drenched2","Drenched3"]){
             KinkyDungeonPlayerBuffs[drenchedBuff].duration = 6;                     // Let buff expire in 5 turns

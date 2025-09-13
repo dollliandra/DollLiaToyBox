@@ -16,7 +16,8 @@ KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_SpriteNearestFix", (
         "DLSE_HalberdRoyal.png",
         "DLSE_HalberdLabrys.png",
         "DLSE_ColossalSword.png",
-        "DLSE_InfiniteBaths.png",
+        "DLSE_MagicEpee.png",
+        "DLSE_FracturedVessel.png",
         "DLSE_MaceInquisitor.png",
     ]
     let DLSE_SpellsList = [
