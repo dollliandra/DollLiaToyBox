@@ -517,11 +517,20 @@ KDAddEvent(KDEventMapWeapon, "playerCastSpecial", "DLSE_FreezingPointUnload", (e
         if (buff) {
             buff.power *= e.mult;
             buff.power += e.power;
-            buff.loaded = false;
             // Swap weapon sprite
             kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_UnformedTex);
             KDGameData.DollLia.ToyBox.freezingPointLoaded = false;
         }
+    }
+});
+
+// Special WeaponLight Function
+KDAddEvent(KDEventMapWeapon, "getLights", "DLSE_FPWeaponLight", (e, weapon, data) => {
+    if(KDGameData.DollLia.ToyBox.freezingPointLoaded){
+        data.lights.push({
+            brightness: e.power, x: KinkyDungeonPlayerEntity.x, y: KinkyDungeonPlayerEntity.y,
+            color: string2hex(e.color || KDBaseWhite)
+        });
     }
 });
 
@@ -534,7 +543,7 @@ KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
         // TODO - EleEffect only when loaded.
         {type: "ElementalEffect", trigger: "playerAttack", power: 1.0, time: 5, damage: "frost"},
         // TODO - WeaponLight only when blade is formed
-        {type: "WeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},
+        {type: "DLSE_FPWeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},
 
         // TODO - Loading and unloading
         {type: "DLSE_FreezingPointReload", trigger: "tick", requireEnergy: true, energyCost: 0.02, power: 4, color: KDBaseWhite, prereq: "LightLoad"},
