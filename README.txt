@@ -179,6 +179,10 @@ Various Sources Including:
  > CC-BY 4.0
  > https://creativecommons.org/licenses/by/4.0/
 
+* ice.wav
+ > CC0 Public Domain
+ > https://opengameart.org/content/ice-spells
+
 * Kinky Dungeon
  > Whip.ogg        - Spliced into DLSE_WhipIceQueen.ogg
  > HeavySwing2.ogg - Spliced into DLSE_HeavySlash.ogg

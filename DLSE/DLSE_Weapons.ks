@@ -492,8 +492,7 @@ KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, dat
                 kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
                 KDGameData.DollLia.ToyBox.freezingPointLoaded = true;
 
-                // TODO - Play a cute SFX here!
-
+                KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/DLSE_SoftFreeze.ogg", undefined, 0.5);
 
 
             }
