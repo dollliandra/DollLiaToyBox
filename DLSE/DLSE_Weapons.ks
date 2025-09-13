@@ -483,11 +483,23 @@ KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, dat
         if (currentLoad >= e.power) {
             if (originalDuration < 9000)
                 KinkyDungeonInterruptSleep(); // End wait if we were reloading
+            
+            // Pay the energy cost
+            if(!KDGameData.DollLia.ToyBox.freezingPointLoaded){
+                if (e.energyCost){KDChangeCharge(KinkyDungeonPlayerDamage?.name, "weapon", "tick", - e.energyCost);}
+
+                // Swap weapon sprite
+                kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
+                KDGameData.DollLia.ToyBox.freezingPointLoaded = true;
+
+                // TODO - Play a cute SFX here!
+
+
+
+            }
             KinkyDungeonPlayerBuffs[weapon.name + "Load"].aura = undefined;
             KinkyDungeonPlayerBuffs[weapon.name + "Load"].duration = 9999;
-            // Swap weapon sprite
-            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
-            KDGameData.DollLia.ToyBox.freezingPointLoaded = true;
+
         // Weapon is still loading
         } else {
             KinkyDungeonPlayerBuffs[weapon.name + "Load"].aura = e.color;
@@ -505,6 +517,7 @@ KDAddEvent(KDEventMapWeapon, "playerCastSpecial", "DLSE_FreezingPointUnload", (e
         if (buff) {
             buff.power *= e.mult;
             buff.power += e.power;
+            buff.loaded = false;
             // Swap weapon sprite
             kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_UnformedTex);
             KDGameData.DollLia.ToyBox.freezingPointLoaded = false;
@@ -529,7 +542,7 @@ KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
     ],
 
     // TODO - Special attack!
-    special: {type: "spell", spell: "ArrowRecurve", prereq: "Loaded", requiresEnergy: true, energyCost: 0.014, range: 6},
+    special: {type: "spell", spell: "ArrowRecurve", prereq: "Loaded", range: 6},
 }
 
 /**************************************************
