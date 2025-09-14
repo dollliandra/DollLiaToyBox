@@ -169,6 +169,9 @@ ItemPickupDLSE_FreezingPoint,"You pick up the frigid hilt of a broken sword."
 KinkyDungeonSpecialDLSE_FreezingPoint,"Frozen Needle: Launch the ice blade as a projectile."
 KDPrereqFailFPLoaded,"The weapon needs to form its ice blade first."
 KinkyDungeonBuffDLSE_FreezingPointLoad,"Reforming: Your weapon is freezing a new blade."
+KinkyDungeonSpellTargetDLSE_FreezingPoint_Special,Choose projectile path
+KinkyDungeonSpellDLSE_FreezingPoint_Special,Frozen Needle
+KinkyDungeonSpellCastDLSE_FreezingPoint_Special,"You launch Freezing Point's blade!"
 
 KinkyDungeonInventoryItemDLSE_FracturedVessel,"Fractured Vessel"
 KinkyDungeonInventoryItemDLSE_FracturedVesselDesc,"Try as you might, it can never be filled."

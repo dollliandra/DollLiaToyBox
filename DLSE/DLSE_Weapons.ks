@@ -441,8 +441,11 @@ KinkyDungeonWeapons["DLSE_MagicEpee"] = {
  * Freezing Point
  * 
  * Elemental Thrusting Sword
- * Forms a frigid blade over 4 turns, that deals Ice damage.
+ * Forms a frigid blade over 5 turns. Deals bonus damage with the blade formed.
+ * Casts a weapon light when the blade is formed.
  * Special - Launch the blade, dealing Ice damage.  However, the sword is nerfed until it can reform.
+ * 
+ * I don't want to talk about how this weapon required SEVEN UNIQUE EVENTS and a prereq...
  **************************************************/
 
 // Manually load the textures we need
@@ -555,7 +558,7 @@ KDAddEvent(KDEventMapWeapon, "playerAttack", "DLSE_ElementalEffectExtended", (e,
     }
 });
 // Swap SFX on prereq
-KDEventMapWeapon.beforePlayerAttack["DLSE_SwapSFX"] = (e, _weapon, data) => {
+KDAddEvent(KDEventMapWeapon, "beforePlayerAttack", "DLSE_SwapSFX", (e, _weapon, data) => {
     if (data.enemy && !data.miss && !data.disarm && data.Damage && data.Damage.damage) {
         if (data.enemy && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
             if (!e.prereq || KDCheckPrereq(data.enemy, e.prereq)){
@@ -563,14 +566,13 @@ KDEventMapWeapon.beforePlayerAttack["DLSE_SwapSFX"] = (e, _weapon, data) => {
             }
         }
     }
-}
+});
 
 KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
     damage: 1, chance: 1.0, staminacost: 2.5, type: "pierce", unarmed: false, rarity: 6, shop: false, sfx: "Miss", magic: true,
     crit: 1.5,
     tags: ["illum", "sword"],
     events: [
-        // TODO - EleEffect only when loaded.
         {type: "DLSE_ElementalEffectExtended", trigger: "playerAttack", power: 1.0, crit: 1.5, powerVuln: 4.0, time: 5, damage: "frost", prereq: "FPLoaded",},
         {type: "DLSE_SwapSFX", trigger: "beforePlayerAttack", prereq: "FPLoaded", replacesfx: "LesserFreeze",},
         {type: "DLSE_FPWeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},
@@ -579,13 +581,30 @@ KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
     ],
 
     // TODO - Special attack!
-    special: {type: "spell", spell: "ArrowRecurve", prereq: "FPLoaded", range: 6},
+    special: {type: "spell", spell: "DLSE_FreezingPoint_Special", prereq: "FPLoaded", range: 6},
 }
 
 // Very simple prereq for the special attack
 KDPrereqs["FPLoaded"] = (_enemy, _e, _data) => {
     return KDGameData.DollLia.ToyBox.freezingPointLoaded;
 }
+
+
+KinkyDungeonSpellListEnemies.push({
+    name: "DLSE_FreezingPoint_Special", color: "#92e8c0", tags: ["ice", "bolt", "offense", "aoe"], sfx: "MagicSlash", hitsfx: "Freeze", school: "Elements", pierceEnemies: true,
+    faction: "Player", noMiscast: true,
+    staminacost: 3.5,
+    noise: 4,
+    manacost: 0, components: [], level:1, type:"bolt",
+    bulletColor: 0x92e4e8, bulletLight: 4,
+    hitColor: 0x92e4e8, hitLight: 7,
+    effectTileDurationModTrail: 10, effectTileTrail: {
+        name: "Ice",
+        duration: 20,
+    },
+    projectileTargeting:true, onhit:"", time: 3,  power: 6, delay: 0, range: 10, damage: "frost", speed: 3, playerEffect: {name: "Damage"},
+    events: [{type: "ElementalOnSlowOrBindOrDrench", trigger: "bulletHitEnemy", damage: "ice", time: 3, power: 0},]
+});
 
 /**************************************************
  * Fractured Vessel
