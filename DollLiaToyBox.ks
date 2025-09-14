@@ -187,6 +187,7 @@ let DLSE_ColossalsList = [          // Items to inject into the loot pools.
 let DLSE_ThrustingSwords_Init = false;       // Have we injected thrusting swords into the loot pools yet?
 let DLSE_ThrustingSwordsList = [             // Items to inject into the loot pools.
     "DLSE_MagicEpee",
+    "DLSE_FreezingPoint",
     "DLSE_FracturedVessel",
 ]
 
@@ -241,24 +242,11 @@ function DLSE_Loot() {
         for(const item in KDWeaponLootList["CommonToy"]){
             if(DLSE_WhipsList.includes(item)){delete KDWeaponLootList["CommonToy"][item]};
         }
-        // Clean all whips out of the chest loot table.
-        KinkyDungeonLootTable.chest.forEach((item,index) => {
-            if(DLSE_WhipsList.includes(item.name)){
-                KinkyDungeonLootTable.chest.splice(index,1);
-            }
-        })
-        // Clean all whips out of the cache loot table.
-        KinkyDungeonLootTable.cache.forEach((item,index) => {
-            if(DLSE_WhipsList.includes(item.name)){
-                KinkyDungeonLootTable.cache.splice(index,1);
-            }
-        })
-        // Clean all whips out of the lessergold loot table.
-        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
-            if(DLSE_WhipsList.includes(item.name)){
-                KinkyDungeonLootTable.cache.splice(index,1);
-            }
-        })
+        Object.keys(KinkyDungeonLootTable).forEach(key => {
+            KinkyDungeonLootTable[key] = KinkyDungeonLootTable[key].filter((lootItem) => {
+                return !DLSE_WhipsList.includes(lootItem.name);
+            });
+        });
         DLSE_Whips_Init = false;
     }
     // Halberds
@@ -294,21 +282,11 @@ function DLSE_Loot() {
         for(const item in KDWeaponLootList["CommonWeapon"]){
             if(DLSE_HalberdsList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
         }
-        KinkyDungeonLootTable.chest.forEach((item,index) => {
-            if(DLSE_HalberdsList.includes(item.name)){
-                KinkyDungeonLootTable.chest.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.cache.forEach((item,index) => {
-            if(DLSE_HalberdsList.includes(item.name)){
-                KinkyDungeonLootTable.cache.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
-            if(DLSE_HalberdsList.includes(item.name)){
-                KinkyDungeonLootTable.lessergold.splice(index,1);
-            }
-        })
+        Object.keys(KinkyDungeonLootTable).forEach(key => {
+            KinkyDungeonLootTable[key] = KinkyDungeonLootTable[key].filter((lootItem) => {
+                return !DLSE_HalberdsList.includes(lootItem.name);
+            });
+        });
         DLSE_Halberds_Init = false;
     }
     // Colossal Weapons
@@ -344,21 +322,11 @@ function DLSE_Loot() {
         for(const item in KDWeaponLootList["CommonWeapon"]){
             if(DLSE_ColossalsList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
         }
-        KinkyDungeonLootTable.chest.forEach((item,index) => {
-            if(DLSE_ColossalsList.includes(item.name)){
-                KinkyDungeonLootTable.chest.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.cache.forEach((item,index) => {
-            if(DLSE_ColossalsList.includes(item.name)){
-                KinkyDungeonLootTable.cache.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
-            if(DLSE_ColossalsList.includes(item.name)){
-                KinkyDungeonLootTable.lessergold.splice(index,1);
-            }
-        })
+        Object.keys(KinkyDungeonLootTable).forEach(key => {
+            KinkyDungeonLootTable[key] = KinkyDungeonLootTable[key].filter((lootItem) => {
+                return !DLSE_ColossalsList.includes(lootItem.name);
+            });
+        });
         DLSE_Colossals_Init = false;
     }
     // Thrusting Swords
@@ -367,6 +335,11 @@ function DLSE_Loot() {
 
         // Allow thrusting swords to appear in shops?
         DLSE_ThrustingSwordsList.forEach((item) => {KinkyDungeonWeapons[item].shop = true;})
+
+        // Cache Loot
+        KinkyDungeonLootTable.cache.push(
+            {name: "DLSE_FreezingPoint", minLevel: 3, weight:0.8, weapon: "DLSE_FreezingPoint", noweapon: ["DLSE_FreezingPoint"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
+        );
 
         // Place Relics in (lesser?) gold chests with a very low weight and minlevel 5.
         KinkyDungeonLootTable.lessergold.push(
@@ -382,26 +355,13 @@ function DLSE_Loot() {
         for(const item in KDWeaponLootList["CommonWeapon"]){
             if(DLSE_ThrustingSwordsList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
         }
-        KinkyDungeonLootTable.chest.forEach((item,index) => {
-            if(DLSE_ThrustingSwordsList.includes(item.name)){
-                KinkyDungeonLootTable.chest.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.cache.forEach((item,index) => {
-            if(DLSE_ThrustingSwordsList.includes(item.name)){
-                KinkyDungeonLootTable.cache.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
-            if(DLSE_ThrustingSwordsList.includes(item.name)){
-                KinkyDungeonLootTable.lessergold.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.gold.forEach((item,index) => {
-            if(DLSE_ThrustingSwordsList.includes(item.name)){
-                KinkyDungeonLootTable.gold.splice(index,1);
-            }
-        })
+        /// Clean up the entire loot table
+        Object.keys(KinkyDungeonLootTable).forEach(key => {
+            KinkyDungeonLootTable[key] = KinkyDungeonLootTable[key].filter((lootItem) => {
+                return !DLSE_ThrustingSwordsList.includes(lootItem.name);
+            });
+        });
+
         DLSE_ThrustingSwords_Init = false;
     }
 
@@ -426,26 +386,11 @@ function DLSE_Loot() {
         for(const item in KDWeaponLootList["CommonWeapon"]){
             if(DLSE_ToysList.includes(item)){delete KDWeaponLootList["CommonWeapon"][item]};
         }
-        KinkyDungeonLootTable.chest.forEach((item,index) => {
-            if(DLSE_ToysList.includes(item.name)){
-                KinkyDungeonLootTable.chest.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.cache.forEach((item,index) => {
-            if(DLSE_ToysList.includes(item.name)){
-                KinkyDungeonLootTable.cache.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.lessergold.forEach((item,index) => {
-            if(DLSE_ToysList.includes(item.name)){
-                KinkyDungeonLootTable.lessergold.splice(index,1);
-            }
-        })
-        KinkyDungeonLootTable.gold.forEach((item,index) => {
-            if(DLSE_ToysList.includes(item.name)){
-                KinkyDungeonLootTable.gold.splice(index,1);
-            }
-        })
+        Object.keys(KinkyDungeonLootTable).forEach(key => {
+            KinkyDungeonLootTable[key] = KinkyDungeonLootTable[key].filter((lootItem) => {
+                return !DLSE_ToysList.includes(lootItem.name);
+            });
+        });
         DLSE_Toys_Init = false;
     }
 }
