@@ -328,24 +328,28 @@ let DLSE_Wrath = {
     name: "DLSE_Wrath", 
     tags: ["light", "aoe", "offense", "buff"], 
     prerequisite: "ApprenticeLight", sfx: "FireSpell", school: "Illusion", manacost: 3, components: [], level:1, type:"passive", power: 6,
-    events: [{type: "DLSE_Wrath", trigger: "playerAttack"}],
+    events: [{type: "DLSE_Wrath", trigger: "afterPlayerAttack"}],
     defaultOff: true,                   // Spell is too expensive to use willy-nilly
 }
 
 KinkyDungeonSpellList["Illusion"].push(DLSE_Wrath);
 
 // Event
-KDEventMapSpell.playerAttack["DLSE_Wrath"] = (_e, spell, data) => {
+KDEventMapSpell.afterPlayerAttack["DLSE_Wrath"] = (_e, spell, data) => {
+    console.log(data);
 
     // Seems to allow Brawler to trigger?  Happy with that.
     if (!data.bullet && KinkyDungeonPlayerDamage && ((KinkyDungeonPlayerDamage.name && KinkyDungeonPlayerDamage.name != "Unarmed") || KinkyDungeonStatsChoice.get("Brawler")) && KinkyDungeonHasMana(KinkyDungeonGetManaCost(spell, false, true)) && data.targetX && data.targetY && (data.enemy && KDHostile(data.enemy))) {
         KDChangeMana(spell.name, "spell", "attack", -KinkyDungeonGetManaCost(spell, false, true));
 
+
         // Cast a Shadow Slash clone two spaces north of the target.
         KinkyDungeonCastSpell(
-            data.targetX, data.targetY, 
+            //data.targetX, data.targetY, 
+            data.enemy.x, data.enemy.y,
             DLSE_WrathStrike,
-            { x: data.targetX, y: data.targetY-3 },
+            //{ x: data.targetX, y: data.targetY-3 },
+            {x: data.enemy.x, y:data.enemy.y-3},
             undefined, 
             undefined,
             "Player"
