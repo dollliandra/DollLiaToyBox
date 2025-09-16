@@ -73,9 +73,9 @@ KDEffectTileTooltipDLSE_VoidDesc,"Blocks light"
 
 
 KinkyDungeonSpellDLSE_Flash,Halo
-KinkyDungeonSpellDLSE_Flash1x1,Ring of Light
-KinkyDungeonSpellDLSE_Flash3x3,Ring of Light
-KinkyDungeonSpellDLSE_Flash5x5,Ring of Light
+KinkyDungeonSpellDLSE_Flash_1x1,Ring of Light
+KinkyDungeonSpellDLSE_Flash_3x3,Ring of Light
+KinkyDungeonSpellDLSE_Flash_5x5,Ring of Light
 KinkyDungeonSpellDescriptionDLSE_Flash,"A halo of light descends around your target. Anyone struck by the halo takes DamageDealt holy damage and is blinded for 7 turns.|Cannot strike targets in the center."
 KinkyDungeonSpellCastDLSE_Flash,A halo of light descends around your target!
 KinkyDungeonSpellTargetDLSE_Flash,Select where to center the halo. (SpellArea radius)
