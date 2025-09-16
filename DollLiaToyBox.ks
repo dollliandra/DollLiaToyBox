@@ -458,6 +458,10 @@ let DLSE_SpellsList = [
     {spellName: "DLSE_Guidance",        require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
     {spellName: "DLSE_Wrath",           require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
 
+    {spellName: "DLSE_Flash",           require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Flash", spellIndexMod: 0, spellOverride: true,},
+    {spellName: "DLSE_GreaterFlash",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "GreaterFlash", spellIndexMod: 0, spellOverride: true,},
+    {spellName: "DLSE_FocusedFlash",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "FocusedFlash", spellIndexMod: 0, spellOverride: true,},
+
     // Shadow Spells
     {spellName: "DLSE_DaggerFan",       require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "Dagger", spellIndexMod: 1,},
     {spellName: "DLSE_ShadowSlashLv2",  require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "ShadowSlash", spellIndexMod: 1,},
@@ -475,12 +479,16 @@ function DLSE_SetSpell(spell){
        && !KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
     {
         KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice(
-            (KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellIndex)+spell.spellIndexMod),0,spell.spellName);
+            (KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellIndex)+spell.spellIndexMod),spell.spellOverride,spell.spellName);
     }
     else if(!KDModSettings["DLSEMCM"][spell.require]
             && KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
     {
-        KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice((KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellName)),1);
+        if(spell.spellOverride){
+            KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice((KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellName)),1, spell.spellIndex);
+        }else{
+            KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice((KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellName)),1);
+        }
     }
 }
 

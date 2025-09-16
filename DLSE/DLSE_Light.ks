@@ -375,7 +375,7 @@ let DLSE_WrathStrike = {
 
 
 
-//#region Spell - Light Rework Idea
+//#region Spell - Flash Rework Idea
 /**********************************************************
  * Spell - Light
  * > Prerequisite - Blessing of Light
@@ -472,7 +472,7 @@ let DLSE_FlashLv3 = {
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
     ],
-    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 2, delay: 1, power: 2, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
+    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 7, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 2, delay: 1, power: 2, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
 }
 
 
@@ -557,9 +557,6 @@ KinkyDungeonSpellListEnemies.push(DLSE_FocusedFlash_5x5Ring);
 
 
 
-
-
-
 // Spell Specials for Waves of Light
 KinkyDungeonSpellSpecials["DLSE_Flash"] = (spell, _data, targetX, targetY, _tX, _tY, _entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) =>  {
     if (_miscast) return "Miscast";
@@ -640,20 +637,9 @@ KinkyDungeonSpellSpecials["DLSE_FocusedFlash"] = (spell, _data, targetX, targetY
 }
 
 
-// Overwrite spell
-//KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv1);
-KinkyDungeonLearnableSpells[6][0][KinkyDungeonLearnableSpells[6][0].findIndex((spell) => {return spell == "Flash"})] = "DLSE_Flash";
-KinkyDungeonLearnableSpells[6][0][KinkyDungeonLearnableSpells[6][0].findIndex((spell) => {return spell == "GreaterFlash"})] = "DLSE_GreaterFlash";
-KinkyDungeonLearnableSpells[6][0][KinkyDungeonLearnableSpells[6][0].findIndex((spell) => {return spell == "FocusedFlash"})] = "DLSE_FocusedFlash";
 KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv1);
 KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv2);
 KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv3);
-
-///KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "Flash"})] = DLSE_FlashLv1;
-KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "GreaterFlash"})] = DLSE_FlashLv2;
-
-
-		//{type:"special", special: "Volcanism", onhit:"", power: 6.0, range: 5.99, aoe: 2.5, size: 1, damage: ""}
 
 
 // bx, by - Target location (Static)
