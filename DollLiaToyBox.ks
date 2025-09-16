@@ -151,9 +151,13 @@ function DLSE_MCM_Config(){
     DLSE_Perks_BigArms();       // Configure a specific perk
     DLSE_ShroudFix();           // Configure Shroud/Smoke Bombs
     DLSE_Classes()              // Configure Class changes
-    DLSE_Light();               // Spell Trees
     DLSE_Shadow();
-    DLSE_Arcane();
+
+
+    for(const spell of DLSE_SpellsList){
+        DLSE_SetSpell(spell);
+    }
+
 
     KDLoadPerks();              // Refresh the perks list so that things show up.
 
@@ -442,38 +446,43 @@ function DLSE_Classes(){
 //////////////////////////////////////////////////////////////////
 //                  Adding Spells w/MCM                         //
 //////////////////////////////////////////////////////////////////
+
+// Define each modded spell's intended position in the Spell Trees here:
+let SP_ILLUSION = 6;
+let SC_VERBAL = 0, SC_ARMS = 1, SC_LEGS = 2, SC_PASSIVE = 3;
+let DLSE_SpellsList = [
+    // Light Spells
+    {spellName: "DLSE_PurgingCross",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
+    {spellName: "DLSE_LeapOfFaith",     require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
+    {spellName: "DLSE_Guidance",        require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
+    {spellName: "DLSE_Wrath",           require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
+
+    // Arcane Spells
+    {spellName: "DLSE_Hyperfocus",      require: "DLSEMCM_Arcane", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 1,},
+    {spellName: "DLSE_Hyperfocus_Lv2",  require: "DLSEMCM_Arcane", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 2,},
+]
+// Helper Function to set a spell according to MCM settings
+function DLSE_SetSpell(spell){
+    if(KDModSettings["DLSEMCM"][spell.require]
+       && !KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
+    {
+        KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice(
+            (KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellIndex)+spell.spellIndexMod),0,spell.spellName);
+    }
+    else if(!KDModSettings["DLSEMCM"][spell.require]
+            && KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
+    {
+        KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice((KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellName)),1);
+    }
+}
+
 //region Spells
 // Set Init bools, so we don't attempt to undo changes that we never made.
 // > Otherwise, we might end up deleting things that we didn't mean to delete!
 // > Alternatively, we might end up adding dupes of spells to the learnable list.
-let DLSE_Light_Init = false;
 let DLSE_Shadow_Init = false;
 let DLSE_Darkblade_Init = false;    // SPECIFICALLY Darkblade
 let ShadowSlashCastText = TextGet("KinkyDungeonSpellCastShadowSlash");
-
-function DLSE_Light(){
-    // Place Light Spells into Learnable Spells IF not already added.
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_Light"] && !DLSE_Light_Init){
-        DLSE_Light_Init = true;
-        // Insert into the Spell List before Summmon Holy Orb.  Keeps it grouped with the rest of the Light spells.
-        KinkyDungeonLearnableSpells[6][2].splice((KinkyDungeonLearnableSpells[6][2].indexOf("HolyOrb")),0,"DLSE_PurgingCross");
-        KinkyDungeonLearnableSpells[6][2].splice((KinkyDungeonLearnableSpells[6][2].indexOf("HolyOrb")),0,"DLSE_LeapOfFaith");
-
-        // Insert Light Passives before The Shadow Within.  Keeps it grouped with the rest of the Light spells.
-        KinkyDungeonLearnableSpells[6][3].splice((KinkyDungeonLearnableSpells[6][3].indexOf("TheShadowWithin")),0,"DLSE_Guidance");
-        KinkyDungeonLearnableSpells[6][3].splice((KinkyDungeonLearnableSpells[6][3].indexOf("TheShadowWithin")),0,"DLSE_Wrath");
-    }
-    // Remove Light Spells from Learnable Spells IF not already added.
-    else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Light"] && DLSE_Light_Init){
-        DLSE_Light_Init = false;
-
-        // Remove all Light spells from their respective lists.
-        KinkyDungeonLearnableSpells[6][2].splice((KinkyDungeonLearnableSpells[6][2].indexOf("DLSE_PurgingCross")),1);
-        KinkyDungeonLearnableSpells[6][2].splice((KinkyDungeonLearnableSpells[6][2].indexOf("DLSE_LeapOfFaith")),1);
-        KinkyDungeonLearnableSpells[6][3].splice((KinkyDungeonLearnableSpells[6][3].indexOf("DLSE_Guidance")),1);
-        KinkyDungeonLearnableSpells[6][3].splice((KinkyDungeonLearnableSpells[6][3].indexOf("DLSE_Wrath")),1);
-    }
-}
 
 
 function DLSE_Shadow(){
@@ -572,35 +581,6 @@ function DLSE_Shadow(){
         KinkyDungeonSpellList["Illusion"].find(spell => spell.name == "DLSE_ShadowSlashLv2").components = ["Arms"];
         addTextKey("KinkyDungeonSpellCastShadowSlash", ShadowSlashCastText);
     }
-}
-
-
-// Following function is NOT used. Attempt to rewrite DLSE_Shadow without Init, but unsure if better
-function DLSE_ShadowV2(){
-
-    // 4 lines per spell.
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && !KinkyDungeonLearnableSpells[6][1].includes("DLSE_DaggerFan")){
-        KinkyDungeonLearnableSpells[6][1].splice((KinkyDungeonLearnableSpells[6][1].indexOf("Dagger")+1),0,"DLSE_DaggerFan");}  // Add the spell if not already added
-    else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && KinkyDungeonLearnableSpells[6][1].includes("DLSE_DaggerFan")){
-        KinkyDungeonLearnableSpells[6][1].splice((KinkyDungeonLearnableSpells[6][1].indexOf("DLSE_DaggerFan")),1);}             // Remove the spell if already added
-
-
-}
-
-// Following alternate strat.
-function DLSE_Arcane(){
-
-    // Hyperfocus after Sonar.
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && !KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus")){
-        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("Sonar")+1),0,"DLSE_Hyperfocus");}  // Add the spell if not already added
-    else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus")){
-        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("DLSE_Hyperfocus")),1);}             // Remove the spell if already added
-    
-    // Hyperfocus after Sonar.
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && !KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus_Lv2")){
-        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("Sonar")+2),0,"DLSE_Hyperfocus_Lv2");}  // Add the spell if not already added
-    else if(!KDModSettings["DLSEMCM"]["DLSEMCM_Arcane"] && KinkyDungeonLearnableSpells[6][0].includes("DLSE_Hyperfocus_Lv2")){
-        KinkyDungeonLearnableSpells[6][0].splice((KinkyDungeonLearnableSpells[6][0].indexOf("DLSE_Hyperfocus_Lv2")),1);}             // Remove the spell if already added
 }
 
 //////////////////////////////////////////////////////////////////
