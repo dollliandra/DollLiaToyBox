@@ -440,6 +440,7 @@ KDEventMapSpell.getLights["DLSE_Light"] = (e, spell, data) => {
  * Reworking Flash into a more interesting spell.
  **********************************************************/
 
+let RING_BULLETSPIN_1X1 = 0.5
 let RING_BULLETSPIN_3X3 = 0.4
 let RING_BULLETSPIN_5X5 = 0.2
 
@@ -449,7 +450,7 @@ let DLSE_FlashLv1 = {
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
     ],
-    school: "Illusion", manacost: 4, components: ["Verbal"], level:1, type:"special", special: "DLSE_Flash", time: 0, delay: 1, power: 1, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "holy", playerEffect: {name: "Blind", time: 4},
+    school: "Illusion", manacost: 4, components: ["Verbal"], level:1, type:"special", special: "DLSE_Flash", time: 0, delay: 1, power: 2, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "holy", playerEffect: {name: "Blind", time: 4},
     aoetype: "DLSE_Ring",
     bulletSpin: RING_BULLETSPIN_3X3,
 }
@@ -461,7 +462,7 @@ let DLSE_FlashLv2 = {
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
     ],
-    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_GreaterFlash", onhit:"aoe", time: 2, delay: 1, power: 1, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
+    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_GreaterFlash", onhit:"aoe", time: 2, delay: 1, power: 2, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
 }
 
 let DLSE_FlashLv3 = {
@@ -471,7 +472,7 @@ let DLSE_FlashLv3 = {
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
     ],
-    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 2, delay: 1, power: 1, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
+    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 2, delay: 1, power: 2, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
 }
 
 
@@ -519,8 +520,9 @@ let DLSE_GreaterFlash_1x1Ring = {
         {type: "DLSE_ElementalEffect", trigger: "bulletHitEnemy", damage: "stun", power: 0, time: 2},
     ],
     noMiscast: true,
-    school: "Illusion", manacost: 0, components: [], level:1, type:"hit", onhit:"instant", time: 0, delay: 0, power: 1, range: 2.5, size: 1, aoe: .99, lifetime: 1, damage: "holy", playerEffect: {name: "Blind", time: 6},
+    school: "Illusion", manacost: 0, components: [], level:1, type:"hit", onhit:"instant", time: 0, delay: 0, power: 2, range: 2.5, size: 1, aoe: .99, lifetime: 1, damage: "holy", playerEffect: {name: "Blind", time: 6},
     aoetype: "DLSE_Ring",
+    bulletSpin: RING_BULLETSPIN_1X1,
 }
 let DLSE_GreaterFlash_3x3Ring       = { ...DLSE_Flash_3x3Ring }
 DLSE_GreaterFlash_3x3Ring.hitevents = [

@@ -25,6 +25,9 @@ KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_SpriteNearestFix", (
         "DLSE_PurgingCross.png",
         "DLSE_LeapOfFaith.png",
         "DLSE_Wrath.png",
+        "DLSE_Flash.png",
+        "DLSE_GreaterFlash.png",
+        "DLSE_FocusedFlash.png",
         // Shadow
         "Dagger.png",
         "DLSE_DaggerFan.png",
