@@ -151,12 +151,9 @@ function DLSE_MCM_Config(){
     DLSE_Perks_BigArms();       // Configure a specific perk
     DLSE_ShroudFix();           // Configure Shroud/Smoke Bombs
     DLSE_Classes()              // Configure Class changes
-    DLSE_Shadow();
-
-
-    for(const spell of DLSE_SpellsList){
-        DLSE_SetSpell(spell);
-    }
+    // Configure Spell Changes
+    for(const spell of DLSE_SpellsList){  DLSE_SetSpell(spell);  }
+    DLSE_Shadow();              // Configure Shadow spell oddities
 
 
     KDLoadPerks();              // Refresh the perks list so that things show up.
@@ -443,6 +440,8 @@ function DLSE_Classes(){
 
 }
 
+
+//region Spells
 //////////////////////////////////////////////////////////////////
 //                  Adding Spells w/MCM                         //
 //////////////////////////////////////////////////////////////////
@@ -450,6 +449,8 @@ function DLSE_Classes(){
 // Define each modded spell's intended position in the Spell Trees here:
 let SP_ILLUSION = 6;
 let SC_VERBAL = 0, SC_ARMS = 1, SC_LEGS = 2, SC_PASSIVE = 3;
+
+// Define all Spell Data here.
 let DLSE_SpellsList = [
     // Light Spells
     {spellName: "DLSE_PurgingCross",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
@@ -457,11 +458,18 @@ let DLSE_SpellsList = [
     {spellName: "DLSE_Guidance",        require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
     {spellName: "DLSE_Wrath",           require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
 
+    // Shadow Spells
+    {spellName: "DLSE_DaggerFan",       require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "Dagger", spellIndexMod: 1,},
+    {spellName: "DLSE_ShadowSlashLv2",  require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "ShadowSlash", spellIndexMod: 1,},
+    {spellName: "DLSE_WickedEdges",     require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 1,},
+
     // Arcane Spells
     {spellName: "DLSE_Hyperfocus",      require: "DLSEMCM_Arcane", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 1,},
     {spellName: "DLSE_Hyperfocus_Lv2",  require: "DLSEMCM_Arcane", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 2,},
-]
-// Helper Function to set a spell according to MCM settings
+];
+
+// Helper Function to set all the above spells
+///////////////////////////////////////////////
 function DLSE_SetSpell(spell){
     if(KDModSettings["DLSEMCM"][spell.require]
        && !KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
@@ -476,26 +484,11 @@ function DLSE_SetSpell(spell){
     }
 }
 
-//region Spells
-// Set Init bools, so we don't attempt to undo changes that we never made.
-// > Otherwise, we might end up deleting things that we didn't mean to delete!
-// > Alternatively, we might end up adding dupes of spells to the learnable list.
-let DLSE_Shadow_Init = false;
-let DLSE_Darkblade_Init = false;    // SPECIFICALLY Darkblade
-let ShadowSlashCastText = TextGet("KinkyDungeonSpellCastShadowSlash");
-
-
+// Function to handle Darkblade and Shadow Slash optional settings.
+///////////////////////////////////////////////////////////////////////
+let DLSE_Darkblade_Init = false;                                        // Have we messed with Darkblade?
+let ShadowSlashCastText = TextGet("KinkyDungeonSpellCastShadowSlash");  // Store the original text for later.
 function DLSE_Shadow(){
-    // Place Shadow Spells into Learnable Spells IF not already added.
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && !DLSE_Shadow_Init){
-        DLSE_Shadow_Init = true;
-        // Insert new Shadow Spells
-        KinkyDungeonLearnableSpells[6][1].splice((KinkyDungeonLearnableSpells[6][1].indexOf("Dagger")+1),0,"DLSE_DaggerFan");
-        KinkyDungeonLearnableSpells[6][1].splice((KinkyDungeonLearnableSpells[6][1].indexOf("ShadowSlash")+1),0,"DLSE_ShadowSlashLv2");
-        KinkyDungeonLearnableSpells[6][3].splice((KinkyDungeonLearnableSpells[6][3].indexOf("TheShadowWithin")+1),0,"DLSE_WickedEdges");
-        
-    }
-
     // MUST have Shadow and not reverted Darkblade to change Darkblade
     if(KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && !KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"] && !DLSE_Darkblade_Init){
         DLSE_Darkblade_Init = true;
@@ -506,14 +499,6 @@ function DLSE_Shadow(){
 
         // Find Shadow Slash and replace its prerequisite with the new Darkblade
         KinkyDungeonSpellList["Illusion"].find(spell => spell.name == "ShadowSlash").prerequisite = "DLSE_Darkblade";
-    }
-    
-    // Remove Shadow Spells from Learnable Spells IF not already added.
-    if(!KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && DLSE_Shadow_Init){
-        DLSE_Shadow_Init = false;
-        KinkyDungeonLearnableSpells[6][1].splice((KinkyDungeonLearnableSpells[6][1].indexOf("DLSE_DaggerFan")),1);
-        KinkyDungeonLearnableSpells[6][1].splice((KinkyDungeonLearnableSpells[6][1].indexOf("DLSE_ShadowSlashLv2")),1);
-        KinkyDungeonLearnableSpells[6][3].splice((KinkyDungeonLearnableSpells[6][3].indexOf("DLSE_WickedEdges")),1);
     }
 
     // Revert to classic Darkblade ONLY IF Darkblade was changed previously.
