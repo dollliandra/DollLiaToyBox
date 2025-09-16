@@ -72,6 +72,25 @@ KDEffectTileTooltipDLSE_VoidDesc,"Blocks light"
 
 
 
+KinkyDungeonSpellDLSE_Flash,Halo
+KinkyDungeonSpellDLSE_Flash1x1,Ring of Light
+KinkyDungeonSpellDLSE_Flash3x3,Ring of Light
+KinkyDungeonSpellDLSE_Flash5x5,Ring of Light
+KinkyDungeonSpellDescriptionDLSE_Flash,"A halo of light descends around your target. Anyone struck by the halo takes DamageDealt holy damage and is blinded for 7 turns.|Cannot strike targets in the center."
+KinkyDungeonSpellCastDLSE_Flash,A halo of light descends around your target!
+KinkyDungeonSpellTargetDLSE_Flash,Select where to center the halo. (SpellArea radius)
+
+KinkyDungeonSpellDLSE_GreaterFlash,Concentricity
+KinkyDungeonSpellDescriptionDLSE_GreaterFlash,"Two potent haloes of light descend around your target. Anyone caught within takes DamageDealt holy damage, is blinded for 16 turns, and stunned briefly.|The center is struck immediately, while the outer ring strikes after a 1-turn delay."
+KinkyDungeonSpellCastDLSE_GreaterFlash,Two rings of light descend around your target!
+KinkyDungeonSpellTargetDLSE_GreaterFlash,Select where to center the haloes. (SpellArea radius)
+
+KinkyDungeonSpellDLSE_FocusedFlash,Waves of Light
+KinkyDungeonSpellDescriptionDLSE_FocusedFlash,"Three potent haloes of light descend around your target. Anyone caught within takes DamageDealt holy damage, is blinded for 30 turns, and is stunned for Duration turns."
+KinkyDungeonSpellCastDLSE_FocusedFlash,You summon three powerful rings of light!
+KinkyDungeonSpellTargetDLSE_FocusedFlash,Select where to center the waves. (SpellArea radius)
+
+
 KinkyDungeonSpellDLSE_PurgingCross,"Purging Cross"
 KinkyDungeonSpellDLSE_PurgingCrossBeam,"Purging Cross"
 KinkyDungeonSpellDLSE_PurgingCrossDamageComp,"Purging Cross"

@@ -427,3 +427,196 @@ KDEventMapSpell.getLights["DLSE_Light"] = (e, spell, data) => {
 // DEBUG
 //KinkyDungeonSpellList["Illusion"].push(DLSE_Light);
 //KinkyDungeonLearnableSpells[6][3].push("DLSE_Light");
+
+
+
+
+
+
+let RING_BULLETSPIN_3X3 = 0.4
+let RING_BULLETSPIN_5X5 = 0.2
+
+let DLSE_FlashLv1 = {
+    name: "DLSE_Flash", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 8, sfx: "MagicSlash",
+    hitColor: 0xffff77, hitLight: 6,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
+    ],
+    school: "Illusion", manacost: 4, components: ["Verbal"], level:1, type:"special", special: "DLSE_Flash", time: 0, delay: 1, power: 1, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "holy", playerEffect: {name: "Blind", time: 4},
+    aoetype: "DLSE_Ring",
+    bulletSpin: RING_BULLETSPIN_3X3,
+}
+
+let DLSE_FlashLv2 = {
+    name: "DLSE_GreaterFlash", color: KDBaseWhite, tags: ["light", "utility", "aoe", "offense"], prerequisite: "DLSE_Flash", spellPointCost: 1,
+    upcastFrom: "DLSE_Flash", upcastLevel: 1,
+    hitColor: 0xffff77, hitLight: 8,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
+    ],
+    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_GreaterFlash", onhit:"aoe", time: 2, delay: 1, power: 1, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
+}
+
+let DLSE_FlashLv3 = {
+    name: "DLSE_FocusedFlash", color: KDBaseWhite, tags: ["light", "utility", "aoe", "offense"], prerequisite: "DLSE_GreaterFlash", spellPointCost: 1,
+    upcastFrom: "DLSE_Flash", upcastLevel: 2,
+    hitColor: 0xffff77, hitLight: 8,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
+    ],
+    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 2, delay: 1, power: 1, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
+}
+
+// Strikes instantly in a 1x1
+let DLSE_Flash_1x1Ring = {
+    name: "DLSE_Flash_1x1", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 2, sfx: "MagicSlash",
+    hitColor: 0xffff77, hitLight: 4,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
+    ],
+    noMiscast: true,
+    school: "Illusion", manacost: 0, components: [], level:1, type:"hit", onhit:"instant", time: 0, delay: 0, power: 1, range: 2.5, size: 1, aoe: .99, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 4},
+    aoetype: "DLSE_Ring",
+}
+// Strikes in a 3x3 ring after 1 turn
+let DLSE_Flash_3x3Ring = {
+    name: "DLSE_Flash_3x3", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 4, sfx: "MagicSlash",
+    hitColor: 0xffff77, hitLight: 6,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
+    ],
+    noMiscast: true,
+    school: "Illusion", manacost: 0, components: [], level:1, type:"inert", onhit:"aoe", time: 0, delay: 1, power: 1, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 4},
+    aoetype: "DLSE_Ring",
+    bulletSpin: RING_BULLETSPIN_3X3,
+}
+// Strikes in a 3x3 ring after 1 turn, then strikes in a 5x5
+let DLSE_Flash_3x3Ring_Chaining = {
+    name: "DLSE_Flash_3x3", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 4, sfx: "MagicSlash",
+    hitColor: 0xffff77, hitLight: 6,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
+    ],
+    noMiscast: true,
+    school: "Illusion", manacost: 0, components: [], level:1, type:"inert", onhit:"aoe", time: 0, delay: 1, power: 1, range: 2.5, size: 3, aoe: 1.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 4},
+    aoetype: "DLSE_Ring",
+    bulletSpin: RING_BULLETSPIN_3X3,
+
+    spellcast: {spell: "DLSE_Flash_5x5", target: "target", directional:false, offset: false}
+}
+// Strikes in a 5x5 ring after 1 turn
+let DLSE_Flash_5x5Ring = {
+    name: "DLSE_Flash_5x5", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 6, sfx: "MagicSlash",
+    hitColor: 0xffff77, hitLight: 8,
+    hitevents: [
+        {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
+    ],
+    noMiscast: true,
+    school: "Illusion", manacost: 0, components: [], level:1, type:"inert", onhit:"aoe", time: 0, delay: 1, power: 1, range: 2.5, size: 5, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 4},
+    aoetype: "DLSE_Ring",
+    bulletSpin: RING_BULLETSPIN_5X5,
+}
+KinkyDungeonSpellListEnemies.push(DLSE_Flash_5x5Ring);
+
+KinkyDungeonSpellSpecials["DLSE_Flash"] = (spell, _data, targetX, targetY, _tX, _tY, _entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) =>  {
+    if (_miscast) return "Miscast";
+    //let rocks = [];
+    //if (rocks.length == 0) return "Fail";
+
+    // Cast spells at target 3x
+    KinkyDungeonCastSpell(
+        targetX,                        // targetX:number   - Target's X coordinate
+        targetY,                        // targetY:number   - Target's Y coordinate
+        DLSE_Flash_3x3Ring,             // spell:spell      - Spell to cast
+        undefined,                      // enemy:entity     - It seems like more of a "Source Tile"
+        undefined,                      // player:any       - Boolean?
+        undefined,                      // bullet           - ???
+        "Player",                       // forceFaction     - Force faction to Player
+    );
+   
+
+    KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
+}
+
+KinkyDungeonSpellSpecials["DLSE_GreaterFlash"] = (spell, _data, targetX, targetY, _tX, _tY, _entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) =>  {
+    if (_miscast) return "Miscast";
+    //let rocks = [];
+    //if (rocks.length == 0) return "Fail";
+
+    // Cast spells at target 3x
+    KinkyDungeonCastSpell(
+        targetX,                        // targetX:number   - Target's X coordinate
+        targetY,                        // targetY:number   - Target's Y coordinate
+        DLSE_Flash_1x1Ring,             // spell:spell      - Spell to cast
+        undefined,                      // enemy:entity     - It seems like more of a "Source Tile"
+        undefined,                      // player:any       - Boolean?
+        undefined,                      // bullet           - ???
+        "Player",                       // forceFaction     - Force faction to Player
+    );
+    KinkyDungeonCastSpell(
+        targetX,                        // targetX:number   - Target's X coordinate
+        targetY,                        // targetY:number   - Target's Y coordinate
+        DLSE_Flash_3x3Ring,             // spell:spell      - Spell to cast
+        undefined,                      // enemy:entity     - It seems like more of a "Source Tile"
+        undefined,                      // player:any       - Boolean?
+        undefined,                      // bullet           - ???
+        "Player",                       // forceFaction     - Force faction to Player
+    );
+   
+
+    KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
+}
+
+KinkyDungeonSpellSpecials["DLSE_FocusedFlash"] = (spell, _data, targetX, targetY, _tX, _tY, _entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) =>  {
+    if (_miscast) return "Miscast";
+    //let rocks = [];
+    //if (rocks.length == 0) return "Fail";
+
+    // Cast spells at target 3x
+    KinkyDungeonCastSpell(
+        targetX,                        // targetX:number   - Target's X coordinate
+        targetY,                        // targetY:number   - Target's Y coordinate
+        DLSE_Flash_1x1Ring,             // spell:spell      - Spell to cast
+        undefined,                      // enemy:entity     - It seems like more of a "Source Tile"
+        undefined,                      // player:any       - Boolean?
+        undefined,                      // bullet           - ???
+        "Player",                       // forceFaction     - Force faction to Player
+    );
+    KinkyDungeonCastSpell(
+        targetX,                        // targetX:number   - Target's X coordinate
+        targetY,                        // targetY:number   - Target's Y coordinate
+        DLSE_Flash_3x3Ring_Chaining,             // spell:spell      - Spell to cast
+        undefined,                      // enemy:entity     - It seems like more of a "Source Tile"
+        undefined,                      // player:any       - Boolean?
+        undefined,                      // bullet           - ???
+        "Player",                       // forceFaction     - Force faction to Player
+    );
+   
+
+    KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
+}
+
+
+// Overwrite spell
+//KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv1);
+KinkyDungeonLearnableSpells[6][0][KinkyDungeonLearnableSpells[6][0].findIndex((spell) => {return spell == "Flash"})] = "DLSE_Flash";
+KinkyDungeonLearnableSpells[6][0][KinkyDungeonLearnableSpells[6][0].findIndex((spell) => {return spell == "GreaterFlash"})] = "DLSE_GreaterFlash";
+KinkyDungeonLearnableSpells[6][0][KinkyDungeonLearnableSpells[6][0].findIndex((spell) => {return spell == "FocusedFlash"})] = "DLSE_FocusedFlash";
+KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv1);
+KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv2);
+KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv3);
+
+///KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "Flash"})] = DLSE_FlashLv1;
+KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "GreaterFlash"})] = DLSE_FlashLv2;
+
+
+		//{type:"special", special: "Volcanism", onhit:"", power: 6.0, range: 5.99, aoe: 2.5, size: 1, damage: ""}
+
+
+// bx, by - Target location (Static)
+// xx, yy - Tested location
+// ox, oy - Player location
+// Ring AOE Type - An AOE that is a 1-thickness ring.
+KDAOETypes["DLSE_Ring"] = (bx, by, xx, yy, rad, modifier = "", ox, oy) => {
+    return rad - 1  <=  KDistEuclidean(bx - xx, by - yy)  &&  KDistEuclidean(bx - xx, by - yy)  <=  rad;
+}
