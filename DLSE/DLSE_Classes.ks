@@ -3,7 +3,7 @@
 
 //////////////////////////////////////////////////////////////////
 // Silent Assassin                                              //
-// Increase sneak by 30% if the player is completely gagged.    //
+// Increase sneak by 15-30% if the player is gagged.            //
 //////////////////////////////////////////////////////////////////
 let DLSE_SilentAssassin = {
     name: "DLSE_SilentAssassin",

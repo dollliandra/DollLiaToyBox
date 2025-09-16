@@ -8,7 +8,7 @@
 //                                                   //
 ///////////////////////////////////////////////////////
 
-
+//#region - Spell - Dagger Lv2
 /****************************************************************
  * Example Spell - Upcasted Shadow Dagger "Fanning Knives"
  * 
@@ -93,7 +93,7 @@ KinkyDungeonSpellList["Illusion"].push(DLSE_DaggerUpcast);
 
 
 
-
+//#region Spell - Shadow Slash Lv2
 /**********************************************************
  * Spell - Whirling Scythe
  * > Cost - 50MP            > Prerequisite - Blessing of Shadow
@@ -127,6 +127,7 @@ let DLSE_ShadowSlashUpcast = {
 KinkyDungeonSpellList["Illusion"].push(DLSE_ShadowSlashUpcast);
 
 
+//#region Spell - Darkblade++
 /**********************************************************
  * Spell - Shadowblade
  * > Cost - 13MP                > Prerequisite - Blessing of Shadow
@@ -245,6 +246,7 @@ KDEventMapSpell.beforeStruggleCalc["DLSE_ModifyStruggleInShadow"] = (e, spell, d
 KinkyDungeonSpellList["Illusion"].push(DLSE_Darkblade);
 
 
+//#region Spell - Wicked Edges
 // EXPERIMENTAL - May not keep.  It's a bit boring.
 /**********************************************************
  * Spell - Wicked Edges
@@ -279,14 +281,14 @@ let DLSE_WickedEdgesBuff = {
 
 
 
+//#region Spell - Shroud++
 // EXPERIMENTAL
 /**********************************************************
  * Spell - Shroud Redux
- * > Cost - NULL                    > Prerequisite - Blessing of Shadow
- * > Damage - 30-60 Shadow Bleed    > Components - Passive
+ * > Cost - 50 MP                   > Prerequisite - Blessing of Shadow
+ * > Damage - NULL                  > Components - Verbal
  * 
- * Shadow damage inflicts a shadow bleed for 10 turns.
- * Tick damage is doubled in shadow.
+ * Visual rework of Shroud.
  **********************************************************/
 let DLSE_Shroud = {name: "DLSE_Shroud", prerequisite: "ApprenticeShadow", tags: ["aoe", "buff", "utility", "shroud", "defense"], sfx: "Fwoosh", school: "Illusion", manacost: 5, components: ["Verbal"], level:1, type:"inert",
     noise: 3.5,// Attracts some enemies

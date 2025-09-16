@@ -7,13 +7,14 @@
 //                                                  //
 //////////////////////////////////////////////////////
 
+//#region Spell - Purging Cross
 /**********************************************************
  * Spell - Purging Cross
  * > Cost - 50MP            > Prerequisite - Blessing of Light
  * > Damage - 50 Holy       > Components - Legs
  * 
  * Casts a cross-shaped AoE centered on the player.
- * Inspired by the spell of the same name from Moonring.
+ * Inspired by a spell from Moonring.
  **********************************************************/
 // Actual Spell on the Hotbar.  Uses the Toggle trick to cast without targeting
 let DLSE_PurgingCross = {
@@ -197,14 +198,14 @@ KDEventMapSpell.toggleSpell["DLSE_PurgingCross"] = (e, spell, data) => {
 
 
 
-
+//#region Spell - Leap of Faith
 /**********************************************************
  * Spell - Leap of Faith
  * > Cost - 40MP           > Prerequisite - Blessing of Light
  * > Components - Legs
  * 
  * Teleport to a tile that you can see. Become Blind for 15 turns.
- * Inspired by the spell of the same name from Moonring.
+ * Inspired by a spell from Moonring.
  **********************************************************/
 let DLSE_LeapOfFaith = {
     name: "DLSE_LeapOfFaith", prerequisite: "ApprenticeLight", tags: ["light", "utility", "defense"], school: "Illusion", //sfx: "MagicSlash"
@@ -258,7 +259,7 @@ let DLSE_Halo = {
 
 
 
-
+//#region Spell - Guidance
 /**********************************************************
  * Spell - Divine Guidance
  * > Prerequisite - Blessing of Light
@@ -315,7 +316,7 @@ KDEventMapSpell.tick["DLSE_Guidance"] = (e, spell, data) => {
 KinkyDungeonSpellList["Illusion"].push(DLSE_Guidance);
 
 
-
+//#region Spell - Wrathful Smite
 /**********************************************************
  * Spell - Wrathful Smite
  * > Prerequisite - ???
@@ -374,7 +375,15 @@ let DLSE_WrathStrike = {
 
 
 
-
+//#region Spell - Light Rework Idea
+/**********************************************************
+ * Spell - Light
+ * > Prerequisite - Blessing of Light
+ * > Components - Toggle
+ * 
+ * Reworking Light into a toggle.  I don't know if it's better,
+ *  so it hasn't ever hit live yet.
+ **********************************************************/
 let DLSE_Light = {
     name: "DLSE_Light", prerequisite: "ApprenticeLight", tags: ["buff", "utility", "light"], school: "Illusion", manacost: 0.1, defaultOff: true, components: [], level:1, type:"passive", 
     events: [
