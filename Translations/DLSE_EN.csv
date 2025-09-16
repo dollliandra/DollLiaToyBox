@@ -198,3 +198,12 @@ KinkyDungeonSpecialDLSE_MaceInquisitor,"Toggle ON/OFF: Why does this weapon have
 KinkyDungeonPlaySelfDLSE_MaceInquisitor,"You play with yourself using the soft tip..."
 KDDLSE_MaceInquisitor_ON,"You flick the switch ON, and the weapon buzzes to life!"
 KDDLSE_MaceInquisitor_OFF,"You flick the switch OFF, and the weapon is silent."
+
+
+
+KDPlayerTitleCategory_DLSE_PlayerTitles,DollLia's Toy Box
+
+KDPlayerTitle_DLSE_SpellMasteryLight,Blind Angel
+KDPlayerTitleDesc_DLSE_SpellMasteryLight,Unlocked by learning every new spell under Blessing of Light.|- Purging Cross|- Leap of Faith|- Divine Guidance|- Wrathful Smite
+KDPlayerTitle_DLSE_SpellMasteryShadow,Shadow Doll
+KDPlayerTitleDesc_DLSE_SpellMasteryShadow,Unlocked by learning every new spell under Blessing of Shadow.|- Dark Scattershot|- Whirling Scythe|- Wicked Edges|- Blade of Darkness

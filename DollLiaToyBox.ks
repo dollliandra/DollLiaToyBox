@@ -82,9 +82,9 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 // Page 2
                 // Header for Compatibility
-                {refvar: "DLSEMCM_Header_Compatibility", type: "text"},
-                {refvar: "DLSEMCM_Perks_BigArms", type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_ShroudChanges", type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Header_Compatibility",    type: "text"},
+                {refvar: "DLSEMCM_Perks_BigArms",           type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_ShroudChanges",           type: "boolean", default: true, block: undefined},
                 {
                     refvar: "DLSEMCM_ClassicDarkblade", type: "boolean", default: false,
                     // This setting does nothing if Shadow is not enabled.  Block it to visually signify this.
@@ -98,17 +98,17 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                     // This setting does nothing if Shadow is not enabled.  Block it to visually signify this.
                     block: () => {return !KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"]}
                 },
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
                 // Column 2
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Exp_BigArms", type: "text"},
-                {refvar: "DLSEMCM_Exp_ShroudChanges", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
-                {refvar: "DLSEMCM_Spacer", type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Exp_BigArms",         type: "text"},
+                {refvar: "DLSEMCM_Exp_ShroudChanges",   type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Spacer",              type: "text"},
 
                 // Page 3
 
@@ -907,4 +907,73 @@ function DLSE_Init_ToyBoxSave(){
             KinkyDungeonSendTextMessage(10, "ERROR: Game save is from a later version of DollLia's Toy Box, please update the mod!", KDBaseRed, 10);
         }
     }
+}
+
+
+
+
+
+
+
+
+//#region Player Titles
+//////////////////////////////////////////////////
+// Player Titles! //
+////////////////////
+let DLSE_KDPlayerTitlesLive = false;
+// Attempt to access the KDPlayerTitles variable.
+// > If we're not in 5.5.1+, this will throw an exception.
+try{
+    KDPlayerTitles;                     // If player titles aren't live, this throws an exception.
+    DLSE_KDPlayerTitlesLive = true;     // Otherwise, player titles are live
+}catch(e){
+    ;                                   // Just catch the exception gracefully.
+}
+
+if(DLSE_KDPlayerTitlesLive){
+    KDPlayerTitles["DLSE_SpellMasteryLight"] = {
+        "unlockCondition": () => {
+            let reqspells = ['DLSE_PurgingCross', 'DLSE_LeapOfFaith', 'DLSE_Guidance', 'DLSE_Wrath']
+            return (reqspells.every((sp) => KinkyDungeonSpells.map((t) => t.name).includes(sp))) // Checks if we have every single spell above
+        },
+        "priority": 2,
+        "color": "#ffedc5",
+        "titleActive": () => {
+            return false;
+        },
+        "titleActivate": () => {
+            return false;
+        },
+        "titleDeactivate": () => {
+            return false;
+        },
+        "category": "DLSE_PlayerTitles",
+        "icon": "None",
+    },
+
+    KDPlayerTitles["DLSE_SpellMasteryShadow"] = {
+        "unlockCondition": () => {
+            let reqspells = ['DLSE_DaggerFan', 'DLSE_ShadowSlashLv2', 'DLSE_WickedEdges',]
+            if(!KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"]){
+                reqspells.push("DLSE_Darkblade")
+            }
+            return (reqspells.every((sp) => KinkyDungeonSpells.map((t) => t.name).includes(sp))) // Checks if we have every single spell above
+        },
+        "priority": 2,
+        "color": "#1e1d58",
+        "titleActive": () => {
+            return false;
+        },
+        "titleActivate": () => {
+            return false;
+        },
+        "titleDeactivate": () => {
+            return false;
+        },
+        "category": "DLSE_PlayerTitles",
+        "icon": "None",
+    },
+
+    // Refresh Player Titles so everything shows up.
+    KDPlayerTitlesRefreshCategories();
 }

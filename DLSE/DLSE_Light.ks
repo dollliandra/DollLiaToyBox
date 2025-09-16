@@ -345,11 +345,11 @@ KDEventMapSpell.afterPlayerAttack["DLSE_Wrath"] = (_e, spell, data) => {
 
         // Cast a Shadow Slash clone two spaces north of the target.
         KinkyDungeonCastSpell(
-            //data.targetX, data.targetY, 
-            data.enemy.x, data.enemy.y,
+            //data.targetX, data.targetY,               // Old version, ignores knockback
+            data.enemy.x, data.enemy.y,                 // "Smart" version, tracking through knockback/pull
             DLSE_WrathStrike,
-            //{ x: data.targetX, y: data.targetY-3 },
-            {x: data.enemy.x, y:data.enemy.y-3},
+            //{ x: data.targetX, y: data.targetY-3 },   // Old version
+            {x: data.enemy.x, y:data.enemy.y-3},        // "Smart" version, tracking through knockback/pull
             undefined, 
             undefined,
             "Player"
