@@ -153,7 +153,7 @@ function DLSE_MCM_Config(){
     DLSE_Classes()              // Configure Class changes
     // Configure Spell Changes
     for(const spell of DLSE_SpellsList){  DLSE_SetSpell(spell);  }
-    DLSE_Shadow();              // Configure Shadow spell oddities
+    DLSE_SpellTweaks();         // Configure Shadow spell oddities
 
 
     KDLoadPerks();              // Refresh the perks list so that things show up.
@@ -496,7 +496,15 @@ function DLSE_SetSpell(spell){
 ///////////////////////////////////////////////////////////////////////
 let DLSE_Darkblade_Init = false;                                        // Have we messed with Darkblade?
 let ShadowSlashCastText = TextGet("KinkyDungeonSpellCastShadowSlash");  // Store the original text for later.
-function DLSE_Shadow(){
+function DLSE_SpellTweaks(){
+
+    // Edit Apprentice Light
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Light"]){
+        KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["DLSE_Flash"];
+    }else{
+        KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["Flash"];
+    }
+
     // MUST have Shadow and not reverted Darkblade to change Darkblade
     if(KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && !KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"] && !DLSE_Darkblade_Init){
         DLSE_Darkblade_Init = true;
