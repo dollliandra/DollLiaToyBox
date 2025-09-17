@@ -472,7 +472,9 @@ let DLSE_FlashLv3 = {
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
     ],
-    noise: 0, sfx: "MagicSlash", school: "Illusion", manacost: 7, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 2, delay: 1, power: 2, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
+    noise: 0, 
+    //sfx: "MagicSlash", 
+    school: "Illusion", manacost: 7, components: ["Verbal"], level:1, type:"special", special: "DLSE_FocusedFlash", onhit:"aoe", time: 4, delay: 1, power: 2, range: 2.5, size: 3, aoe: 2.5, lifetime: 1, damage: "stun", playerEffect: {name: "Blind", time: 6}
 }
 
 
@@ -497,7 +499,8 @@ KDAddEvent(KDEventMapBullet, "bulletHitEnemy", "DLSE_ElementalEffect", (e, b, da
 
 // Strikes in a 3x3 ring after 1 turn
 let DLSE_Flash_3x3Ring = {
-    name: "DLSE_Flash_3x3", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 4, sfx: "MagicSlash",
+    name: "DLSE_Flash_3x3",
+    color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 4, sfx: "MagicSlash",
     hitColor: 0xffff77, hitLight: 6,
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 8},
@@ -510,7 +513,8 @@ let DLSE_Flash_3x3Ring = {
 
 // Strikes instantly in a 1x1
 let DLSE_GreaterFlash_1x1Ring = {
-    name: "DLSE_Flash_1x1", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 2, sfx: "MagicSlash",
+    name: "DLSE_Flash_1x1",
+    color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 2, sfx: "MagicSlash",
     hitColor: 0xffff77, hitLight: 4,
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 17},
@@ -538,10 +542,12 @@ DLSE_FocusedFlash_3x3Ring.hitevents = [
                                         {type: "BlindAll", trigger: "bulletHitEnemy", time: 31},
                                         {type: "DLSE_ElementalEffect", trigger: "bulletHitEnemy", damage: "stun", power: 0, time: 4},
                                       ]
+DLSE_FocusedFlash_3x3Ring.noSprite  = true;  // FocusedFlash has a projectile-style sprite
 
 // Strikes in a 5x5 ring after 1 turn
 let DLSE_FocusedFlash_5x5Ring = {
-    name: "DLSE_Flash_5x5", color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 6, sfx: "MagicSlash",
+    name: "DLSE_Flash_5x5",
+    color: KDBaseWhite, prerequisite: "ApprenticeLight", tags: ["light", "utility", "aoe", "offense"], noise: 6, sfx: "MagicSlash",
     hitColor: 0xffff77, hitLight: 8,
     hitevents: [
         {type: "BlindAll", trigger: "bulletHitEnemy", time: 31},
@@ -551,10 +557,39 @@ let DLSE_FocusedFlash_5x5Ring = {
     school: "Illusion", manacost: 0, components: [], level:1, type:"inert", onhit:"aoe", time: 0, delay: 1, power: 2, range: 2.5, size: 5, aoe: 2.5, lifetime: 1, damage: "holy", playerEffect: {name: "Blind", time: 10},
     aoetype: "DLSE_Ring",
     bulletSpin: RING_BULLETSPIN_5X5,
+    noSprite: true,// FocusedFlash has a projectile-style sprite
 }
 KinkyDungeonSpellListEnemies.push(DLSE_FocusedFlash_5x5Ring);
 
 
+
+let DLSE_FlashStrike_1x1 = {
+    name: "DLSE_Flash_1x1", tags: ["aoe", "offense", "light"], prerequisite: "DLSE_Wrath", sfx: "Evil", school: "Illusion", manacost: 3, components: ["Arms"], level:1, 
+    type:"bolt", projectileTargeting:true, piercing: true, noTerrainHit: true, noEnemyCollision: true, onhit:"aoe", power: 0, delay: 0, range: 1.5, aoe: 0, size: 1, lifetime:1, damage: "holy", speed: 1, time: 0,
+    //trailspawnaoe: 1.5, trailPower: 0, trailLifetime: 1, trailHit: "", trailDamage:"inert", trail:"lingering", trailChance: 0.4
+    bulletSpin: RING_BULLETSPIN_3X3,
+    // TODO - SFX
+    landsfx: "DLSE_SoftLight",//"DLSE_exp_short_hard6",//"Telekinesis",
+    hideWarnings: true,
+}
+let DLSE_FlashStrike_3x3 = {
+    name: "DLSE_Flash_3x3_Trans", tags: ["aoe", "offense", "light"], prerequisite: "DLSE_Wrath", sfx: "Evil", school: "Illusion", manacost: 3, components: ["Arms"], level:1, 
+    type:"bolt", projectileTargeting:true, piercing: true, noTerrainHit: true, noEnemyCollision: true, onhit:"aoe", power: 0, delay: 0, range: 3.5, aoe: 0, size: 3, lifetime:1, damage: "holy", speed: 2, time: 0,
+    //trailspawnaoe: 1.5, trailPower: 0, trailLifetime: 1, trailHit: "", trailDamage:"inert", trail:"lingering", trailChance: 0.4
+    bulletSpin: RING_BULLETSPIN_3X3,
+    // TODO - SFX
+    landsfx: "DLSE_SoftLight",//"DLSE_exp_short_hard6",//"Telekinesis",
+    hideWarnings: true,
+}
+let DLSE_FlashStrike_5x5 = {
+    name: "DLSE_Flash_5x5_Trans", tags: ["aoe", "offense", "light"], prerequisite: "DLSE_Wrath", sfx: "Evil", school: "Illusion", manacost: 3, components: ["Arms"], level:1, 
+    type:"bolt", projectileTargeting:true, piercing: true, noTerrainHit: true, noEnemyCollision: true, onhit:"aoe", power: 0, delay: 0, range: 5.5, aoe: 0, size: 5, lifetime:1, damage: "holy", speed: 2, time: 0,
+    //trailspawnaoe: 1.5, trailPower: 0, trailLifetime: 1, trailHit: "", trailDamage:"inert", trail:"lingering", trailChance: 0.4
+    bulletSpin: RING_BULLETSPIN_3X3,
+    // TODO - SFX
+    landsfx: "DLSE_SoftLight",//"DLSE_exp_short_hard6",//"Telekinesis",
+    hideWarnings: true,
+}
 
 
 // Spell Specials for Waves of Light
@@ -573,7 +608,6 @@ KinkyDungeonSpellSpecials["DLSE_Flash"] = (spell, _data, targetX, targetY, _tX, 
         undefined,                      // bullet           - ???
         "Player",                       // forceFaction     - Force faction to Player
     );
-   
 
     KinkyDungeonSendActionMessage(3, TextGet("KinkyDungeonSpellCast"+spell.name), "#88AAFF", 2 + (spell.channel ? spell.channel - 1 : 0));
 }
@@ -630,6 +664,37 @@ KinkyDungeonSpellSpecials["DLSE_FocusedFlash"] = (spell, _data, targetX, targetY
         undefined,                      // player:any       - Boolean?
         undefined,                      // bullet           - ???
         "Player",                       // forceFaction     - Force faction to Player
+    );
+
+
+    // Cast a Shadow Slash clone from north of the target.
+    KinkyDungeonCastSpell(
+        targetX, targetY,
+        DLSE_FlashStrike_1x1,
+        { x: targetX, y: targetY-2 },
+        undefined, 
+        undefined,
+        "Player"
+    );
+
+    // Cast a Shadow Slash clone from north of the target.
+    KinkyDungeonCastSpell(
+        targetX, targetY,
+        DLSE_FlashStrike_3x3,
+        { x: targetX, y: targetY-4 },
+        undefined, 
+        undefined,
+        "Player"
+    );
+
+    // Cast a Shadow Slash clone from north of the target.
+    KinkyDungeonCastSpell(
+        targetX, targetY,
+        DLSE_FlashStrike_5x5,
+        { x: targetX, y: targetY-6 },
+        undefined, 
+        undefined,
+        "Player"
     );
    
 
