@@ -534,7 +534,9 @@ KDAddEvent(KDEventMapWeapon, "playerAttack", "DLSE_ElementalEffectExtended", (e,
         if (!e.prereq || KDCheckPrereq(data.enemy, e.prereq)){
             if (data.enemy && (!e.chance || KDRandom() < e.chance) && data.enemy.hp > 0 && !KDHelpless(data.enemy)) {
                 let damageDealt = e.power;
-                if (data.enemy.vulnerable > 0) {
+                if (data.enemy.vulnerable > 0
+                    || (KinkyDungeonFlags.get("DLSB_PerformingFlecheDisplacement")  &&  e.isThrustingSword) // Tie into Spellblade Mod
+                ) {
                     damageDealt = e.powerVuln;
                 };
                 KinkyDungeonDamageEnemy(data.enemy, {
@@ -573,7 +575,7 @@ KinkyDungeonWeapons["DLSE_FreezingPoint"] = {name: "DLSE_FreezingPoint",
     crit: 1.5,
     tags: ["illum", "sword"],
     events: [
-        {type: "DLSE_ElementalEffectExtended", trigger: "playerAttack", power: 1.0, crit: 1.5, powerVuln: 4.0, time: 5, damage: "frost", prereq: "FPLoaded",},
+        {type: "DLSE_ElementalEffectExtended", trigger: "playerAttack", power: 1.0, crit: 1.5, powerVuln: 4.0, time: 5, damage: "frost", prereq: "FPLoaded", isThrustingSword: true,},
         {type: "DLSE_SwapSFX", trigger: "beforePlayerAttack", prereq: "FPLoaded", replacesfx: "LesserFreeze",},
         {type: "DLSE_FPWeaponLight", trigger: "getLights", power: 3, color: "#92e8c0"},
         {type: "DLSE_FreezingPointReload", trigger: "tick", requireEnergy: true, energyCost: 0.03, power: 5, color: KDBaseWhite, prereq: "LightLoad"},
