@@ -1024,7 +1024,7 @@ KinkyDungeonSpellSpecials["DLSE_GiantSwing_Mundane"] = (spell, data, targetX, ta
                 tease: KinkyDungeonPlayerDamage.tease};
             data = {
                 target: en,
-                attackCost: 0.0, // Important
+                attackCost: KinkyDungeonPlayerDamage.staminacost ? -KinkyDungeonPlayerDamage.staminacost : 0, //-10.0, // Important for Battle Rhythm
                 attackCostOrig: 0.0,
                 skipTurn: false,
                 spellAttack: true,
