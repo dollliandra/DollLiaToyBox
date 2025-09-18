@@ -77,7 +77,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_ThrustingSwords", type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_Toys",            type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
-                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 // Page 2

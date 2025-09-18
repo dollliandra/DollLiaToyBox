@@ -19,6 +19,7 @@ KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_SpriteNearestFix", (
         "DLSE_MagicEpee.png",
         "DLSE_FracturedVessel.png",
         "DLSE_MaceInquisitor.png",
+        "DLSE_Estoc.png",
     ]
     let DLSE_SpellsList = [
         // Light

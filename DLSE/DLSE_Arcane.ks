@@ -41,9 +41,11 @@ let DLSE_Hyperfocus_Passive = {
     name: "DLSE_Hyperfocus_Passive", manacost: 0, components: [], level:1, passive: true, type:"", onhit:"", time: 0, delay: 0, range: 0, lifetime: 0, power: 0, damage: "inert",
     hideLearned: true, hideWithout: "DLSE_Hyperfocus",
     events: [
-        {type: "DLSE_Hyperfocus_Passive", trigger: "playerCast", tags: ["arrowreplace"],},
+        //{type: "DLSE_Hyperfocus_Passive", trigger: "playerCast", tags: ["arrowreplace"],},
         {type: "DLSE_Hyperfocus_Passive", trigger: "beforeCrit"},
-        {type: "DLSE_Hyperfocus_Passive", trigger: "duringCrit", mult: 1.5},
+        //{type: "DLSE_Hyperfocus_Passive", trigger: "duringCrit", mult: 1.5},
+        {type: "DLSE_Hyperfocus_Passive", trigger: "launchBullet", power: 1,},
+        {type: "DLSE_Hyperfocus_Passive_Static", trigger: "launchBullet", power: 1,},
     ]
 }
 
@@ -203,3 +205,41 @@ KDEventMapSpell.duringCrit["DLSE_Hyperfocus_Passive"] = (e, _spell, data) => {
         data.customCrit = true;
     }
 }
+
+
+
+
+// New Attempt!
+KDAddEvent(KDEventMapSpell, "launchBullet", "DLSE_Hyperfocus_Passive", (_e, spell, data) => {
+    console.log(data);
+    let id = "ev_" + _e.type + _e.original + spell.name;
+    if (data.bullet
+        && (data.b.vx || data.b.vy) // only moving projectiles
+        && data.bullet.source == -1 && (!_e.original || !KDBulletHasFlag(data.b, id))
+    ) {
+        KDSetBulletInheritedFlag(data.b, id, true);
+        if (data.bullet.damage) {
+            data.b.bullet.damage.damage *= 1 + _e.power; // multiplies damage
+        } else {
+            if (data.b.bullet.dmgMult == undefined) data.b.bullet.dmgMult = 1;
+            data.b.bullet.dmgMult *= 1 + _e.power; // multiplies damage
+        }
+    }
+});
+
+
+KDAddEvent(KDEventMapSpell, "launchBullet", "DLSE_Hyperfocus_Passive_Static", (_e, spell, data)  => {
+    let id = "ev_" + _e.type + _e.original + spell.id;
+    if (data.bullet
+        && (!data.b.vx && !data.b.vy) // only static projectiles
+        && data.bullet.source == -1 && (!_e.original || !KDBulletHasFlag(data.b, id))
+    ) {
+        KDSetBulletInheritedFlag(data.b, id, true);
+        if (data.bullet.damage) {
+            data.b.bullet.damage.damage *= 1 + _e.power; // multiplies damage
+        } else {
+            if (data.b.bullet.dmgMult == undefined) data.b.bullet.dmgMult = 1;
+            data.b.bullet.dmgMult *= 1 + _e.power; // multiplies damage
+        }
+    }
+});

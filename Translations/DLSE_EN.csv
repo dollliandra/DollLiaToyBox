@@ -80,7 +80,7 @@ KinkyDungeonSpellDescriptionDLSE_Flash,"A halo of light descends around your tar
 KinkyDungeonSpellCastDLSE_Flash,A halo of light descends around your target!
 KinkyDungeonSpellTargetDLSE_Flash,Select where to center the halo. (SpellArea radius)
 
-KinkyDungeonSpellDLSE_GreaterFlash,Concentricity
+KinkyDungeonSpellDLSE_GreaterFlash,Concentric
 KinkyDungeonSpellDescriptionDLSE_GreaterFlash,"Two potent haloes of light descend around your target. Anyone caught within takes DamageDealt holy damage, is blinded for 16 turns, and stunned briefly.|The center is struck immediately, while the outer ring strikes after a 1-turn delay."
 KinkyDungeonSpellCastDLSE_GreaterFlash,Two rings of light descend around your target!
 KinkyDungeonSpellTargetDLSE_GreaterFlash,Select where to center the haloes. (SpellArea radius)
@@ -180,6 +180,11 @@ KinkyDungeonInventoryItemDLSE_MagicEpee,"Magic Épée"
 KinkyDungeonInventoryItemDLSE_MagicEpeeDesc,"The flexible blade thrums with power."
 KinkyDungeonInventoryItemDLSE_MagicEpeeDesc2,"Deals pierce damage, increased to 35 against vulnerable targets. The blade's enchantment guides itself towards your target, even ghosts."
 ItemPickupDLSE_MagicEpee,"You pick up an enchanted fencing sword."
+
+KinkyDungeonInventoryItemDLSE_Estoc,"Estoc"
+KinkyDungeonInventoryItemDLSE_EstocDesc,"Estoc is bestoc."
+KinkyDungeonInventoryItemDLSE_EstocDesc2,"Deals pierce damage. Deals 60 slash damage instead against vulnerable targets."
+ItemPickupDLSE_MagicEpee,"You pick up an oversized thrusting sword."
 
 KinkyDungeonInventoryItemDLSE_FreezingPoint,"Freezing Point"
 KinkyDungeonInventoryItemDLSE_FreezingPointDesc,"This broken blade mends itself with ice!"

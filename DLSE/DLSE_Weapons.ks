@@ -438,6 +438,30 @@ KinkyDungeonWeapons["DLSE_MagicEpee"] = {
 }
 
 /**************************************************
+ * Estoc
+ * 
+ * 2H Thrusting Sword
+ * R1 deals solid poke, while R2 is a devastating slash.
+ **************************************************/
+KinkyDungeonWeapons["DLSE_Estoc"] = {name: "DLSE_Estoc", damage: 3, chance: 1, staminacost: 4.0, type: "pierce", unarmed: false, rarity: 4, shop: true, sfx: "LightSwing",
+    tags: ["sword"],
+    crit: 1.5,
+    clumsy: true, 
+    events: [
+        {type: "ChangeDamageVulnerable", trigger: "beforePlayerAttack", power: 6.0, damage: "slash"},
+        {type: "DLSE_SwapSFX", trigger: "beforePlayerAttack", prereq: "DLSE_NotVuln", replacesfx: "Miss",},
+    ],
+}
+
+// Prereq to swap SFX for basic attack.
+KDPrereqs["DLSE_NotVuln"] = (enemy, e, data) => {
+    return (enemy.vulnerable == 0  &&  !KinkyDungeonFlags.get("DLSB_PerformingFlecheDisplacement"));
+}
+
+
+
+
+/**************************************************
  * Freezing Point
  * 
  * Elemental Thrusting Sword
