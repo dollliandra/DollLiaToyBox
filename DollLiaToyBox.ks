@@ -187,6 +187,7 @@ let DLSE_ColossalsList = [          // Items to inject into the loot pools.
 
 let DLSE_ThrustingSwords_Init = false;       // Have we injected thrusting swords into the loot pools yet?
 let DLSE_ThrustingSwordsList = [             // Items to inject into the loot pools.
+    "DLSE_Estoc",
     "DLSE_MagicEpee",
     "DLSE_FreezingPoint",
     "DLSE_FracturedVessel",
@@ -337,15 +338,30 @@ function DLSE_Loot() {
         // Allow thrusting swords to appear in shops?
         DLSE_ThrustingSwordsList.forEach((item) => {KinkyDungeonWeapons[item].shop = true;})
 
-        // Cache Loot
-        KinkyDungeonLootTable.cache.push(
-            {name: "DLSE_FreezingPoint", minLevel: 3, weight:0.8, weapon: "DLSE_FreezingPoint", noweapon: ["DLSE_FreezingPoint"], message:"LootChestWeapon", messageColor:"lightblue", messageTime: 3, allFloors: true},
+
+        // Rubble Loot!
+        KinkyDungeonLootTable.rubble.push(
+            {name: "DLSE_FreezingPoint", minLevel: 3, weight:0.8, weapon: "DLSE_FreezingPoint", noweapon: ["DLSE_FreezingPoint"], message:"LootRubbleDLSE_FreezingPoint", messageColor:KDBaseLightGreen, messageTime: 3, allFloors: true},
         );
 
-        // Place Relics in (lesser?) gold chests with a very low weight and minlevel 5.
+        // Chest Loot
+        KinkyDungeonLootTable.chest.push(
+            {name: "DLSE_Estoc", minLevel: 0, weight:1, weapon: "DLSE_Estoc", noweapon: ["DLSE_Estoc"], message:"LootChestWeapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true},
+        );
+
+        // Cache Loot
+        KinkyDungeonLootTable.cache.push(
+            {name: "DLSE_FracturedVessel", minLevel: 5, weight:0.33, weapon: "DLSE_FracturedVessel", noweapon: ["DLSE_FracturedVessel"], message:"LootChestWeapon", messageColor:"yellow", messageTime: 3, allFloors: true},
+        );
+
+        // Magic weapons go into Lesser Gold.
         KinkyDungeonLootTable.lessergold.push(
             {name: "DLSE_MagicEpee", minLevel: 3, weight:0.33, weapon: "DLSE_MagicEpee", message:"LootChestWeapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true, noweapon: ["DLSE_MagicEpee"]},
-            {name: "DLSE_FracturedVessel", minLevel: 5, weight:0.33, weapon: "DLSE_FracturedVessel", noweapon: ["DLSE_FracturedVessel"], message:"LootChestWeapon", messageColor:"yellow", messageTime: 3, allFloors: true},
+        );
+
+        // Magic weapons go into ConjureQuest
+        KinkyDungeonLootTable.ConjureQuest.push(
+            {name: "DLSE_MagicEpee", minLevel: 0, weight:3, weapon: "DLSE_MagicEpee", message:"KDGoddessQuestReward_Weapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true, noweapon: ["DLSE_MagicEpee"]},
         );
     // Else, remove them from the pool
     // > This comes up if you mess with saves, then edit the MCM
@@ -375,7 +391,7 @@ function DLSE_Loot() {
 
         // Place Toys
         KinkyDungeonLootTable.chest.push(
-		    {name: "DLSE_MaceInquisitor", arousalMode: true, minLevel: 0, weight:0.5, weapon: "DLSE_MaceInquisitor", noweapon: ["DLSE_MaceInquisitor"], message:"LootChestWeapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true},
+		    {name: "DLSE_MaceInquisitor", arousalMode: true, minLevel: 0, weight:0.8, weapon: "DLSE_MaceInquisitor", noweapon: ["DLSE_MaceInquisitor"], message:"LootChestWeapon", messageColor:KDBaseLightBlue, messageTime: 3, allFloors: true},
         );
 
     // Else, remove them from the pool

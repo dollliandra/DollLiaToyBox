@@ -412,7 +412,7 @@ KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
 }
 
 
-//region Thrusting Swords
+//region Basic Thrusting Swords
 ////////////////////////////////////////////////////////
 //                                                    //
 //      ////////////////////////////////////////      //
@@ -443,7 +443,7 @@ KinkyDungeonWeapons["DLSE_MagicEpee"] = {
  * 2H Thrusting Sword
  * R1 deals solid poke, while R2 is a devastating slash.
  **************************************************/
-KinkyDungeonWeapons["DLSE_Estoc"] = {name: "DLSE_Estoc", damage: 3, chance: 1, staminacost: 4.0, type: "pierce", unarmed: false, rarity: 4, shop: true, sfx: "LightSwing",
+KinkyDungeonWeapons["DLSE_Estoc"] = {name: "DLSE_Estoc", damage: 3, chance: 1, staminacost: 4.0, type: "pierce", unarmed: false, rarity: 4, shop: false, sfx: "LightSwing",
     tags: ["sword"],
     crit: 1.5,
     clumsy: true, 
@@ -462,6 +462,7 @@ KDPrereqs["DLSE_NotVuln"] = (enemy, e, data) => {
 
 
 
+//region Freezing Point
 /**************************************************
  * Freezing Point
  * 
@@ -475,15 +476,31 @@ KDPrereqs["DLSE_NotVuln"] = (enemy, e, data) => {
 
 // Manually load the textures we need
 // To assign texture afterwards - kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex)
+let DLSE_FreezingPoint_DefaultTex = null;
 let DLSE_FreezingPoint_UnformedTex = null;
 let DLSE_FreezingPoint_FormedTex = null;
 KDAddEvent(KDEventMapGeneric, "afterModSettingsLoad", "DLSE_FreezingPointLoadTex", (e, data) => {
-    let filepath = KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint_Alt.png"];
+    let filepath = KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint_Load.png"];
+    DLSE_FreezingPoint_DefaultTex = KDTex(KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint.png"], true);
     DLSE_FreezingPoint_FormedTex = KDTex(filepath, true);
-    DLSE_FreezingPoint_UnformedTex = KDTex(KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint.png"], true);
+    DLSE_FreezingPoint_UnformedTex = KDTex(KDModFiles[KinkyDungeonRootDirectory + "Items/DLSE_FreezingPoint_Unload.png"], true);
 });
 KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_FreezingPointLoadGame", (e, data) => {
     if(KDGameData.DollLia?.ToyBox){
+        //
+        if(!KDGameData.DollLia.ToyBox.freezingPointCharged){
+            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_DefaultTex);
+            // Load correct strings.
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPoint", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointBroken"));
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPointDesc", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointBrokenDesc"));
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPointDesc2", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointBrokenDesc2"));
+            return;
+        }else{
+            // Load correct strings.
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPoint", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointTransformed"));
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPointDesc", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointTransformedDesc"));
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPointDesc2", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointTransformedDesc2"));
+        }
         // If weapopn is loaded, load the alternate sprite
         if(KDGameData.DollLia.ToyBox.freezingPointLoaded){
             kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
@@ -496,6 +513,22 @@ KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_FreezingPointLoadGame", (e,
 KDAddEvent(KDEventMapWeapon, "tick", "DLSE_FreezingPointReload", (e, weapon, data) => {
     let player = data.player || KinkyDungeonPlayerEntity;
     if (KDGameData.SlowMoveTurns < 1 && (!e.prereq || !KDPrereqs[e.prereq] || KDPrereqs[e.prereq](player, e, data))) {
+
+        // Transform the weapon if it has never been reloaded before.
+        if(!KDGameData.DollLia.ToyBox.freezingPointCharged){
+            KDGameData.DollLia.ToyBox.freezingPointCharged = true;
+            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_UnformedTex);
+
+            // Transform text strings.
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPoint", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointTransformed"));
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPointDesc", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointTransformedDesc"));
+            addTextKey("KinkyDungeonInventoryItemDLSE_FreezingPointDesc2", TextGet("KinkyDungeonInventoryItemDLSE_FreezingPointTransformedDesc2"));
+
+            // Display a message to the player?
+            KinkyDungeonSendTextMessage(8, TextGet("KDFreezingPointTransformation"), KDBaseCyan, 1, false);
+            KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/PowerMagic.ogg", undefined, 0.7);
+        }
+
         let originalDuration = KinkyDungeonPlayerBuffs[weapon.name + "Load"]?.duration;
         let currentLoad = KDEntityBuffedStat(player, weapon.name + "Load") || 0;
         KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, {
@@ -635,6 +668,7 @@ KinkyDungeonSpellListEnemies.push({
     events: [{type: "ElementalOnSlowOrBindOrDrench", trigger: "bulletHitEnemy", damage: "ice", time: 3, power: 0},]
 });
 
+//region Fractured Vessel
 /**************************************************
  * Fractured Vessel
  * 
