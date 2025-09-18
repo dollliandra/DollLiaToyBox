@@ -462,6 +462,8 @@ KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_FreezingPointLoadGame", (e,
         // If weapopn is loaded, load the alternate sprite
         if(KDGameData.DollLia.ToyBox.freezingPointLoaded){
             kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_FormedTex);
+        }else{
+            kdpixitex.set("Game/Items/DLSE_FreezingPoint.png", DLSE_FreezingPoint_UnformedTex);
         }
     }
 });
