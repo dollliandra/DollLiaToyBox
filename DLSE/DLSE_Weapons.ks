@@ -325,11 +325,11 @@ KinkyDungeonWeapons["DLSE_Halberd"] = {name: "DLSE_Halberd", damage: 5.5, chance
 /**************************************************
  * Silver Labrys
  * 
- * Polearm that deals massive slash damage.
+ * Magical polearm that deals massive slash damage.
  * Special Ability - Giant Swing
  **************************************************/
 // Labrynth cosplay weapon
-KinkyDungeonWeapons["DLSE_HalberdLabrys"] = {name: "DLSE_HalberdLabrys", damage: 6.5, chance: 1.2, staminacost: 5, type: "slash", unarmed: false, rarity: 4, shop: false,
+KinkyDungeonWeapons["DLSE_HalberdLabrys"] = {name: "DLSE_HalberdLabrys", damage: 6.5, chance: 1.5, staminacost: 5, type: "slash", unarmed: false, rarity: 4, shop: false,
     sfx: "HeavySwing",                         // Strike with the blade
     tags: ["axe"],                                  // TBD - Not sure what tags suit best.
     crit: 1.2,                                      // Base crit rate.
@@ -338,6 +338,7 @@ KinkyDungeonWeapons["DLSE_HalberdLabrys"] = {name: "DLSE_HalberdLabrys", damage:
     massive: true,                                  // Still massive, though.
     angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
     cutBonus: 0.05,
+    magic: true,                                    // It's magical.
 
     // Strike in an arc.
     special: {type: "spell", spell: "DLSE_GiantSwing"},

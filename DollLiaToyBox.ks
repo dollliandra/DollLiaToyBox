@@ -59,9 +59,35 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 // Header for Weapons
                 {refvar: "DLSEMCM_Header_Weapons",  type: "text"},
                 // Enable/Disable New Weapons
-                {refvar: "DLSEMCM_Shops",           type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_Whips",           type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_Halberds",        type: "boolean", default: true, block: undefined},
+
+                {refvar: "DLSEMCM_Colossals",       type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_ThrustingSwords", type: "boolean", default: true, block: undefined},
+                
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Shops",           type: "boolean", default: true, block: undefined},
+
+                {refvar: "DLSEMCM_Epicenters",      type: "boolean", default: true, block: undefined},
+
+
+                // Page 1, Column 2
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Toys",            type: "boolean", default: true, block: undefined},
+                
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+
+
+
+
+                
+                // Page 2
+                // Spells
 
                 {refvar: "DLSEMCM_Header_Spells",   type: "text"},
                 // Enable/Disable Class Changes
@@ -71,16 +97,24 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Light",           type: "boolean", default: true, block: undefined},                
                 {refvar: "DLSEMCM_Shadow",          type: "boolean", default: true, block: undefined},
 
-                // Page 1, Column 2
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
-                {refvar: "DLSEMCM_Colossals",       type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_ThrustingSwords", type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_Toys",            type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+
+                // Column 2
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
-                // Page 2
+
+
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
+
+                // Page 3
                 // Header for Compatibility
                 {refvar: "DLSEMCM_Header_Compatibility",    type: "text"},
                 {refvar: "DLSEMCM_Perks_BigArms",           type: "boolean", default: true, block: undefined},
@@ -148,6 +182,7 @@ if (KDEventMapGeneric['afterModConfig'] != undefined) {
 function DLSE_MCM_Config(){
     DLSE_Loot();                // Configure Loot Tables based upon MCM settings
     DLSE_Shops();               // Configure Shops
+    DLSE_Epicenters()           // Configure Epicenter Loot
     DLSE_Perks_BigArms();       // Configure a specific perk
     DLSE_ShroudFix();           // Configure Shroud/Smoke Bombs
     DLSE_Classes()              // Configure Class changes
@@ -411,6 +446,70 @@ function DLSE_Loot() {
         DLSE_Toys_Init = false;
     }
 }
+
+//region Epicenters
+//////////////////////////////////////////////////////////////////
+// Modifying Cursed Epicenters With MCM                         //
+//////////////////////////////////////////////////////////////////
+
+let DLSE_EpicentersPatched = false;
+let DLSE_OriginalEpicenters = undefined;
+
+// Add loot here!
+let KDGetCursedEpicenterLoot_Patched = (enemy) => {
+	let possible = [
+		{name: "DarkKatana", weight: 100, ignoreInInventory: true, minELevel: 0},
+		{name: "StaffDoll", weight: 100, ignoreInInventory: true, minELevel: 0},
+		{name: "StaffChain", weight: 100, ignoreInInventory: true, minELevel: 1},
+		{name: "StaffBind", weight: 100, ignoreInInventory: true, minELevel: 2},
+		{name: "MagicAxe", weight: 100, ignoreInInventory: true, minELevel: 3},
+		{name: "StaffStorm", weight: 100, ignoreInInventory: true, minELevel: 5},
+		{name: "StaffIncineration", weight: 100, ignoreInInventory: true, minELevel: 3},
+		{name: "StaffFrostbite", weight: 100, ignoreInInventory: true, minELevel: 0},
+		{name: "MagicSword", weight: 100, ignoreInInventory: true, minELevel: 2},
+	];
+
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Whips"])               {possible.push({name: "DLSE_WhipIceQueen", weight: 100, ignoreInInventory: true, minELevel: 0},
+                                                                               {name: "DLSE_WhipRose", weight: 100, ignoreInInventory: true, minELevel: 3}
+    );}
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_ThrustingSwords"])     {possible.push({name: "DLSE_MagicEpee", weight: 100, ignoreInInventory: true, minELevel: 2},
+                                                                               {name: "DLSE_FracturedVessel", weight: 100, ignoreInInventory: true, minELevel: 3}
+    );}
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Halberds"])            {possible.push({name: "DLSE_HalberdLabrys", weight: 100, ignoreInInventory: true, minELevel: 1});}
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Colossals"])           {possible.push({name: "DLSE_ColossalSword", weight: 100, ignoreInInventory: true, minELevel: 3});}
+
+	let elevel = KDGameData.EpicenterLevel;
+
+	// filter
+	possible = possible.filter((p) => {
+		return elevel >= p.minELevel && (!p.ignoreInInventory || !KinkyDungeonInventoryGet(p.name));
+	})
+
+	if (possible.length > 0) {
+		return GetByWeight(ListToRecord(possible)).name;
+	}
+	return "BlueKey";
+}
+
+function DLSE_Epicenters(){
+
+    // Save the original Epicenter Loot function.
+    if(!DLSE_OriginalEpicenters){DLSE_OriginalEpicenters = KDGetCursedEpicenterLoot}
+
+    // Overwrite Epicenters
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Epicenters"]  && !DLSE_EpicentersPatched){
+        DLSE_EpicentersPatched = true;
+        KDGetCursedEpicenterLoot = KDGetCursedEpicenterLoot_Patched;
+    }
+    // Else restore Epicenters
+    else if(DLSE_EpicentersPatched && !KDModSettings["DLSEMCM"]["DLSEMCM_Epicenters"]){
+        DLSE_EpicentersPatched = false;
+        KDGetCursedEpicenterLoot = DLSE_OriginalEpicenters;
+    }
+
+}
+
+
 
 //////////////////////////////////////////////////////////////////
 // Modifying The Shoppe With MCM                                //
