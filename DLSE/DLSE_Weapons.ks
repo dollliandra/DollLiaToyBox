@@ -451,6 +451,7 @@ KinkyDungeonWeapons["DLSE_Estoc"] = {name: "DLSE_Estoc", damage: 3, chance: 1, s
         {type: "ChangeDamageVulnerable", trigger: "beforePlayerAttack", power: 6.0, damage: "slash"},
         {type: "DLSE_SwapSFX", trigger: "beforePlayerAttack", prereq: "DLSE_NotVuln", replacesfx: "Miss",},
     ],
+    angle: -0.48,                                   // Angle when rendered on player appearance (Telekinesis)
 }
 
 // Prereq to swap SFX for basic attack.
