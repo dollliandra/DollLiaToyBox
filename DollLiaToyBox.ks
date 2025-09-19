@@ -1029,7 +1029,7 @@ try{
 if(DLSE_KDPlayerTitlesLive){
     KDPlayerTitles["DLSE_SpellMasteryLight"] = {
         "unlockCondition": () => {
-            let reqspells = ['DLSE_PurgingCross', 'DLSE_LeapOfFaith', 'DLSE_Guidance', 'DLSE_Wrath']
+            let reqspells = ['DLSE_PurgingCross', 'DLSE_LeapOfFaith', 'DLSE_Guidance', 'DLSE_Wrath', 'DLSE_FocusedFlash']
             return (reqspells.every((sp) => KinkyDungeonSpells.map((t) => t.name).includes(sp))) // Checks if we have every single spell above
         },
         "priority": 2,
