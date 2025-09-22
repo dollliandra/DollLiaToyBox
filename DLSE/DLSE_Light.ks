@@ -241,81 +241,6 @@ KinkyDungeonSpellList["Illusion"].push(DLSE_LeapOfFaith);
 
 
 
-
-
-/**********************************************************
- * Spell - Halo
- * > Cost - 40MP           > Prerequisite - ???
- * > Components - Verbal
- * 
- * Deal damage in a 3x3 (5x5?) AoE, EXCEPT the center.
- **********************************************************/
-
-let DLSE_Halo = {
-    name: "EarthformRing", tags: ["light", "offense", "aoe"], landsfx: "Bones", school: "Illusion", manacost: 4, components: ["Verbal"], prerequisite: ["ApprenticeLight"],
-    level:1, type:"hit", onhit:"aoe", 
-    power: 2, delay: 1, range: 2.5, size: 1, aoe: 1.99, lifetime: 1, damage: "holy",
-}
-
-
-
-//#region Spell - Guidance
-/**********************************************************
- * Spell - Divine Guidance
- * > Prerequisite - Blessing of Light
- * > Components - Passive
- * 
- * Gain Accuracy while blind.
- **********************************************************/
-let DLSE_Guidance = {
-    name: "DLSE_Guidance",
-    tags: ["light", "utility"],
-    prerequisite: ["ApprenticeLight"],
-    school: "Illusion",
-    manacost: 0, components: [], level: 1,
-    type: "", onhit: "",
-    passive: true, 
-    time: 0,
-    delay: 0, 
-    range: 0, 
-    lifetime: 0,
-    power: 0,
-    damage: "inert",
-    events: [
-        {
-            type: "DLSE_Guidance",
-            trigger: "tick",
-        }
-    ]
-}
-
-// Tick Event - Increases Accuracy While Blinded
-// Currently 10% Accuracy per 1 Blind Level.  Max of 60% ACC when blind, which turns the debuff into a buff!
-KDEventMapSpell.tick["DLSE_Guidance"] = (e, spell, data) => {
-    let accPower = 0.1 * KinkyDungeonBlindLevel;
-
-    //console.log(KinkyDungeonGetVisionRadius());       // Debugging purposes
-
-    // If we are blind, apply the buff
-    if (KinkyDungeonBlindLevel > 0) {
-        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, {
-            id: "DLSE_Guidance",
-            type: "Accuracy",
-            power: accPower,
-            duration: 1,
-            //infinite: true,
-            player: true,
-            enemies: false,
-            count: 1,
-            events: []
-        })       
-    }
-}
-
-
-KinkyDungeonSpellList["Illusion"].push(DLSE_Guidance);
-
-
 //#region Spell - Wrathful Smite
 /**********************************************************
  * Spell - Wrathful Smite
@@ -714,3 +639,119 @@ KinkyDungeonSpellList["Illusion"].push(DLSE_FlashLv3);
 KDAOETypes["DLSE_Ring"] = (bx, by, xx, yy, rad, modifier = "", ox, oy) => {
     return rad - 1  <=  KDistEuclidean(bx - xx, by - yy)  &&  KDistEuclidean(bx - xx, by - yy)  <=  rad;
 }
+
+
+
+
+
+
+//region Spell - Eye for an Eye
+/*******************
+ * Eye for an Eye
+ * 
+ * Deal blinding holy damage whenever you're attacked.
+ */
+let DLSE_Retribution = {
+    name: "DLSE_Retribution",
+    tags: ["light", "buff"],
+    prerequisite: ["ApprenticeLight"],
+    school: "Illusion",
+    manacost: 1, components: [], level: 1,
+    type: "passive", //passive: true, 
+    time: 0,
+    delay: 0, 
+    range: 0, 
+    lifetime: 0,
+    power: 0,
+    damage: "inert",
+    events: [
+        {trigger: "beforeAttack", type: "DLSE_Retribution_Spellcast", spell: "DLSE_Retribution_Flash", prereq: "hit-hostile"},
+    ],
+}
+KinkyDungeonSpellList["Illusion"].push(DLSE_Retribution);
+
+
+KDAddEvent(KDEventMapSpell, "beforeAttack", "DLSE_Retribution_Spellcast",  (e, spell, data) => {
+    console.log(data);
+    if (data.attacker
+        && KinkyDungeonHasMana(KinkyDungeonGetManaCost(spell, false, true))
+        && data.eventable
+        && (!(e.prereq == "hit") || (!data.missed && data.hit))
+        && (!(e.prereq == "hit-hostile") || (!data.missed && data.hit //&& !data.attacker.playWithPlayer
+            // Player attacking = hostile?
+            // Enemy attacking enemy? hostile
+            && (data.attacker.player || !data.target.player || KinkyDungeonAggressive(data.attacker))))
+    ) {
+        KDChangeMana(spell.name,"spell", "cast", -KinkyDungeonGetManaCost(spell));
+        KinkyDungeonCastSpell(data.attacker.x, data.attacker.y, KinkyDungeonFindSpell(e.spell, true), undefined, undefined, undefined, "Player");
+        KDTriggerSpell(spell, data, false, true);
+        if (e.requiredTag)
+            KinkyDungeonTickBuffTag(KinkyDungeonPlayerEntity, e.requiredTag, 1);
+    }
+});
+
+// Meow
+let DLSE_Retribution_Flash = {
+    allySpell: true, name: "DLSE_Retribution_Flash", manacost: 0, components: [], level:1, type:"hit", school: "Illusion",
+    onhit:"instant", noTerrainHit: true, power: 2, delay: 1, range: 1.5, size: 1, aoe: 1.5, lifetime: 1, damage: "holy",
+    events: [{type: "BlindAll", trigger: "bulletHitEnemy", time: 10}],
+}
+KinkyDungeonSpellListEnemies.push(DLSE_Retribution_Flash);
+
+
+
+//#region Spell - Guidance
+/**********************************************************
+ * Spell - Divine Guidance
+ * > Prerequisite - Blessing of Light
+ * > Components - Passive
+ * 
+ * Gain Accuracy while blind.
+ **********************************************************/
+let DLSE_Guidance = {
+    name: "DLSE_Guidance",
+    tags: ["light", "utility"],
+    prerequisite: ["ApprenticeLight"],
+    school: "Illusion",
+    manacost: 0, components: [], level: 1,
+    type: "", onhit: "",
+    passive: true, 
+    time: 0,
+    delay: 0, 
+    range: 0, 
+    lifetime: 0,
+    power: 0,
+    damage: "inert",
+    events: [
+        {
+            type: "DLSE_Guidance",
+            trigger: "tick",
+        }
+    ]
+}
+
+// Tick Event - Increases Accuracy While Blinded
+// Currently 10% Accuracy per 1 Blind Level.  Max of 60% ACC when blind, which turns the debuff into a buff!
+KDEventMapSpell.tick["DLSE_Guidance"] = (e, spell, data) => {
+    let accPower = 0.1 * KinkyDungeonBlindLevel;
+
+    //console.log(KinkyDungeonGetVisionRadius());       // Debugging purposes
+
+    // If we are blind, apply the buff
+    if (KinkyDungeonBlindLevel > 0) {
+        KinkyDungeonApplyBuffToEntity(KinkyDungeonPlayerEntity, {
+            id: "DLSE_Guidance",
+            type: "Accuracy",
+            power: accPower,
+            duration: 1,
+            //infinite: true,
+            player: true,
+            enemies: false,
+            count: 1,
+            events: []
+        })       
+    }
+}
+
+
+KinkyDungeonSpellList["Illusion"].push(DLSE_Guidance);

@@ -12,8 +12,12 @@ KDModButtonDLSEMCM_Light,"Enable new Light Spells"
 KDModButtonDLSEMCM_Shadow,"Enable new Shadow Spells"
 KDModButtonDLSEMCM_Arcane,"Enable new Arcane Spells"
 KDModButtonDLSEMCM_ShroudChanges,"Shroud/Smoke Bombs are Shadow"
-KDModButtonDLSEMCM_ClassicDarkblade,"Revert Darkblade (Default: OFF)"
+KDModButtonDLSEMCM_NewFlash,"Enable Flash Redesign"
+KDModButtonDLSEMCM_NewDarkblade,"Enable Darkblade Redesign"
 KDModButtonDLSEMCM_Perks_BigArms,"Enable Big Arms perk"
+
+KDModButtonDLSEMCM_LightBlockCap,"Blind Block Penalty Cap = 50%"
+KDModButtonDLSEMCM_LightBlockCapExp,"Overwrites KDPlayerBlockPenalty()"
 
 KDModButtonDLSEMCM_ShadowSlashLegs,"Shadow Slash w/Legs (Default: OFF)"
 
@@ -73,6 +77,10 @@ KDEffectTileTooltipDLSE_VoidDesc,"Blocks light"
 
 
 
+
+KinkyDungeonSpellApprenticeLight_Patched,Blessing of Light
+KinkyDungeonSpellDescriptionApprenticeLight_Patched,Unlocks light spells. Learn Halo. Gain significantly increased resistance to blinding from bright lights.|---|Your block penalty from being blind cannot exceed 50%.
+
 KinkyDungeonSpellDLSE_Flash,Halo
 KinkyDungeonSpellDLSE_Flash_1x1,Ring of Light
 KinkyDungeonSpellDLSE_Flash_3x3,Ring of Light
@@ -101,9 +109,13 @@ KinkyDungeonSpellTargetDLSE_PurgingCross,"This is a bug. Please report to DollLi
 KinkyDungeonSpellCastDLSE_PurgingCrossTest,
 
 KinkyDungeonSpellDLSE_LeapOfFaith,"Leap of Faith"
-KinkyDungeonSpellDescriptionDLSE_LeapOfFaith,"Instantly teleport up to 3 tiles away.  You are blinded for 15 turns upon arrival."
+KinkyDungeonSpellDescriptionDLSE_LeapOfFaith,"Instantly teleport up to 3 tiles away to a location you can see.  You are blinded for 15 turns upon arrival."
 KinkyDungeonSpellCastDLSE_LeapOfFaith,"You leap blindly into the distance!"
 KinkyDungeonSpellTargetDLSE_LeapOfFaith,"Choose target location (3 tile range)"
+
+KinkyDungeonSpellDLSE_Retribution,"Retribution"
+KinkyDungeonSpellDLSE_Retribution_Flash,"Retribution"
+KinkyDungeonSpellDescriptionDLSE_Retribution,"Toggle: Whenever you are struck by an attack, deal 20 holy damage to your attacker and blind them for 10 turns."
 
 
 KinkyDungeonSpellDLSE_Guidance,"Divine Guidance"

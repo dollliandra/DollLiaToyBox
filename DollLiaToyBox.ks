@@ -96,18 +96,19 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 // Enable/Disable Spell School Changes
                 {refvar: "DLSEMCM_Light",           type: "boolean", default: true, block: undefined},                
                 {refvar: "DLSEMCM_Shadow",          type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
 
-                {refvar: "DLSEMCM_Spacer",          type: "text"},
+                
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
 
                 // Column 2
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
-                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
-                {refvar: "DLSEMCM_Spacer",          type: "text"},
-
+                {refvar: "DLSEMCM_NewFlash",        type: "boolean", default: true, block: () => {return !KDModSettings["DLSEMCM"]["DLSEMCM_Light"]}},
+                {refvar: "DLSEMCM_NewDarkblade",    type: "boolean", default: true, block: () => {return !KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"]}},
+                
 
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
@@ -119,11 +120,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Header_Compatibility",    type: "text"},
                 {refvar: "DLSEMCM_Perks_BigArms",           type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_ShroudChanges",           type: "boolean", default: true, block: undefined},
-                {
-                    refvar: "DLSEMCM_ClassicDarkblade", type: "boolean", default: false,
-                    // This setting does nothing if Shadow is not enabled.  Block it to visually signify this.
-                    block: () => {return !KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"]}
-                },
+                {refvar: "DLSEMCM_LightBlockCap",           type: "boolean", default: true, block: undefined},
 
                 // Header for Experiments
                 {refvar: "DLSEMCM_Header_Experiments", type: "text"},
@@ -133,12 +130,12 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                     block: () => {return !KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"]}
                 },
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
-                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_Spacer",          type: "text"},
                 // Column 2
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
                 {refvar: "DLSEMCM_Exp_BigArms",         type: "text"},
                 {refvar: "DLSEMCM_Exp_ShroudChanges",   type: "text"},
-                {refvar: "DLSEMCM_Spacer",              type: "text"},
+                {refvar: "DLSEMCM_LightBlockCapExp",    type: "text"},
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
@@ -568,35 +565,37 @@ let SC_VERBAL = 0, SC_ARMS = 1, SC_LEGS = 2, SC_PASSIVE = 3;
 // Define all Spell Data here.
 let DLSE_SpellsList = [
     // Light Spells
-    {spellName: "DLSE_PurgingCross",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
-    {spellName: "DLSE_LeapOfFaith",     require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
-    {spellName: "DLSE_Guidance",        require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
-    {spellName: "DLSE_Wrath",           require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
+    {spellName: "DLSE_PurgingCross",    require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
+    {spellName: "DLSE_LeapOfFaith",     require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
+    {spellName: "DLSE_Guidance",        require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
+    {spellName: "DLSE_Wrath",           require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
+    {spellName: "DLSE_Retribution",     require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
 
-    {spellName: "DLSE_Flash",           require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Flash", spellIndexMod: 0, spellOverride: true,},
-    {spellName: "DLSE_GreaterFlash",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "GreaterFlash", spellIndexMod: 0, spellOverride: true,},
-    {spellName: "DLSE_FocusedFlash",    require: "DLSEMCM_Light", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "FocusedFlash", spellIndexMod: 0, spellOverride: true,},
+    {spellName: "DLSE_Flash",           require: ["DLSEMCM_Light", "DLSEMCM_NewFlash"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Flash", spellIndexMod: 0, spellOverride: true,},
+    {spellName: "DLSE_GreaterFlash",    require: ["DLSEMCM_Light", "DLSEMCM_NewFlash"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "GreaterFlash", spellIndexMod: 0, spellOverride: true,},
+    {spellName: "DLSE_FocusedFlash",    require: ["DLSEMCM_Light", "DLSEMCM_NewFlash"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "FocusedFlash", spellIndexMod: 0, spellOverride: true,},
 
     // Shadow Spells
-    {spellName: "DLSE_DaggerFan",       require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "Dagger", spellIndexMod: 1,},
-    {spellName: "DLSE_ShadowSlashLv2",  require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "ShadowSlash", spellIndexMod: 1,},
-    {spellName: "DLSE_WickedEdges",     require: "DLSEMCM_Shadow", spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 1,},
+    {spellName: "DLSE_DaggerFan",       require: ["DLSEMCM_Shadow"], spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "Dagger", spellIndexMod: 1,},
+    {spellName: "DLSE_ShadowSlashLv2",  require: ["DLSEMCM_Shadow"], spellPage: SP_ILLUSION, spellComp: SC_ARMS, spellIndex: "ShadowSlash", spellIndexMod: 1,},
+    {spellName: "DLSE_WickedEdges",     require: ["DLSEMCM_Shadow"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 1,},
 
     // Arcane Spells
-    {spellName: "DLSE_Hyperfocus",      require: "DLSEMCM_Arcane", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 1,},
-    {spellName: "DLSE_Hyperfocus_Lv2",  require: "DLSEMCM_Arcane", spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 2,},
+    {spellName: "DLSE_Hyperfocus",      require: ["DLSEMCM_Arcane"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 1,},
+    {spellName: "DLSE_Hyperfocus_Lv2",  require: ["DLSEMCM_Arcane"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Sonar", spellIndexMod: 2,},
 ];
 
 // Helper Function to set all the above spells
 ///////////////////////////////////////////////
 function DLSE_SetSpell(spell){
-    if(KDModSettings["DLSEMCM"][spell.require]
+    if(spell.require.every((testMCM) => KDModSettings["DLSEMCM"][testMCM])
+        //KDModSettings["DLSEMCM"][spell.require]
        && !KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
     {
         KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].splice(
             (KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].indexOf(spell.spellIndex)+spell.spellIndexMod),spell.spellOverride,spell.spellName);
     }
-    else if(!KDModSettings["DLSEMCM"][spell.require]
+    else if(!spell.require.every((testMCM) => KDModSettings["DLSEMCM"][testMCM])
             && KinkyDungeonLearnableSpells[spell.spellPage][spell.spellComp].includes(spell.spellName))
     {
         if(spell.spellOverride){
@@ -611,17 +610,64 @@ function DLSE_SetSpell(spell){
 ///////////////////////////////////////////////////////////////////////
 let DLSE_Darkblade_Init = false;                                        // Have we messed with Darkblade?
 let ShadowSlashCastText = TextGet("KinkyDungeonSpellCastShadowSlash");  // Store the original text for later.
+
+let DLSE_LightBlock_Patched = false;
+let DLSE_App_Light = TextGet("KinkyDungeonSpellApprenticeLight")
+let DLSE_Desc_Light = TextGet("KinkyDungeonSpellDescriptionApprenticeLight")
+
+// Editing Block Penalty when Blinded (Temporarily)
+let KDPlayerBlockPenalty_DEFAULT = KDPlayerBlockPenalty;
+let KDPlayerBlockPenalty_PATCHED = () => {
+	if (KinkyDungeonFlags.get("ZeroResistance")) return 1000;
+	let blockPenalty = Math.min(0.5, .1 * KinkyDungeonBlindLevel);
+
+	if (KinkyDungeonIsArmsBound(false, true)) blockPenalty = blockPenalty + (1 - blockPenalty) * 0.7;
+	if (KinkyDungeonStatFreeze) blockPenalty += 1;
+
+	// Editing Here
+    if(!KDHasSpell("ApprenticeLight")){
+        if (KinkyDungeonStatBlind) blockPenalty += 0.5;
+    }
+
+	blockPenalty += KinkyDungeonGetBuffedStat(KinkyDungeonPlayerBuffs, "BlockPenalty");
+
+
+	return Math.min(1, blockPenalty);
+}
+
 function DLSE_SpellTweaks(){
+
 
     // Edit Apprentice Light
     if(KDModSettings["DLSEMCM"]["DLSEMCM_Light"]){
         KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["DLSE_Flash"];
+
+        // Block Cap
+        if(KDModSettings["DLSEMCM"]["DLSEMCM_LightBlockCap"]  &&  !DLSE_LightBlock_Patched){
+            DLSE_LightBlock_Patched = true;
+            KDPlayerBlockPenalty = KDPlayerBlockPenalty_PATCHED;
+        }
+        else if(!KDModSettings["DLSEMCM"]["DLSEMCM_LightBlockCap"]  &&  DLSE_LightBlock_Patched){
+            DLSE_LightBlock_Patched = false;
+            KDPlayerBlockPenalty = KDPlayerBlockPenalty_DEFAULT;
+        }
+
+        addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_Patched"));
+        addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_Patched"));
     }else{
         KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["Flash"];
+
+        if(!KDModSettings["DLSEMCM"]["DLSEMCM_LightBlockCap"]  &&  DLSE_LightBlock_Patched){
+            DLSE_LightBlock_Patched = false;
+            KDPlayerBlockPenalty = KDPlayerBlockPenalty_DEFAULT;
+        }
+        // Revert Changes
+        addTextKey("KinkyDungeonSpellApprenticeLight", DLSE_App_Light);
+        addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", DLSE_Desc_Light);
     }
 
     // MUST have Shadow and not reverted Darkblade to change Darkblade
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && !KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"] && !DLSE_Darkblade_Init){
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && KDModSettings["DLSEMCM"]["DLSEMCM_NewDarkblade"] && !DLSE_Darkblade_Init){
         DLSE_Darkblade_Init = true;
 
         // Insert the new Darkblade and remove the old.
@@ -633,7 +679,7 @@ function DLSE_SpellTweaks(){
     }
 
     // Revert to classic Darkblade ONLY IF Darkblade was changed previously.
-    if(KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"] && DLSE_Darkblade_Init
+    if(!KDModSettings["DLSEMCM"]["DLSEMCM_NewDarkblade"] && DLSE_Darkblade_Init
         || !KDModSettings["DLSEMCM"]["DLSEMCM_Shadow"] && DLSE_Darkblade_Init
     ){
         DLSE_Darkblade_Init = false;
@@ -682,7 +728,7 @@ function DLSE_SpellTweaks(){
         }
 
         // Add ShadowSlash to Arms
-        if(KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"]){
+        if(!KDModSettings["DLSEMCM"]["DLSEMCM_NewDarkblade"]){
             KinkyDungeonLearnableSpells[6][1].splice(KinkyDungeonLearnableSpells[6][1].indexOf("ShadowBlade")+1,0,"ShadowSlash");
         }else{
             KinkyDungeonLearnableSpells[6][1].splice(KinkyDungeonLearnableSpells[6][1].indexOf("Dagger"),0,"ShadowSlash");
@@ -959,8 +1005,6 @@ function DLSE_Perks_BigArms(){
 
 
 
-
-
 //#region Initialize Save Data
 /****************************************************************
  * Need to keep track of certain things.
@@ -1029,7 +1073,10 @@ try{
 if(DLSE_KDPlayerTitlesLive){
     KDPlayerTitles["DLSE_SpellMasteryLight"] = {
         "unlockCondition": () => {
-            let reqspells = ['DLSE_PurgingCross', 'DLSE_LeapOfFaith', 'DLSE_Guidance', 'DLSE_Wrath', 'DLSE_FocusedFlash']
+            let reqspells = ['DLSE_PurgingCross', 'DLSE_LeapOfFaith', 'DLSE_Guidance', 'DLSE_Wrath']
+            if(KDModSettings["DLSEMCM"]["DLSEMCM_NewFlash"]){
+                reqspells.push("DLSE_FocusedFlash")
+            }
             return (reqspells.every((sp) => KinkyDungeonSpells.map((t) => t.name).includes(sp))) // Checks if we have every single spell above
         },
         "priority": 2,
@@ -1050,7 +1097,7 @@ if(DLSE_KDPlayerTitlesLive){
     KDPlayerTitles["DLSE_SpellMasteryShadow"] = {
         "unlockCondition": () => {
             let reqspells = ['DLSE_DaggerFan', 'DLSE_ShadowSlashLv2', 'DLSE_WickedEdges',]
-            if(!KDModSettings["DLSEMCM"]["DLSEMCM_ClassicDarkblade"]){
+            if(KDModSettings["DLSEMCM"]["DLSEMCM_NewDarkblade"]){
                 reqspells.push("DLSE_Darkblade")
             }
             return (reqspells.every((sp) => KinkyDungeonSpells.map((t) => t.name).includes(sp))) // Checks if we have every single spell above
