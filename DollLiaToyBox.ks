@@ -644,10 +644,15 @@ let KDPlayerBlockPenalty_PATCHED = () => {
 
 function DLSE_SpellTweaks(){
 
+    if(KDModSettings["DLSEMCM"]["DLSEMCM_Light"]  &&  KDModSettings["DLSEMCM"]["DLSEMCM_NewFlash"]){
+        KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["DLSE_Flash"];
+    }
+    else{
+        KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["Flash"];
+    }
 
     // Edit Apprentice Light
     if(KDModSettings["DLSEMCM"]["DLSEMCM_Light"]){
-        KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["DLSE_Flash"];
 
         // Block Cap
         if(KDModSettings["DLSEMCM"]["DLSEMCM_LightBlockCap"]  &&  !DLSE_LightBlock_Patched){
@@ -660,8 +665,13 @@ function DLSE_SpellTweaks(){
         }
 
         if(!DLSE_LightBlock_Patched){
-            addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_Patched"));
-            addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_Patched"));
+            if(KDModSettings["DLSEMCM"]["DLSEMCM_NewFlash"]){
+                addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_Patched"));
+                addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_Patched"));
+            }else{
+                addTextKey("KinkyDungeonSpellApprenticeLight", DLSE_App_Light);
+                addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", DLSE_Desc_Light);
+            }
         }else{
             addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_BlockPatched"));
             addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_BlockPatched"));
