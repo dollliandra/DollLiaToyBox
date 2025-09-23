@@ -77,9 +77,10 @@ KDEffectTileTooltipDLSE_VoidDesc,"Blocks light"
 
 
 
-
 KinkyDungeonSpellApprenticeLight_Patched,Blessing of Light
-KinkyDungeonSpellDescriptionApprenticeLight_Patched,Unlocks light spells. Learn Halo. Gain significantly increased resistance to blinding from bright lights.|---|Your block penalty from being blind cannot exceed 50%.
+KinkyDungeonSpellDescriptionApprenticeLight_Patched,Unlocks light spells. Learn Halo. Gain significantly increased resistance to blinding from bright lights.
+KinkyDungeonSpellApprenticeLight_BlockPatched,Blessing of Light
+KinkyDungeonSpellDescriptionApprenticeLight_BlockPatched,Unlocks light spells. Learn Halo. Gain significantly increased resistance to blinding from bright lights.|---|Your block penalty from being blind cannot exceed 50%.
 
 KinkyDungeonSpellDLSE_Flash,Halo
 KinkyDungeonSpellDLSE_Flash_1x1,Ring of Light
@@ -115,7 +116,7 @@ KinkyDungeonSpellTargetDLSE_LeapOfFaith,"Choose target location (3 tile range)"
 
 KinkyDungeonSpellDLSE_Retribution,"Retribution"
 KinkyDungeonSpellDLSE_Retribution_Flash,"Retribution"
-KinkyDungeonSpellDescriptionDLSE_Retribution,"Toggle: Whenever you are struck by an attack, deal 20 holy damage to your attacker and blind them for 10 turns."
+KinkyDungeonSpellDescriptionDLSE_Retribution,"Toggle: Whenever you are attacked, deal 20 holy damage to your attacker and blind them for 10 turns."
 
 
 KinkyDungeonSpellDLSE_Guidance,"Divine Guidance"

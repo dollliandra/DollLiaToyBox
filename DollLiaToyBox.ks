@@ -652,8 +652,13 @@ function DLSE_SpellTweaks(){
             KDPlayerBlockPenalty = KDPlayerBlockPenalty_DEFAULT;
         }
 
-        addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_Patched"));
-        addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_Patched"));
+        if(!DLSE_LightBlock_Patched){
+            addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_Patched"));
+            addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_Patched"));
+        }else{
+            addTextKey("KinkyDungeonSpellApprenticeLight", TextGet("KinkyDungeonSpellApprenticeLight_BlockPatched"));
+            addTextKey("KinkyDungeonSpellDescriptionApprenticeLight", TextGet("KinkyDungeonSpellDescriptionApprenticeLight_BlockPatched"));
+        }
     }else{
         KinkyDungeonSpellList["Illusion"][KinkyDungeonSpellList["Illusion"].findIndex((spell) => {return spell.name == "ApprenticeLight"})].autoLearn = ["Flash"];
 

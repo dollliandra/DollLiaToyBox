@@ -665,7 +665,7 @@ let DLSE_Retribution = {
     power: 0,
     damage: "inert",
     events: [
-        {trigger: "beforeAttack", type: "DLSE_Retribution_Spellcast", spell: "DLSE_Retribution_Flash", prereq: "hit-hostile"},
+        {trigger: "beforeAttack", type: "DLSE_Retribution_Spellcast", spell: "DLSE_Retribution_Flash", },//prereq: "hit-hostile"},
     ],
 }
 KinkyDungeonSpellList["Illusion"].push(DLSE_Retribution);
