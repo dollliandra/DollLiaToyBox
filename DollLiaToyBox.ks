@@ -96,9 +96,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 // Enable/Disable Spell School Changes
                 {refvar: "DLSEMCM_Light",           type: "boolean", default: true, block: undefined},                
                 {refvar: "DLSEMCM_Shadow",          type: "boolean", default: true, block: undefined},
-
-                // TODO - Restore for next ver
-                {refvar: "DLSEMCM_Spacer",              type: "text"},//{refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
+                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
 
                 
                 {refvar: "DLSEMCM_Spacer",          type: "text"},
@@ -122,9 +120,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Header_Compatibility",    type: "text"},
                 {refvar: "DLSEMCM_Perks_BigArms",           type: "boolean", default: true, block: undefined},
                 {refvar: "DLSEMCM_ShroudChanges",           type: "boolean", default: true, block: undefined},
-
-                // TODO - Restore for next ver
-                {refvar: "DLSEMCM_Spacer",              type: "text"},//{refvar: "DLSEMCM_LightBlockCap",           type: "boolean", default: true, block: undefined},
+                {refvar: "DLSEMCM_LightBlockCap",           type: "boolean", default: true, block: undefined},
 
                 // Header for Experiments
                 {refvar: "DLSEMCM_Header_Experiments", type: "text"},
@@ -139,9 +135,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
                 {refvar: "DLSEMCM_Exp_BigArms",         type: "text"},
                 {refvar: "DLSEMCM_Exp_ShroudChanges",   type: "text"},
-
-                // TODO - Restore for next ver
-                {refvar: "DLSEMCM_Spacer",              type: "text"},//{refvar: "DLSEMCM_LightBlockCapExp",    type: "text"},
+                {refvar: "DLSEMCM_LightBlockCapExp",    type: "text"},
 
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
                 {refvar: "DLSEMCM_Spacer",              type: "text"},
@@ -576,7 +570,7 @@ let DLSE_SpellsList = [
     {spellName: "DLSE_LeapOfFaith",     require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_LEGS, spellIndex: "HolyOrb", spellIndexMod: 0,},
     {spellName: "DLSE_Guidance",        require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
     {spellName: "DLSE_Wrath",           require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
-    //{spellName: "DLSE_Retribution",     require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
+    {spellName: "DLSE_Retribution",     require: ["DLSEMCM_Light"], spellPage: SP_ILLUSION, spellComp: SC_PASSIVE, spellIndex: "TheShadowWithin", spellIndexMod: 0,},
 
     {spellName: "DLSE_Flash",           require: ["DLSEMCM_Light", "DLSEMCM_NewFlash"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "Flash", spellIndexMod: 0, spellOverride: true,},
     {spellName: "DLSE_GreaterFlash",    require: ["DLSEMCM_Light", "DLSEMCM_NewFlash"], spellPage: SP_ILLUSION, spellComp: SC_VERBAL, spellIndex: "GreaterFlash", spellIndexMod: 0, spellOverride: true,},
@@ -1085,12 +1079,12 @@ function DLSE_Init_ToyBoxSave(){
 let DLSE_KDPlayerTitlesLive = false;
 // Attempt to access the KDPlayerTitles variable.
 // > If we're not in 5.5.1+, this will throw an exception.
-// try{
-//     KDPlayerTitles;                     // If player titles aren't live, this throws an exception.
-//     DLSE_KDPlayerTitlesLive = true;     // Otherwise, player titles are live
-// }catch(e){
-//     ;                                   // Just catch the exception gracefully.
-// }
+try{
+    KDPlayerTitles;                     // If player titles aren't live, this throws an exception.
+    DLSE_KDPlayerTitlesLive = true;     // Otherwise, player titles are live
+}catch(e){
+    ;                                   // Just catch the exception gracefully.
+}
 
 if(DLSE_KDPlayerTitlesLive){
     KDPlayerTitles["DLSE_SpellMasteryLight"] = {
