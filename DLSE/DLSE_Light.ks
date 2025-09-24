@@ -274,7 +274,7 @@ KDEventMapSpell.playerAttack["DLSE_Wrath"] = (_e, spell, data) => {
         // Give the player "credit" for the spellcast.
         wrathCredits++;
 
-        KDTriggerSpell(spell, data, false, false);      // 4th arg is Toggle for the 50% reduced CD. Switching to false as this is a SPELL.
+        KDTriggerSpell(spell, data, false, true);      // 4th arg is Toggle for the 50% reduced CD. Switching to false as this is a SPELL.
     }
 
     // TODO - Toggle OFF the spell, but it's not working T_T
