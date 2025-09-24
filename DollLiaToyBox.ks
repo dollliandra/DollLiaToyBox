@@ -9,7 +9,7 @@
 // NOTE TO SELF:
 // Please remember to increment this when you update your own mod!
 // -Doll.Lia
-let DLSE_VER = 0.3
+let DLSE_VER = 0.31
 
 
 /**************************************************************
