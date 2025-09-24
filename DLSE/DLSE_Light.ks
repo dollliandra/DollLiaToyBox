@@ -252,35 +252,29 @@ KinkyDungeonSpellList["Illusion"].push(DLSE_LeapOfFaith);
  **********************************************************/
 let DLSE_Wrath = {
     name: "DLSE_Wrath", 
-    tags: ["light", "aoe", "offense", "buff"], 
-    prerequisite: "ApprenticeLight", sfx: "FireSpell", school: "Illusion", manacost: 3, components: [], level:1, type:"passive", power: 6,
-    events: [{type: "DLSE_Wrath", trigger: "afterPlayerAttack"}],
-    defaultOff: true,                   // Spell is too expensive to use willy-nilly
+    tags: ["light", "aoe", "offense", "buff"], prerequisite: "ApprenticeLight", sfx: "FireSpell", school: "Illusion",
+    manacost: 3, components: [], level:1, type:"passive", power: 6,
+    events: [{type: "DLSE_Wrath", trigger: "playerAttack"},
+             {type: "DLSE_Wrath", trigger: "afterPlayerAttack"}
+    ],
+    //defaultOff: true,                   // Spell is too expensive to use willy-nilly
 }
 
+let wrathCredits = 0;
 KinkyDungeonSpellList["Illusion"].push(DLSE_Wrath);
 
 // Event
-KDEventMapSpell.afterPlayerAttack["DLSE_Wrath"] = (_e, spell, data) => {
+KDEventMapSpell.playerAttack["DLSE_Wrath"] = (_e, spell, data) => {
     console.log(data);
 
     // Seems to allow Brawler to trigger?  Happy with that.
     if (!data.bullet && KinkyDungeonPlayerDamage && ((KinkyDungeonPlayerDamage.name && KinkyDungeonPlayerDamage.name != "Unarmed") || KinkyDungeonStatsChoice.get("Brawler")) && KinkyDungeonHasMana(KinkyDungeonGetManaCost(spell, false, true)) && data.targetX && data.targetY && (data.enemy && KDHostile(data.enemy))) {
         KDChangeMana(spell.name, "spell", "attack", -KinkyDungeonGetManaCost(spell, false, true));
 
+        // Give the player "credit" for the spellcast.
+        wrathCredits++;
 
-        // Cast a Shadow Slash clone two spaces north of the target.
-        KinkyDungeonCastSpell(
-            //data.targetX, data.targetY,               // Old version, ignores knockback
-            data.enemy.x, data.enemy.y,                 // "Smart" version, tracking through knockback/pull
-            DLSE_WrathStrike,
-            //{ x: data.targetX, y: data.targetY-3 },   // Old version
-            {x: data.enemy.x, y:data.enemy.y-3},        // "Smart" version, tracking through knockback/pull
-            undefined, 
-            undefined,
-            "Player"
-        );
-        KDTriggerSpell(spell, data, false, true);
+        KDTriggerSpell(spell, data, false, false);      // 4th arg is Toggle for the 50% reduced CD. Switching to false as this is a SPELL.
     }
 
     // TODO - Toggle OFF the spell, but it's not working T_T
@@ -288,9 +282,29 @@ KDEventMapSpell.afterPlayerAttack["DLSE_Wrath"] = (_e, spell, data) => {
 
 }
 
+
+KDAddEvent(KDEventMapSpell, "afterPlayerAttack", "DLSE_Wrath",  (e, spell, data) => {
+    if(wrathCredits){
+        // Cast a Shadow Slash clone two spaces north of the target.
+        KinkyDungeonCastSpell(
+            //data.targetX, data.targetY,               // Old version, ignores knockback
+            data.enemy.x, data.enemy.y,                 // "Smart" version, tracking through knockback/pull
+            KinkyDungeonFindSpell("DLSE_WrathStrike", true),
+            //{ x: data.targetX, y: data.targetY-3 },   // Old version
+            {x: data.enemy.x, y:data.enemy.y-3},        // "Smart" version, tracking through knockback/pull
+            undefined, 
+            undefined,
+            "Player",
+        );
+        wrathCredits--;
+    }
+});
+
+
+
 // Actual Wrath spell.
 let DLSE_WrathStrike = {
-    name: "DLSE_WrathStrike", tags: ["aoe", "offense", "light"], prerequisite: "DLSE_Wrath", sfx: "Evil", school: "Illusion", manacost: 3, components: ["Arms"], level:1, 
+    name: "DLSE_WrathStrike", tags: ["aoe", "offense", "light"], sfx: "Evil", school: "Illusion", manacost: 3, components: [], level:1, 
     type:"bolt", projectileTargeting:true, piercing: true, noTerrainHit: true, noEnemyCollision: true, onhit:"aoe", power: 6, delay: 0, range: 2.5, aoe: 0, size: 1, lifetime:1, damage: "holy", speed: 1, time: 2,
     //trailspawnaoe: 1.5, trailPower: 0, trailLifetime: 1, trailHit: "", trailDamage:"inert", trail:"lingering", trailChance: 0.4
 
@@ -298,7 +312,7 @@ let DLSE_WrathStrike = {
     landsfx: "DLSE_exp_short_hard6",//"DLSE_exp_short_hard6",//"Telekinesis",
 }
 
-
+KinkyDungeonSpellListEnemies.push(DLSE_WrathStrike);
 
 //#region Spell - Flash Rework Idea
 /**********************************************************
@@ -694,7 +708,7 @@ KDAddEvent(KDEventMapSpell, "beforeAttack", "DLSE_Retribution_Spellcast",  (e, s
 let DLSE_Retribution_Flash = {
     allySpell: true, name: "DLSE_Retribution_Flash", manacost: 0, components: [], level:1, type:"hit", school: "Illusion",
     onhit:"instant", noTerrainHit: true, power: 2, delay: 1, range: 1.5, size: 1, aoe: 1.5, lifetime: 1, damage: "holy",
-    events: [{type: "BlindAll", trigger: "bulletHitEnemy", time: 10}],
+    events: [{type: "BlindAll", trigger: "bulletHitEnemy", time: 7}],
 }
 KinkyDungeonSpellListEnemies.push(DLSE_Retribution_Flash);
 

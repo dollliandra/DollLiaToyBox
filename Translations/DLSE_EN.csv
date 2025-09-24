@@ -114,9 +114,9 @@ KinkyDungeonSpellDescriptionDLSE_LeapOfFaith,"Instantly teleport up to 3 tiles a
 KinkyDungeonSpellCastDLSE_LeapOfFaith,"You leap blindly into the distance!"
 KinkyDungeonSpellTargetDLSE_LeapOfFaith,"Choose target location (3 tile range)"
 
-KinkyDungeonSpellDLSE_Retribution,"Retribution"
-KinkyDungeonSpellDLSE_Retribution_Flash,"Retribution"
-KinkyDungeonSpellDescriptionDLSE_Retribution,"Toggle: Whenever you are attacked, deal 20 holy damage to your attacker and blind them for 10 turns."
+KinkyDungeonSpellDLSE_Retribution,"Eye for an Eye"
+KinkyDungeonSpellDLSE_Retribution_Flash,"Eye for an Eye"
+KinkyDungeonSpellDescriptionDLSE_Retribution,"Toggle: Whenever you are attacked, deal 20 holy damage to your attacker and blind them for 7 turns."
 
 
 KinkyDungeonSpellDLSE_Guidance,"Divine Guidance"
