@@ -187,7 +187,7 @@ KDEventMapSpell.toggleSpell["DLSE_PurgingCross"] = (e, spell, data) => {
 
 
                 // TODO - Move this lower?  Unsure how it will behave with stacks.
-                KDTriggerSpell(spell, data, false, true);                                       // "Trigger" the Spell.  Consumes Arcane Power, etc.
+                KDTriggerSpell(spell, data, false, false);                                       // "Trigger" the Spell.  Consumes Arcane Power, etc.
             }
 
             // Make time advance, as nothing we've done actually costs a turn.  This includes miscasts.
