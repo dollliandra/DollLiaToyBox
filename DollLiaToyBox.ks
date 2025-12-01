@@ -96,7 +96,7 @@ if (KDEventMapGeneric['afterModSettingsLoad'] != undefined) {
                 // Enable/Disable Spell School Changes
                 {refvar: "DLSEMCM_Light",           type: "boolean", default: true, block: undefined},                
                 {refvar: "DLSEMCM_Shadow",          type: "boolean", default: true, block: undefined},
-                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return true;}},
+                {refvar: "DLSEMCM_Arcane",          type: "boolean", default: false, block: () => {return false;}},
 
                 
                 {refvar: "DLSEMCM_Spacer",          type: "text"},

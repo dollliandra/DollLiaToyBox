@@ -187,7 +187,7 @@ KDEventMapSpell.toggleSpell["DLSE_PurgingCross"] = (e, spell, data) => {
 
 
                 // TODO - Move this lower?  Unsure how it will behave with stacks.
-                KDTriggerSpell(spell, data, false, true);                                       // "Trigger" the Spell.  Consumes Arcane Power, etc.
+                KDTriggerSpell(spell, data, false, false);    // 4th arg is Toggle for the 50% reduced CD.  Set to false, as this is a normal spell.
             }
 
             // Make time advance, as nothing we've done actually costs a turn.  This includes miscasts.
@@ -274,7 +274,7 @@ KDEventMapSpell.playerAttack["DLSE_Wrath"] = (_e, spell, data) => {
         // Give the player "credit" for the spellcast.
         wrathCredits++;
 
-        KDTriggerSpell(spell, data, false, false);      // 4th arg is Toggle for the 50% reduced CD. Switching to false as this is a SPELL.
+        KDTriggerSpell(spell, data, false, true);      // 4th arg is Toggle for the 50% reduced CD.
     }
 
     // TODO - Toggle OFF the spell, but it's not working T_T
@@ -346,7 +346,7 @@ KDEventMapSpell.getLights["DLSE_Light"] = (e, spell, data) => {
         // Spend the 1MP cost, but only once during that turn. You can toggle it on/off and it won't spend any more until turn passes.
         if (data.update > 0 || !KinkyDungeonFlags.get("DLSE_Light")) {
             KDChangeMana(spell.name, "spell", "tick", -KinkyDungeonGetManaCost(spell, false, true));
-            KDTriggerSpell(spell, data, false, true);
+            KDTriggerSpell(spell, data, false, true);   // 4th arg is Toggle for the 50% reduced CD.
             KinkyDungeonSetFlag("DLSE_Light", 1);       // Set the flag for 1 turn.
         }
     }else{

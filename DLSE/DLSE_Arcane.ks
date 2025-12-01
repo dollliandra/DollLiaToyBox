@@ -45,7 +45,7 @@ let DLSE_Hyperfocus_Passive = {
         {type: "DLSE_Hyperfocus_Passive", trigger: "beforeCrit"},
         //{type: "DLSE_Hyperfocus_Passive", trigger: "duringCrit", mult: 1.5},
         {type: "DLSE_Hyperfocus_Passive", trigger: "launchBullet", power: 1,},
-        {type: "DLSE_Hyperfocus_Passive_Static", trigger: "launchBullet", power: 1,},
+        {type: "DLSE_Hyperfocus_Passive_Static", trigger: "launchBullet", power: 2,},
     ]
 }
 
