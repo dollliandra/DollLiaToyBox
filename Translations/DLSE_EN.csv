@@ -201,7 +201,7 @@ ItemPickupDLSE_MagicEpee,"You pick up an enchanted fencing sword."
 KinkyDungeonInventoryItemDLSE_Estoc,"Estoc"
 KinkyDungeonInventoryItemDLSE_EstocDesc,"Estoc is bestoc."
 KinkyDungeonInventoryItemDLSE_EstocDesc2,"Deals pierce damage. Deals 60 slash damage instead against vulnerable targets."
-ItemPickupDLSE_MagicEpee,"You pick up an oversized thrusting sword."
+ItemPickupDLSE_Estoc,"You pick up an oversized thrusting sword."
 
 KinkyDungeonInventoryItemDLSE_FreezingPoint,"Broken Rapier"
 KinkyDungeonInventoryItemDLSE_FreezingPointDesc,"It was once an elegant blade."
