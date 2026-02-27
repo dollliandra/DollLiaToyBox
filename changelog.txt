@@ -1,0 +1,17 @@
+Version 0.4:
+===============
+Colossal Weapons:
+- Colossal weapons cannot critically strike.
+- Colossal weapons take an extra turn to swing. They have a new weapon tag/icon to represent this.
+
+Elegy
+- Renamed from "Colossal Sword"
+- Elegy now deals 100 -> 120 damage, and has all colossal weapon updates above.
+
+Inquisitor's Mace:
+- Now deals 30 crush damage with 150% crit. When turned ON, it deals 25 charm damage with a 25% chance to stun 2 turns.
+- No longer has a damage penalty when turned ON, like other magic wands.
+- Weapon special's text now says if it's turned ON or OFF.
+
+Cardinal Flare:
+- Renamed
