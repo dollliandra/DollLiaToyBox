@@ -8,33 +8,54 @@
 //                                                   //
 ///////////////////////////////////////////////////////
 
+// Extend KDWeaponNoDamagePenalty to handle hybrid weapon/toy items.
+let KDWeaponNoDamagePenalty_OLD = KDWeaponNoDamagePenalty;
+KDWeaponNoDamagePenalty = (weapon) => {
+    // If the weapon has a flag to determine damage penalty, check that first
+    if(KDWeapon({name: weapon.name})?.noDamagePenalty_Flag){
+        return KinkyDungeonFlags.get(KDWeapon({name: weapon.name})?.noDamagePenalty_Flag) !== undefined
+    }
+    // Otherwise, run the old function.
+    else{return KDWeaponNoDamagePenalty_OLD(weapon);}
+}
+
+
+
+
 //region Teasing Weapons
 /**************************************************
  * Inquisitor's Mace
  * 
- * Hier-tier toy that can deal grope damage OR charm damage (magic)
+ * Hier-tier toy that can deal crush damage OR charm damage (magic)
  *  > This lets you change the weapon from physical to magical.
  * Special Ability - Toggle On/Off
  *  > Change the damage that the weapon deals.
  **************************************************/
 KinkyDungeonWeapons["DLSE_MaceInquisitor"] = {
-    name: "DLSE_MaceInquisitor", damage: 2.5, chance: 1.0, staminacost: 3, type: "grope", unarmed: false, rarity: 4, shop: false, sfx: "RubberBolt",
+    name: "DLSE_MaceInquisitor", damage: 3.0, chance: 1.0, staminacost: 3, type: "crush", unarmed: false, rarity: 4, shop: false, sfx: "HeavySwing",
     tags: ["toy"], noDamagePenalty: true,
-    crit: 2,
+    crit: 1.5,
     //angle: 0,
     playSelfBonus: 5,
     arousalMode: true,
     playSelfMsg: "KinkyDungeonPlaySelfDLSE_MaceInquisitor",
     playSelfSound: "Vibe",
     events: [
-        //{type: "ElementalEffect", trigger: "playerAttack", power: 0, damage: "stun", time: 2, chance: 0.2},
+        {type: "DLSE_ElementalEffectExtended", trigger: "playerAttack", power: 0, damage: "stun", time: 2, chance: 0.25, prereq: "DLSE_MaceON"},
         {type: "DLSE_ChangeDamageFlag", trigger: "beforePlayerAttack",
             DLSE_requiredFlag: "DLSE_MaceInquisitor_ON",
             DLSE_sfx: "Vibe",
-            power: 2.0, damage: "charm"
+            power: 2.5, damage: "charm"
         },
     ],
+    noDamagePenalty_Flag: "DLSE_MaceInquisitor_ON",     // Does not have a damage penalty IF this flag is set.
     special: {type: "spell", selfCast: true, spell: "DLSE_MaceInquisitor_Switch", requiresEnergy: false,}
+}
+
+// Very simple prereq for the special attack
+KDPrereqs["DLSE_MaceON"] = (_enemy, _e, _data) => {
+    console.log("checking")
+    return KinkyDungeonFlags.get("DLSE_MaceInquisitor_ON") !== undefined;
 }
 
 // Spell used by the weapon to set a flag internally.
@@ -52,13 +73,29 @@ KinkyDungeonSpellSpecials["DLSE_MaceInquisitor_SwitchSpecial"] = () => {
         // Play Vibe SFX here.
         KinkyDungeonPlaySound(KinkyDungeonRootDirectory + "Audio/Vibe.ogg", undefined, 0.8);
         KinkyDungeonSendTextMessage(10, TextGet("KDDLSE_MaceInquisitor_ON"), KDBasePink, 2, true);
+        addTextKey("KinkyDungeonSpecialDLSE_MaceInquisitor", TextGet("KinkyDungeonSpecialDLSE_MaceInquisitor_ON"));
     }
     else{
         KinkyDungeonSetFlag("DLSE_MaceInquisitor_ON", 0);
         // Do NOT play SFX here.
         KinkyDungeonSendTextMessage(10, TextGet("KDDLSE_MaceInquisitor_OFF"), KDBasePink, 2, true);
+        addTextKey("KinkyDungeonSpecialDLSE_MaceInquisitor", TextGet("KinkyDungeonSpecialDLSE_MaceInquisitor_OFF"));
     }
 }
+
+// Handle setting correct text string on game load.
+KDAddEvent(KDEventMapGeneric, "afterNewGame", "DLSE_MaceInquisitorNewGame", (e, data) => {
+    addTextKey("KinkyDungeonSpecialDLSE_MaceInquisitor", TextGet("KinkyDungeonSpecialDLSE_MaceInquisitor_OFF"));
+});
+
+KDAddEvent(KDEventMapGeneric, "afterLoadGame", "DLSE_MaceInquisitorLoadGame", (e, data) => {
+    if(KinkyDungeonFlags.get("DLSE_MaceInquisitor_ON") !== undefined){
+        addTextKey("KinkyDungeonSpecialDLSE_MaceInquisitor", TextGet("KinkyDungeonSpecialDLSE_MaceInquisitor_ON"));
+    }
+    else{
+        addTextKey("KinkyDungeonSpecialDLSE_MaceInquisitor", TextGet("KinkyDungeonSpecialDLSE_MaceInquisitor_OFF"));
+    }
+});
 
 // Change the damage that a weapon does based upon a flag.
 KDAddEvent(KDEventMapWeapon, "beforePlayerAttack", "DLSE_ChangeDamageFlag", (e, _weapon, data) => {

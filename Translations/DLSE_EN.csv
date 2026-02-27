@@ -189,7 +189,7 @@ KDWeaponTagD_DLSE_Colossal,"Colossal: This weapon is extremely heavy, and takes 
 
 KinkyDungeonInventoryItemDLSE_ColossalSword,"Elegy"
 KinkyDungeonInventoryItemDLSE_ColossalSwordDesc,"No mortal was ever intended to wield a sword like this..."
-KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Takes an extra turn to swing. Deals terrifying slash damage and stuns the target.|Can perform Giant Swing to hit all targets in a 3-tile arc."
+KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Deals terrifying slash damage and stuns the target, but needs an extra turn of wind-up to swing. Can perform Giant Swing to hit all targets in a 3-tile arc."
 ItemPickupDLSE_ColossalSword,"You struggle to pick up a sword as big as yourself!"
 KinkyDungeonSpecialDLSE_ColossalSword,"Giant Swing: Strike all targets in an arc for 2x SP cost, knocking them back."
 
@@ -245,10 +245,12 @@ KinkyDungeonSpellCastFailDLSE_GiantSwingShort,"There's an obstacle in the way!"
 
 KinkyDungeonInventoryItemDLSE_MaceInquisitor,"Inquisitor's Mace"
 KinkyDungeonInventoryItemDLSE_MaceInquisitorDesc,"We have ways of making you talk...~"
-KinkyDungeonInventoryItemDLSE_MaceInquisitorDesc2,"Deals grope damage. Flick the switch to deal 20 charm damage instead."
+KinkyDungeonInventoryItemDLSE_MaceInquisitorDesc2,"A durable toy that can be swung to deal crush damage. Flick the switch to deal 25 charm damage instead, with a 25% chance to stun for 2 turns."
 ItemPickupDLSE_MaceInquisitor,"You pick up a mace with a suspiciously soft head."
-KinkyDungeonSpecialDLSE_MaceInquisitor,"Toggle ON/OFF: Why does this weapon have a switch?"
-KinkyDungeonPlaySelfDLSE_MaceInquisitor,"You play with yourself using the soft tip..."
+KinkyDungeonSpecialDLSE_MaceInquisitor,
+KinkyDungeonSpecialDLSE_MaceInquisitor_ON,"Flick the ON/OFF Switch - Weapon is currently ON"
+KinkyDungeonSpecialDLSE_MaceInquisitor_OFF,"Flick the ON/OFF Switch - Weapon is currently OFF"
+KinkyDungeonPlaySelfDLSE_MaceInquisitor,"You play with yourself using the large magic wand..."
 KDDLSE_MaceInquisitor_ON,"You flick the switch ON, and the weapon buzzes to life!"
 KDDLSE_MaceInquisitor_OFF,"You flick the switch OFF, and the weapon is silent."
 

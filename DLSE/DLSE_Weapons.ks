@@ -394,10 +394,11 @@ KDWeaponTags["DLSE_Colossal"] = true;
 // Colossal Sword
 // 100 Damage, 100 SP, 
 KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
-    damage: 10, chance: 1.2, staminacost: 10, type: "slash", unarmed: false, rarity: 5, shop: false,
+    damage: 12, chance: 1.2, staminacost: 10, type: "slash", unarmed: false, rarity: 5, shop: false,
     cutBonus: 0.05,                                 // Should it be too awkward to cut with? Or even just dull?
-    crit: 1.2,                                      // Base crit rate.
-    clumsy: true, heavy: true, //massive: true,       // As big as it gets.
+    crit: 1.0,
+    nocrit: true,                                   // Colossals don't crit.
+    clumsy: true, heavy: true, //massive: true,     // As big as it gets.
 	tags: ["sword","DLSE_Colossal"],
 	sfx: "DLSE_HeavySlash",                         // Thwomp
     //angle: -0.48,                                 // Angle when rendered on player appearance (Telekinesis)
