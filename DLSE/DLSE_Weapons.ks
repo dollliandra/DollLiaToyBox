@@ -389,6 +389,7 @@ KinkyDungeonWeapons["DLSE_HalberdRoyal"] = {name: "DLSE_HalberdRoyal", damage: 8
 ////////////////////////////////////////////////////////
 //
 //  BIG weapons. You basically NEED Iron Blood and something else to manage these.
+KDWeaponTags["DLSE_Colossal"] = true;
 
 // Colossal Sword
 // 100 Damage, 100 SP, 
@@ -396,21 +397,37 @@ KinkyDungeonWeapons["DLSE_ColossalSword"] = {name: "DLSE_ColossalSword",
     damage: 10, chance: 1.2, staminacost: 10, type: "slash", unarmed: false, rarity: 5, shop: false,
     cutBonus: 0.05,                                 // Should it be too awkward to cut with? Or even just dull?
     crit: 1.2,                                      // Base crit rate.
-    clumsy: true, heavy: true, massive: true,       // As big as it gets.
-	tags: ["sword"],
+    clumsy: true, heavy: true, //massive: true,       // As big as it gets.
+	tags: ["sword","DLSE_Colossal"],
 	sfx: "DLSE_HeavySlash",                         // Thwomp
     //angle: -0.48,                                 // Angle when rendered on player appearance (Telekinesis)
 
     // Strike in an arc.
     special: {type: "spell", spell: "DLSE_GiantSwingShort"},
 
+    DLSE_ColossalDelay: 1,                          // Delay before swing.
+
     events: [
         // Casting a spell on hit is a potential solution to have VFX
         //{type: "CastSpell", spell: "Tremor", trigger: "playerAttack", requireEnergy: false},
         {type: "ElementalEffect", trigger: "playerAttack", power: 0, damage: "stun", time: 2},
         {type: "DLSE_KnockbackGiantSwing", trigger: "playerAttack", dist: 2},
+        {type: "DLSE_ColossalDelay", trigger: "beforePlayerLaunchAttack"},
     ]
 }
+
+// Somehow, this wasn't getting added correctly.
+if(!KDEventMapWeapon["beforePlayerAttack"]){
+    KDEventMapWeapon["beforePlayerAttack"] = {}
+}
+// Event to delay a weapon swing.
+KDAddEvent(KDEventMapWeapon, "beforePlayerLaunchAttack", "DLSE_ColossalDelay", (e, weapon, data) => {
+    // If not a spell attack, advance turn before attack is launched.
+    if (!KinkyDungeonFlags.get("DLSE_ColossalDelay") && !data.spellAttack){
+        KinkyDungeonSetFlag("DLSE_ColossalDelay", weapon.DLSE_ColossalDelay + 1);                           // Prevent duplicate delays
+        KinkyDungeonAdvanceTime(weapon.DLSE_ColossalDelay ? Math.max(weapon.DLSE_ColossalDelay, 1) : 1);    // Naive solution
+    }
+});
 
 
 //region Basic Thrusting Swords
@@ -969,6 +986,11 @@ KDAddEvent(KDEventMapWeapon, "playerAttack", "DLSE_KnockbackGiantSwing", (e, _we
 // Spell special attached to above spell.
 // > Meant for non-magical weapons.
 KinkyDungeonSpellSpecials["DLSE_GiantSwing_Mundane"] = (spell, data, targetX, targetY, _tX, _tY, entity, _enemy, _moveDirection, _bullet, _miscast, _faction, _cast, _selfCast) => {
+
+    // Delay for certain weapons.
+    if(KinkyDungeonPlayerDamage.DLSE_ColossalDelay){
+        KinkyDungeonAdvanceTime(KinkyDungeonPlayerDamage.DLSE_ColossalDelay);    // Naive solution
+    }
 
     // Need a proper cost, let's copy Charge!
     let halberdCost = KinkyDungeonPlayerDamage.name == "DLSE_ColossalSword" ? 2 * KDAttackCost().attackCost : KDAttackCost().attackCost;

@@ -184,9 +184,12 @@ KinkyDungeonInventoryItemDLSE_HalberdRoyalDesc2,"Ranged attacks deal severe slas
 ItemPickupDLSE_HalberdRoyal,"You find a regal looking halberd, replete with golden trim."
 KinkyDungeonSpecialDLSE_HalberdRoyal,"Hew: Bring the blade down upon an enemy at 2 range."
 
+KDWeaponTag_DLSE_Colossal,Colossal
+KDWeaponTagD_DLSE_Colossal,"Colossal: This weapon is extremely heavy, and takes an additional turn to swing."
+
 KinkyDungeonInventoryItemDLSE_ColossalSword,"Elegy"
 KinkyDungeonInventoryItemDLSE_ColossalSwordDesc,"No mortal was ever intended to wield a sword like this..."
-KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Deals terrifying slash damage and stuns the target."
+KinkyDungeonInventoryItemDLSE_ColossalSwordDesc2,"Takes an extra turn to swing. Deals terrifying slash damage and stuns the target.|Can perform Giant Swing to hit all targets in a 3-tile arc."
 ItemPickupDLSE_ColossalSword,"You struggle to pick up a sword as big as yourself!"
 KinkyDungeonSpecialDLSE_ColossalSword,"Giant Swing: Strike all targets in an arc for 2x SP cost, knocking them back."
 
